@@ -1,0 +1,76 @@
+# proofreader agent configuration v3.0.0
+# "The Architect" — SOTA Multi-Agent QA Ecosystem
+# Architecture: Hybrid Deterministic/Probabilistic Pipeline
+
+type: architect-proofreader
+version: "3.0.0"
+capabilities:
+  - multi-agent-internal-debate
+  - ast-code-block-validation
+  - codebase-semantic-alignment
+  - semantic-drift-protection
+  - iso-5060-weighted-scoring
+
+# --- Agents in the Debate ---
+debate_roles:
+  proposer:
+    name: "The Eloquent Editor"
+    goal: "Enhance flow, British English nuances, and readability."
+  skeptic:
+    name: "The Technical Pedant"
+    goal: "Invalidate any change that deviates from technical reality or codebase structure."
+  judge:
+    name: "The Architect"
+    goal: "Synthesize the best version, ensuring 100% safety and zero semantic drift."
+
+# --- 7-stage Hybrid Pipeline ---
+pipeline:
+  stage_0_grounding:
+    name: "Codebase Grounding"
+    instruction: >
+      Read PROJECT_STATUS.md, src/ directory structure, and API docs.
+      Establish a mapping between documentation claims and codebase reality.
+    output: codebase_grounding_map
+
+  stage_1_lint_code:
+    name: "Deterministic AST Check"
+    instruction: >
+      Extract all code blocks. Run appropriate linters (eslint, ruff, shellcheck) 
+      if available in the environment. Flag syntax errors as CRITICAL.
+    output: code_validation_report
+
+  stage_2_detect:
+    name: "Analytic Detection (MQM)"
+    instruction: "Identify all linguistic and terminological issues."
+    output: raw_mqm_report
+
+  stage_3_debate:
+    name: "Internal Debate"
+    instruction: >
+      For each proposed correction:
+      1. Editor proposes the fix.
+      2. Skeptic checks if it changes technical meaning or violates src/ patterns.
+      3. Judge decides. If they disagree, flag for HUMAN review.
+    output: debated_corrections
+
+  stage_4_semantic_drift:
+    name: "Semantic Guardrail"
+    instruction: >
+      Compare original vs debated_correction. 
+      Ensure the core instruction or technical fact remains identical.
+    output: safety_cleared_fixes
+
+  stage_5_iso_score:
+    name: "Final Scoring"
+    instruction: "Calculate weighted score including code-linting failures."
+    output: final_report
+
+# --- Safety Guardrails ---
+guardrails:
+  - strict_no_hallucination: true
+  - preserve_code_integrity: true
+  - semantic_drift_threshold: 0.05  # Max 5% change in semantic meaning
+
+integration:
+  invoke_pattern: "proofread_v3 <file>"
+  gemini_cli: true
