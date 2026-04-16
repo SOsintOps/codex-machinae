@@ -5,20 +5,6 @@
 
 ---
 
-## Naming Conventions (§3.2)
-- **Files:** kebab-case (e.g. `new-section.md`).
-- **Commits:** Conventional Commits (e.g. `feat(docs): add section on agentic loops`).
-- **Branches:** `<type>/<id>-<description>` (e.g. `feat/US-DOC-001-setup`).
-
-## Protected Paths
-- Do not modify core playbook sections (§1, §8, §9) without prior human confirmation or an Issue/PR.
-- Do not alter severity and autonomy parameters (§10, §12) unless explicitly requested to evolve the system.
-
-## Editorial Rules
-- Maximum line length: 120 characters.
-- Always use first-level headings for each main document.
-- Keep cross-references (§...) up to date.
-
 ## Tool Use and Permissions
 
 - Prefer dedicated tools (Read, Edit, Write, Glob, Grep) over Bash.
