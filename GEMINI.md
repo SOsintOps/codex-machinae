@@ -1,35 +1,52 @@
-# GEMINI.md - Istruzioni Operative per il Playbook LLM
+# GEMINI.md — Gemini Agent Rules
 
-Questo file contiene i mandati fondamentali per Gemini CLI nella gestione del repository "Software Development Playbook". Queste istruzioni hanno la precedenza su ogni altra configurazione predefinita.
+> Agent-specific configuration for Gemini CLI (Google).
+> **Shared rules are in `AI-AGENTS.md` — read that first. This file only adds Gemini-specific behaviour.**
+> These instructions take precedence over any other default Gemini CLI configuration.
 
-## Obiettivo del Progetto
-Gestire, mantenere ed evolvere il framework universale per lo sviluppo di progetti software con l'ausilio di LLM e agenti autonomi. Il repository funge da "Single Source of Truth" per le metodologie di sviluppo del team.
+---
 
-## Mandati Fondamentali
+## Project Objective
 
-### 1. Dogfooding (Principio Cardine)
-Gemini CLI DEVE applicare le regole definite nel `software-development-playbook.md` per la gestione di questo stesso repository. In particolare:
-- Mantenere aggiornato `PROJECT_STATUS.md` ad ogni sessione (§2.2).
-- Usare Conventional Commits per ogni modifica (§3.3).
-- Seguire la Definition of Done per ogni aggiornamento del playbook (§1.8).
-- Documentare decisioni architetturali significative tramite ADR nella cartella `docs/adr/` (§1.5).
+Manage, maintain, and evolve the universal software development framework with the support of LLMs and autonomous agents.
+This repository acts as the **Single Source of Truth** for the team's development methodology.
 
-### 2. Gestione GitHub
-- **Issue:** Ogni proposta di modifica o nuova sezione deve essere preceduta da un'Issue su GitHub per discuterne lo scope.
-- **Pull Requests:** Nessuna modifica entra in `main` senza una PR. Le PR devono essere classificate secondo i bucket definiti nel playbook (§10.1): `safe`, `additive`, `breaking`, `p0`.
-- **Changelog:** Ogni release o modifica significativa deve essere registrata in `CHANGELOG.md` seguendo lo standard Keep a Changelog (§6.4).
+---
 
-### 3. Manutenzione del Playbook
-- **Ricerca SOTA:** Prima di aggiungere nuove sezioni su tecnologie emergenti (es. nuovi framework di agenzia), esegui una ricerca sullo stato dell'arte e documentala in `docs/research/` (§1.7).
-- **Consistenza:** Assicurati che i riferimenti incrociati tra le sezioni (es. §9 che cita §1.7.5) siano sempre corretti e aggiornati.
-- **Stile:** Mantieni il tono professionale, tecnico e asciutto del documento originale. Usa l'italiano come lingua principale per il contenuto del playbook, ma mantieni i termini tecnici standard in inglese dove appropriato (es. "fail fast", "dependency inversion").
+## Core Mandates
 
-### 4. Struttura dei File
-Il repository deve rispettare rigorosamente la struttura definita nel §2.1 del playbook. Qualora mancassero directory o file obbligatori, Gemini CLI deve segnalarlo o crearli secondo necessità.
+### 1. Dogfooding (Cardinal Principle)
 
-## Flusso di Lavoro Suggerito
-1. **Analisi:** Leggi `PROJECT_STATUS.md` per capire il contesto attuale.
-2. **Pianificazione:** Se la modifica è complessa, usa `enter_plan_mode` per delineare la strategia.
-3. **Esecuzione:** Applica le modifiche in modo chirurgico.
-4. **Validazione:** Verifica la correttezza formale del Markdown e l'integrità dei link interni.
-5. **Conclusione:** Aggiorna lo stato del progetto e prepara il commit.
+Gemini CLI MUST apply the rules defined in `software-development-playbook.md` to manage this very repository. Specifically:
+
+- Keep `PROJECT_STATUS.md` up to date after every session (§2.2).
+- Use Conventional Commits for every change (§3.3).
+- Follow the Definition of Done for every playbook update (§1.8).
+- Document significant architectural decisions as ADRs in `docs/adr/` (§1.5).
+
+### 2. GitHub Workflow
+
+- **Issues:** Every proposal for a change or new section must be preceded by a GitHub Issue to discuss its scope.
+- **Pull Requests:** No change enters `main` without a PR. PRs must be classified according to the buckets defined in the playbook (§10.1): `safe`, `additive`, `breaking`, `p0`.
+- **Changelog:** Every release or significant change must be recorded in `CHANGELOG.md` following the Keep a Changelog standard (§6.4).
+
+### 3. Playbook Maintenance
+
+- **SOTA Research:** Before adding new sections on emerging technologies (e.g. new agentic frameworks), run a state-of-the-art research and document it in `docs/research/` (§1.7).
+- **Consistency:** Ensure cross-references between sections (e.g. §9 citing §1.7.5) are always correct and up to date.
+- **Style:** Maintain the professional, technical, and concise tone of the original document.
+
+### 4. File Structure Enforcement
+
+The repository MUST strictly follow the structure defined in §2.1 of the playbook.
+If any required directories or files are missing, Gemini CLI must flag them and create them as necessary.
+
+---
+
+## Suggested Workflow
+
+1. **Analysis:** Read `PROJECT_STATUS.md` to understand the current context.
+2. **Planning:** For complex changes, use plan mode to outline the strategy before acting.
+3. **Execution:** Apply changes surgically; do not refactor beyond the task scope.
+4. **Validation:** Verify Markdown correctness and the integrity of internal links.
+5. **Wrap-up:** Update project status and prepare the commit.

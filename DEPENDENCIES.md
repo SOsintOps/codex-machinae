@@ -1,13 +1,19 @@
-# Dependencies
+# Dependencies — dev_playbook
 
-Questo repository contiene documentazione e regole operative (playbook). Le sue "dipendenze" sono principalmente gli agenti che lo interpretano.
+This repository contains documentation and operative rules (a playbook). Its "dependencies" are primarily the agents that interpret it and the tooling that enforces its conventions.
 
 ## Critical Dependencies
 
-### Gemini CLI
+### Claude (Anthropic)
 - **Type:** LLM-based autonomous agent
-- **Role:** Primary management and maintenance agent.
-- **Contract:** Interprets `GEMINI.md` and `CLAUDE.md`.
+- **Role:** Primary development and maintenance agent.
+- **Contract:** Interprets `AI-AGENTS.md` and `CLAUDE.md`.
+- **Last verified:** 2026-04-16
+
+### Gemini CLI (Google)
+- **Type:** LLM-based autonomous agent
+- **Role:** Secondary management and maintenance agent.
+- **Contract:** Interprets `AI-AGENTS.md` and `GEMINI.md`.
 - **Last verified:** 2026-04-15
 
 ### GitHub Actions
@@ -19,6 +25,10 @@ Questo repository contiene documentazione e regole operative (playbook). Le sue 
 ## Development Dependencies
 
 ### Prettier / Markdownlint
-- **Purpose:** Mantieni la consistenza del formato Markdown.
+- **Purpose:** Enforce consistent Markdown formatting across the playbook.
 - **Version:** Latest
 - **Pinned:** No
+
+## Notes
+- No runtime dependencies — this is a meta-documentation project.
+- Agent contracts (CLAUDE.md, GEMINI.md) derive from `AI-AGENTS.md` as the single source of truth.
