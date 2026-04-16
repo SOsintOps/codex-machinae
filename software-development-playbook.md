@@ -2,296 +2,296 @@
 
 **Version:** 2.0.0 — Draft
 **Last updated:** 2026-04-15
-**Scope:** Framework universale per lo sviluppo, il testing, il deploy, la manutenzione e la sorveglianza attiva di progetti software.
+**Scope:** Framework for developing, testing, deploying, maintaining, and monitoring software projects.
 
-Questo playbook definisce l'intero ciclo di vita di un progetto software: dalla raccolta dei requisiti fino al deploy e al monitoraggio continuo delle dipendenze. È pensato per sviluppatori indipendenti e piccoli team che operano con agenti autonomi (Claude Code, Ruflo, o equivalenti).
+This playbook defines the entire lifecycle of a software project: from requirements gathering through to deployment and continuous dependency monitoring. It is designed for independent developers and small teams operating with autonomous agents (Claude Code, Ruflo, or equivalents).
 
 ---
 
-## Indice
+## Table of Contents
 
-### Parte I — Sviluppo
+### Part I — Development
 
-1. [Requisiti e pianificazione](#1-requisiti-e-pianificazione)
-2. [Struttura del progetto](#2-struttura-del-progetto)
-3. [Qualità del codice](#3-qualità-del-codice)
-4. [Requisiti di sicurezza](#4-requisiti-di-sicurezza)
-5. [Strategia di testing](#5-strategia-di-testing)
-6. [Documentazione](#6-documentazione)
-7. [CI/CD e deploy](#7-cicd-e-deploy)
+1. [Requirements and planning](#1-requirements-and-planning)
+2. [Project structure](#2-project-structure)
+3. [Code quality](#3-code-quality)
+4. [Security requirements](#4-security-requirements)
+5. [Testing strategy](#5-testing-strategy)
+6. [Documentation](#6-documentation)
+7. [CI/CD and deployment](#7-cicd-and-deployment)
 
-### Parte II — Sorveglianza e manutenzione
+### Part II — Surveillance and maintenance
 
 8. [Dependency Surface Map](#8-dependency-surface-map)
-9. [Agenti di sorveglianza](#9-agenti-di-sorveglianza)
-10. [Classificazione dei cambiamenti](#10-classificazione-dei-cambiamenti)
-11. [Matrice di test di compatibilità](#11-matrice-di-test-di-compatibilità)
+9. [Surveillance agents](#9-surveillance-agents)
+10. [Change classification](#10-change-classification)
+11. [Compatibility test matrix](#11-compatibility-test-matrix)
 12. [Remediation workflow](#12-remediation-workflow)
-13. [Database di compatibilità](#13-database-di-compatibilità)
-14. [Self-testing e osservabilità](#14-self-testing-e-osservabilità)
+13. [Compatibility database](#13-compatibility-database)
+14. [Self-testing and observability](#14-self-testing-and-observability)
 
-### Parte III — Gestione
+### Part III — Management
 
-15. [Ciclo di vita del progetto](#15-ciclo-di-vita-del-progetto)
-16. [Convenzioni per agenti AI](#16-convenzioni-per-agenti-ai)
+15. [Project lifecycle](#15-project-lifecycle)
+16. [Conventions for AI agents](#16-conventions-for-ai-agents)
 
-### Appendici
+### Appendices
 
-- [A — Checklist per fase](#appendice-a--checklist-per-fase)
-- [B — Template](#appendice-b--template)
-- [C — Glossario](#appendice-c--glossario)
-
----
-
-# PARTE I — SVILUPPO
+- [A — Per-phase checklists](#appendix-a--phase-checklists)
+- [B — Templates](#appendix-b--templates)
+- [C — Glossary](#appendix-c--glossary)
 
 ---
 
-## 1. Requisiti e pianificazione
+# PART I — DEVELOPMENT
 
-Ogni feature, bugfix o progetto parte da requisiti scritti. Codice senza requisiti documentati è debito tecnico dal primo commit.
+---
 
-### 1.1 Gerarchia dei documenti di requisiti
+## 1. Requirements and planning
+
+Every feature, bugfix, or project begins with written requirements. Code without documented requirements is technical debt from the first commit.
+
+### 1.1 Requirements document hierarchy
 
 ```
 PRD (Product Requirements Document)
  └── Epic
       └── User Story
            └── Acceptance Criteria
-                └── Task tecnico
+                └── Technical task
 ```
 
-Ogni livello è tracciabile al superiore. Un task tecnico senza user story di riferimento è un segnale d'allarme — potrebbe essere lavoro inutile o scope creep.
+Every level is traceable to the one above it. A technical task without a referenced User Story is a warning signal — it could be unnecessary work or scope creep.
 
 ### 1.2 PRD (Product Requirements Document)
 
-Il PRD è il documento di livello più alto. Definisce il **cosa** e il **perché**, mai il **come** (quello è architettura). Contenuto minimo:
+The PRD is the highest-level document. It defines the **what** and the **why**, never the **how** (that is architecture). Minimum content:
 
-| Sezione | Contenuto | Obbligatoria |
-|---------|-----------|-------------|
-| **Status e ownership** | Versione del draft, autore, data ultimo aggiornamento | Sì |
-| **Purpose and scope** | Cosa il sistema garantisce e cosa NON copre | Sì |
-| **Stakeholder e utenti** | Chi usa il sistema e in che contesto | Sì |
-| **Requisiti funzionali** | Cosa il sistema deve fare, organizzato per area | Sì |
-| **Requisiti non-funzionali** | Performance, sicurezza, accessibilità, scalabilità | Sì |
-| **Vincoli architetturali** | Tecnologie obbligate, integrazioni, limitazioni | Sì |
-| **Boundary con altri sistemi** | Cosa è responsabilità di altri repo/servizi/team | Sì |
-| **Open questions** | Incognite note, con owner e strategia di risoluzione | Sì |
-| **Decisioni architetturali** | ADR (Architecture Decision Records) referenziate | Raccomandata |
-| **Later-phase work** | Lavoro esplicitamente rinviato, con motivazione | Raccomandata |
-| **Appendici** | Documenti sorgente, riferimenti esterni | Raccomandata |
+| Section | Content | Required |
+|---------|---------|----------|
+| **Status and ownership** | Draft version, author, date of last update | Yes |
+| **Purpose and scope** | What the system guarantees and what it does NOT cover | Yes |
+| **Stakeholders and users** | Who uses the system and in what context | Yes |
+| **Functional requirements** | What the system must do, organised by area | Yes |
+| **Non-functional requirements** | Performance, security, accessibility, scalability | Yes |
+| **Architectural constraints** | Mandatory technologies, integrations, limitations | Yes |
+| **Boundaries with other systems** | What is the responsibility of other repos/services/teams | Yes |
+| **Open questions** | Known unknowns, with owner and resolution strategy | Yes |
+| **Architectural decisions** | Referenced ADR (Architecture Decision Records) | Recommended |
+| **Later-phase work** | Work explicitly deferred, with justification | Recommended |
+| **Appendices** | Source documents, external references | Recommended |
 
-**Pre-implementation checklist.** Ogni PRD DEVE includere una checklist all'inizio del documento che elenca le decisioni già prese e confermate. L'implementatore la verifica prima di scrivere codice. Se una voce della checklist non corrisponde al codice nel repo, l'implementazione si ferma fino alla risoluzione.
+**Pre-implementation checklist.** Every PRD MUST include a checklist at the beginning of the document listing decisions already made and confirmed. The implementer verifies it before writing any code. If an item on the checklist does not match the code in the repository, implementation halts until the discrepancy is resolved.
 
 ### 1.3 User story
 
-Formato standard:
+Standard format:
 
 ```
-Come [ruolo utente]
-Voglio [azione]
-In modo da [beneficio]
+As a [user role]
+I want [action]
+So that [benefit]
 ```
 
-Ogni user story DEVE avere:
+Every User Story MUST have:
 
-- **ID univoco** — formato `US-<area>-<numero>` (es. `US-AUTH-001`)
-- **Priorità** — P0 (bloccante), P1 (must-have per release), P2 (should-have), P3 (nice-to-have)
-- **Stima** — in ore o story point, aggiornata dopo la prima sessione di lavoro
-- **Acceptance criteria** — lista di condizioni verificabili che definiscono "fatto"
-- **Dipendenze** — riferimento ad altre user story che devono essere completate prima
-- **Link al PRD** — sezione del PRD che questa story implementa
+- **Unique ID** — format `US-<area>-<number>` (e.g. `US-AUTH-001`)
+- **Priority** — P0 (blocker), P1 (must-have for release), P2 (should-have), P3 (nice-to-have)
+- **Estimate** — in hours or story points, updated after the first working session
+- **Acceptance criteria** — list of verifiable conditions that define "done"
+- **Dependencies** — reference to other User Stories that must be completed first
+- **Link to PRD** — the PRD section that this story implements
 
 ### 1.4 Acceptance criteria
 
-Ogni criterio è una condizione binaria (passa o non passa). Formato:
+Each criterion is a binary condition (pass or fail). Format:
 
 ```
-DATO [contesto iniziale]
-QUANDO [azione dell'utente o del sistema]
-ALLORA [risultato atteso]
+GIVEN [initial context]
+WHEN [user or system action]
+THEN [expected result]
 ```
 
-I criteri di accettazione diventano test. Se un criterio non è traducibile in un test automatizzato, va riscritto fino a quando non lo è.
+Acceptance criteria become tests. If a criterion cannot be translated into an automated test, it must be rewritten until it can.
 
 ### 1.5 Architecture Decision Records (ADR)
 
-Ogni decisione architetturale significativa è documentata in un ADR. Formato minimo:
+Every significant architectural decision is documented in an ADR. Minimum format:
 
 ```markdown
-# ADR-<numero>: <titolo>
+# ADR-<number>: <title>
 
 **Status:** proposed | accepted | deprecated | superseded by ADR-<n>
 **Date:** YYYY-MM-DD
-**Context:** Perché questa decisione è necessaria.
-**Decision:** Cosa è stato deciso.
-**Consequences:** Impatto positivo e negativo della decisione.
-**Alternatives rejected:** Cosa è stato considerato e scartato, con motivazione.
+**Context:** Why this decision is necessary.
+**Decision:** What was decided.
+**Consequences:** Positive and negative impact of the decision.
+**Alternatives rejected:** What was considered and discarded, with justification.
 ```
 
-Gli ADR sono **append-only** — non si cancellano, si superano con nuovi ADR che li referenziano.
+ADRs are **append-only** — they are never deleted; they are superseded by new ADRs that reference them.
 
-### 1.6 Gestione del backlog
+### 1.6 Backlog management
 
-Il backlog è una lista ordinata per priorità. Regole:
+The backlog is an ordered list by priority. Rules:
 
-- Ogni item ha uno stato: `todo`, `in-progress`, `blocked`, `review`, `done`
-- Nessun item resta `in-progress` per più di una settimana senza aggiornamento
-- Item `blocked` devono avere un motivo e un owner per lo sblocco
-- Item `done` devono avere tutti gli acceptance criteria soddisfatti e i test scritti
-- Il backlog viene rivisto settimanalmente; item con priorità P3 più vecchi di 90 giorni vengono archiviati o cancellati
+- Every item has a status: `todo`, `in-progress`, `blocked`, `review`, `done`
+- No item remains `in-progress` for more than one week without an update
+- `blocked` items must have a reason and an owner responsible for unblocking
+- `done` items must have all Acceptance Criteria satisfied and tests written
+- The backlog is reviewed weekly; P3-priority items older than 90 days are archived or deleted
 
-### 1.7 Ricerca sullo stato dell'arte
+### 1.7 State-of-the-art research
 
-Prima di implementare una feature, un modulo, o un'integrazione, il sistema DEVE suggerire all'utente di condurre una ricerca sullo stato dell'arte. Questo vale sia per il progetto nel suo complesso sia per le singole parti.
+Before implementing a feature, a module, or an integration, the system must prompt the user to conduct state-of-the-art research. This applies both to the project as a whole and to individual parts.
 
-#### 1.7.1 Quando la ricerca è obbligatoria
+#### 1.7.1 When research is mandatory
 
-| Trigger | Cosa ricercare | Output atteso |
-|---------|---------------|---------------|
-| **Nuovo progetto** (Fase 0) | Progetti simili esistenti, framework consolidati, pattern architetturali dominanti nel dominio | Report con: soluzioni esistenti, pro/contro, decisione motivata su build vs adopt vs fork |
-| **Nuova feature significativa** (P0 o P1) | Implementazioni di riferimento, librerie specializzate, pattern documentati | Sezione "State of the art" nella user story con link e valutazione |
-| **Nuova dipendenza** | Alternative disponibili, confronto maturità/community/manutenzione, licenza | Tabella comparativa in `DEPENDENCIES.md` con motivazione della scelta |
-| **Scelta tecnologica** (linguaggio, framework, database) | Benchmark recenti, trend di adozione, case study nel dominio | ADR con sezione "Alternatives rejected" compilata da ricerca reale |
-| **Refactoring architetturale** | Pattern attuali nel settore, migrazioni documentate da altri progetti | ADR con riferimenti a esperienze simili |
+| Trigger | What to research | Expected output |
+|---------|-----------------|-----------------|
+| **New project** (Phase 0) | Existing similar projects, established frameworks, dominant architectural patterns in the domain | Report covering: existing solutions, pros/cons, justified decision on build vs adopt vs fork |
+| **Significant new feature** (P0 or P1) | Reference implementations, specialised libraries, documented patterns | "State of the art" section in the User Story with links and evaluation |
+| **New dependency** | Available alternatives, maturity/community/maintenance comparison, licence | Comparative table in `DEPENDENCIES.md` with justification for the choice |
+| **Technology choice** (language, framework, database) | Recent benchmarks, adoption trends, case studies in the domain | ADR with "Alternatives rejected" section populated from real research |
+| **Architectural refactoring** | Current patterns in the industry, documented migrations from other projects | ADR with references to similar experiences |
 
-#### 1.7.2 Cosa ricercare per ogni componente
+#### 1.7.2 What to research for each component
 
-Per ogni parte significativa del progetto, la ricerca dovrebbe coprire:
+For every significant part of the project, research should cover:
 
-**Soluzioni esistenti.** Esiste già una libreria, un servizio, o un progetto open source che fa quello che sto per scrivere? Se sì, è più maturo, testato e mantenuto di quello che potrei produrre io? Regola: non reinventare la ruota a meno che le ruote esistenti non vadano bene per la mia strada — e documentare perché non vanno bene nell'ADR.
+**Existing solutions.** Does a library, service, or open-source project already exist that does what I am about to write? If so, is it more mature, tested, and maintained than what I could produce? Rule: do not reinvent the wheel unless the existing wheels are not suited to the road ahead — and document why they are not in the ADR.
 
-**Pattern e best practice.** Come risolvono questo problema i progetti maturi nello stesso dominio? Quali pattern architetturali sono emersi come dominanti? Quali anti-pattern sono stati documentati? Cercare: post di engineering blog di aziende rilevanti, conferenze recenti, RFC e proposal nei repository di riferimento.
+**Patterns and best practices.** How do mature projects in the same domain solve this problem? Which architectural patterns have emerged as dominant? Which anti-patterns have been documented? Search: engineering blog posts from relevant companies, recent conferences, RFCs and proposals in reference repositories.
 
-**Evoluzione della tecnologia.** La tecnologia che sto usando è ancora la scelta migliore? Ci sono alternative più recenti che risolvono problemi noti della tecnologia attuale? La community è attiva o in declino? Cercare: GitHub star trend, frequenza di release, numero di contributor attivi, issue aperte vs chiuse.
+**Technology evolution.** Is the technology I am using still the best choice? Are there newer alternatives that resolve known issues with the current technology? Is the community active or in decline? Search: GitHub star trends, release frequency, number of active contributors, open vs closed issues.
 
-**Esperienza di altri.** Chi altro ha fatto qualcosa di simile e cosa ha imparato? Quali errori posso evitare? Cercare: post-mortem pubblici, case study, thread su forum tecnici, talk da conferenze.
+**Experience from others.** Who else has done something similar and what did they learn? What mistakes can I avoid? Search: public post-mortems, case studies, technical forum threads, conference talks.
 
-#### 1.7.3 Come l'agente AI supporta la ricerca
+#### 1.7.3 How the AI agent supports research
 
-L'agente AI DEVE suggerire proattivamente la ricerca nei seguenti momenti:
+The AI agent MUST proactively suggest research at the following moments:
 
-**All'inizio di un nuovo progetto:** "Prima di iniziare l'implementazione, vuoi che faccia una ricerca sullo stato dell'arte per [dominio del progetto]? Posso cercare progetti simili, framework consolidati, e pattern architetturali usati nel settore."
+**At the start of a new project:** "Before implementing, shall I research the state of the art for [project domain]? I can look for similar projects, established frameworks, and architectural patterns used in the industry."
 
-**Quando viene aggiunta una nuova dipendenza:** "Stai per aggiungere [libreria]. Vuoi che verifichi se ci sono alternative più recenti o mature? Posso confrontare: maturità, frequenza di aggiornamento, dimensione della community, licenza, e eventuali problemi noti."
+**When a new dependency is added:** "You are about to add [library]. Would you like me to check whether there are more recent or mature alternatives? I can compare: maturity, update frequency, community size, licence, and any known issues."
 
-**Quando viene proposta una scelta architetturale:** "Questa decisione ha un impatto a lungo termine. Vuoi che cerchi come altri progetti nel dominio [X] hanno affrontato lo stesso problema? Posso trovare ADR pubblici, post di engineering blog, e case study."
+**When an architectural choice is proposed:** "This decision has a long-term impact. Would you like me to look at how other projects in the [X] domain have approached the same problem? I can find public ADRs, engineering blog posts, and case studies."
 
-**Quando il progetto entra in una nuova fase:** "Il progetto sta per affrontare [nuova area]. Vuoi che faccia un check sullo stato dell'arte per le tecnologie e i pattern usati in questa area?"
+**When the project enters a new phase:** "The project is about to tackle [new area]. Would you like me to carry out a state-of-the-art check on the technologies and patterns used in this area?"
 
-**Durante la revisione periodica:** "Sono passati [N] mesi dall'ultima ricerca sullo stato dell'arte per [componente]. Alcune delle tecnologie usate potrebbero avere alternative migliori o aggiornamenti significativi. Vuoi che faccia un check?"
+**During periodic review:** "It has been [N] months since the last state-of-the-art research for [component]. Some of the technologies in use may have better alternatives or significant updates. Would you like me to carry out a check?"
 
-#### 1.7.4 Registro delle ricerche
+#### 1.7.4 Research register
 
-Ogni ricerca sullo stato dell'arte è documentata in `docs/research/`:
+Document each research exercise in `docs/research/`:
 
 ```
 docs/research/
-├── YYYY-MM-DD-<argomento>.md      # Report di ricerca
-├── YYYY-MM-DD-<argomento>.md
-└── index.md                        # Indice con data, argomento, esito
+├── YYYY-MM-DD-<topic>.md          # Research report
+├── YYYY-MM-DD-<topic>.md
+└── index.md                        # Index with date, topic, outcome
 ```
 
-Formato del report:
+Report format:
 
 ```markdown
-# Ricerca: [Argomento]
+# Research: [Topic]
 
-**Data:** YYYY-MM-DD
-**Trigger:** nuovo progetto | nuova feature | nuova dipendenza | revisione periodica
-**Autore:** umano | agente AI | entrambi
+**Date:** YYYY-MM-DD
+**Trigger:** new project | new feature | new dependency | periodic review
+**Author:** human | AI agent | both
 
-## Domanda di ricerca
-[Cosa volevamo sapere]
+## Research question
+[What we wanted to know]
 
-## Soluzioni trovate
-[Lista con pro/contro/maturità/licenza]
+## Solutions found
+[List with pros/cons/maturity/licence]
 
-## Raccomandazione
-[Cosa fare e perché]
+## Recommendation
+[What to do and why]
 
-## Fonti
-[Link a documentazione, blog, repository, paper]
+## Sources
+[Links to documentation, blogs, repositories, papers]
 
-## Decisione presa
-[Cosa abbiamo deciso e riferimento all'ADR se presente]
+## Decision taken
+[What was decided and reference to the ADR if present]
 ```
 
-#### 1.7.5 Agente di ricerca stato dell'arte (State-of-the-Art Scout)
+#### 1.7.5 State-of-the-art research agent (State-of-the-Art Scout)
 
-Oltre agli agenti di sorveglianza delle dipendenze (§9), il playbook prevede un agente dedicato alla ricerca dello stato dell'arte. Questo agente opera in modo diverso dagli altri: non monitora una singola dipendenza, ma scandaglia il panorama tecnologico intorno al progetto.
+In addition to the dependency surveillance agents (§9), the playbook includes an agent dedicated to state-of-the-art research. This agent operates differently from the others: it does not monitor a single dependency, but scans the technological landscape surrounding the project.
 
-**Frequenza:** trimestrale per componenti stabili, mensile per componenti in fase attiva di sviluppo.
+**Frequency:** quarterly for stable components, monthly for components under active development.
 
-**Cosa fa:**
+**What it does:**
 
-1. **Technology health check.** Per ogni tecnologia significativa nel progetto (linguaggio, framework, database, librerie chiave), verifica: ultima release, frequenza di release nell'ultimo anno, trend degli issue aperti, stato della documentazione, eventuali announcement di deprecation o end-of-life.
+1. **Technology health check.** For every significant technology in the project (language, framework, database, key libraries), verifies: latest release, release frequency over the past year, trend of open issues, state of documentation, any deprecation or end-of-life announcements.
 
-2. **Alternative scanning.** Cerca nuove librerie o servizi che risolvono lo stesso problema di una dipendenza esistente, ma con approccio diverso o migliore. Non suggerisce di cambiare — segnala che l'alternativa esiste e lascia la decisione all'umano.
+2. **Alternative scanning.** Searches for new libraries or services that solve the same problem as an existing dependency, but with a different or improved approach. It does not suggest switching — it flags that the alternative exists and leaves the decision to the human.
 
-3. **Pattern evolution.** Verifica se i pattern architetturali usati nel progetto sono ancora considerati best practice o se la community si è mossa verso approcci diversi. Cerca: aggiornamenti a styleguide ufficiali, nuovi RFC nei repository di riferimento, talk recenti da conferenze chiave.
+3. **Pattern evolution.** Verifies whether the architectural patterns used in the project are still considered best practice or whether the community has moved towards different approaches. Searches: updates to official style guides, new RFCs in reference repositories, recent talks from key conferences.
 
-4. **Security landscape.** Verifica se le practice di sicurezza del progetto sono allineate con le raccomandazioni correnti (OWASP, NIST, CIS benchmarks). Cerca: nuove vulnerability class, nuovi tool di scanning, aggiornamenti alle raccomandazioni.
+4. **Security landscape.** Verifies whether the project's security practices are aligned with current recommendations (OWASP, NIST, CIS benchmarks). Searches: new vulnerability classes, new scanning tools, updates to recommendations.
 
-5. **Ecosystem health.** Valuta la salute complessiva dell'ecosistema: la community è in crescita o in declino? Ci sono fork significativi? Ci sono controversie (licenza, governance, ownership) che potrebbero impattare il progetto?
+5. **Ecosystem health.** Evaluates the overall health of the ecosystem: is the community growing or in decline? Are there significant forks? Are there controversies (licence, governance, ownership) that could impact the project?
 
-**Output:** un report in `docs/research/` con segnalazioni classificate:
+**Output:** a report in `docs/research/` with classified findings:
 
-| Segnalazione | Significato | Azione |
-|-------------|-------------|--------|
-| `healthy` | La tecnologia è attiva, mantenuta, senza alternative superiori | Nessuna |
-| `watch` | Esiste un'alternativa emergente o un trend da monitorare | Inserire nel prossimo ciclo di ricerca |
-| `evaluate` | Un'alternativa è matura abbastanza da meritare una valutazione seria | Creare un ADR con confronto |
-| `migrate` | La tecnologia è in declino, deprecata, o ha problemi significativi | Pianificare la migrazione nel backlog |
-| `urgent` | End-of-life, vulnerability critica senza patch, fork ostile | Azione immediata |
+| Finding | Meaning | Action |
+|---------|---------|--------|
+| `healthy` | The technology is active, maintained, with no superior alternatives | None |
+| `watch` | An emerging alternative or trend to monitor exists | Add to the next research cycle |
+| `evaluate` | An alternative is mature enough to warrant serious evaluation | Create an ADR with comparison |
+| `migrate` | The technology is in decline, deprecated, or has significant issues | Plan migration in the backlog |
+| `urgent` | End-of-life, critical vulnerability without a patch, hostile fork | Immediate action |
 
 ### 1.8 Definition of Done
 
-Un item è "fatto" quando TUTTE queste condizioni sono soddisfatte:
+An item is "done" when ALL of the following conditions are met:
 
-- [ ] La ricerca sullo stato dell'arte è stata condotta se applicabile (§1.7)
-- [ ] Il codice è scritto e rispetta le convenzioni di stile (§3)
-- [ ] Tutti gli acceptance criteria sono soddisfatti
-- [ ] I test sono scritti e passano (§5)
-- [ ] La coverage non è scesa sotto la soglia (§5.3)
-- [ ] La documentazione è aggiornata (§6)
-- [ ] Il codice è stato rivisto (self-review o peer review)
-- [ ] Il CI è verde
-- [ ] La surface map è aggiornata se sono state aggiunte/rimosse dipendenze esterne (§8)
-- [ ] `PROJECT_STATUS.md` è aggiornato
+- [ ] State-of-the-art research has been conducted where applicable (§1.7)
+- [ ] Code is written and complies with style conventions (§3)
+- [ ] All Acceptance Criteria are satisfied
+- [ ] Tests are written and pass (§5)
+- [ ] Coverage has not dropped below the threshold (§5.3)
+- [ ] Documentation is up to date (§6)
+- [ ] Code has been reviewed (self-review or peer review)
+- [ ] CI is green
+- [ ] The surface map is updated if external dependencies have been added or removed (§8)
+- [ ] `PROJECT_STATUS.md` is updated
 
 ---
 
-## 2. Struttura del progetto
+## 2. Project structure
 
-### 2.1 File obbligatori nella root
+### 2.1 Mandatory files in the root
 
-Ogni progetto DEVE contenere:
+Every project MUST contain:
 
 ```
 project-root/
-├── CLAUDE.md                    # Regole per agenti AI
-├── PROJECT_STATUS.md            # Stato corrente (4 sezioni fisse)
-├── DEPENDENCIES.md              # Mappa dipendenze critiche e contratti
-├── CHANGELOG.md                 # Storico dei cambiamenti per release
-├── COMPATIBILITY.md             # Stato compatibilità con dipendenze esterne (generato)
+├── CLAUDE.md                    # Rules for AI agents
+├── PROJECT_STATUS.md            # Current status (4 fixed sections)
+├── DEPENDENCIES.md              # Critical dependency map and contracts
+├── CHANGELOG.md                 # History of changes per release
+├── COMPATIBILITY.md             # Compatibility status with external dependencies (generated)
 ├── docs/
-│   ├── prd/                     # PRD e documenti di requisiti
+│   ├── prd/                     # PRD and requirements documents
 │   │   └── 00-prd.md
 │   ├── adr/                     # Architecture Decision Records
-│   │   ├── 001-<titolo>.md
+│   │   ├── 001-<title>.md
 │   │   └── ...
-│   ├── api/                     # Documentazione API (generata o manuale)
-│   └── runbooks/                # Procedure operative (deploy, rollback, incident)
-├── src/                         # Codice sorgente
-├── tests/                       # Test (struttura specchiata a src/)
-├── scripts/                     # Script di build, seed, utility
-├── ci/                          # Configurazione CI/CD
-│   └── adapters/                # Adapter per forge specifico (github/, gitlab/, ecc.)
-├── compat-data/                 # Database di compatibilità
-├── compatibility/               # Schema, surface map, cataloghi
-├── surveillance/                # Configurazione agenti di sorveglianza
-└── .config/                     # Configurazione linting, formatting, ecc.
+│   ├── api/                     # API documentation (generated or manual)
+│   └── runbooks/                # Operational procedures (deploy, rollback, incident)
+├── src/                         # Source code
+├── tests/                       # Tests (structure mirroring src/)
+├── scripts/                     # Build, seed, utility scripts
+├── ci/                          # CI/CD configuration
+│   └── adapters/                # Adapters for specific forges (github/, gitlab/, etc.)
+├── compat-data/                 # Compatibility database
+├── compatibility/               # Schema, surface map, catalogues
+├── surveillance/                # Surveillance agent configuration
+└── .config/                     # Linting, formatting configuration, etc.
     ├── eslint.config.js
     ├── prettier.config.js
     └── ...
@@ -299,387 +299,387 @@ project-root/
 
 ### 2.2 PROJECT_STATUS.md
 
-Aggiornato ad ogni sessione di lavoro. Quattro sezioni fisse:
+Updated at every working session. Four fixed sections:
 
 ```markdown
 ## Objective
-Cosa il progetto deve raggiungere in questa fase.
+What the project must achieve in this phase.
 
 ## Modified Files
-Lista dei file modificati nell'ultima sessione, con motivo.
+List of files modified in the last session, with reason.
 
 ## Logical State
-Stato corrente: cosa funziona, cosa no, cosa è bloccato.
+Current status: what works, what does not, what is blocked.
 
 ## Next Action
-La prossima azione concreta da eseguire.
+The next concrete action to perform.
 ```
 
 ### 2.3 CLAUDE.md
 
-Regole operative per agenti AI. Contenuto minimo:
+Operational rules for AI agents. Minimum content:
 
-- Lingua e stile di scrittura (es. British English, active voice, short sentences)
-- Lista di parole vietate
-- Scope delle modifiche consentite per livello di autonomia (L0/L1/L2)
-- Convenzioni di naming per branch, commit, file
-- Percorsi protetti (file che l'agente non può modificare senza conferma umana)
-- Regole editoriali (no em dash, max lunghezza riga, ecc.)
+- Language and writing style (e.g. British English, active voice, short sentences)
+- List of forbidden words
+- Scope of permitted modifications per autonomy level (L0/L1/L2)
+- Naming conventions for branches, commits, files
+- Protected paths (files the agent cannot modify without human confirmation)
+- Editorial rules (no em dash, max line length, etc.)
 
 ---
 
-## 3. Qualità del codice
+## 3. Code quality
 
-### 3.1 Principi architetturali
+### 3.1 Architectural principles
 
-Ogni progetto DEVE rispettare questi principi indipendentemente dal linguaggio:
+Every project MUST adhere to these principles regardless of language:
 
-**Separation of concerns.** Ogni modulo ha una responsabilità singola e ben definita. Il codice che parla con API esterne vive in un adapter/client layer separato dalla logica di business e dalla UI.
+**Separation of concerns.** Every module has a single, well-defined responsibility. Code that communicates with external APIs lives in a separate adapter/client layer, apart from business logic and the UI.
 
-**Dependency inversion.** I moduli di alto livello non dipendono da moduli di basso livello — entrambi dipendono da astrazioni (interfacce, tipi, contratti). Questo rende il codice testabile e il client layer sostituibile.
+**Dependency inversion.** High-level modules do not depend on low-level modules — both depend on abstractions (interfaces, types, contracts). This makes the code testable and the client layer replaceable.
 
-**Fail fast.** Gli errori vengono rilevati e segnalati il prima possibile. Input non valido viene rifiutato al boundary, non propagato silenziosamente.
+**Fail fast.** Errors are detected and reported as early as possible. Invalid input is rejected at the boundary, not propagated silently.
 
-**Immutabilità per default.** Preferire strutture dati immutabili e funzioni pure. Lo stato mutabile è confinato in store/state manager espliciti.
+**Immutability by default.** Prefer immutable data structures and pure functions. Mutable state is confined to explicit store/state managers.
 
-**Explicit over implicit.** Nessuna magia nascosta: no global state non dichiarato, no side effect in getter, no import circolari.
+**Explicit over implicit.** No hidden magic: no undeclared global state, no side effects in getters, no circular imports.
 
-### 3.2 Convenzioni di naming
+### 3.2 Naming conventions
 
-| Elemento | Convenzione | Esempio |
+| Element | Convention | Example |
 |----------|------------|---------|
 | File | kebab-case | `user-profile.ts`, `auth-client.py` |
-| Classe/Componente | PascalCase | `UserProfile`, `AuthClient` |
-| Funzione/metodo | camelCase (JS/TS), snake_case (Python) | `getUserById()`, `get_user_by_id()` |
-| Costante | SCREAMING_SNAKE_CASE | `MAX_RETRY_COUNT`, `API_BASE_URL` |
-| Variabile d'ambiente | SCREAMING_SNAKE_CASE con prefisso progetto | `ARC_CORTEX_URL`, `APP_SECRET_KEY` |
-| Branch | `<tipo>/<id>-<descrizione-breve>` | `feat/US-AUTH-001-login-flow` |
+| Class/Component | PascalCase | `UserProfile`, `AuthClient` |
+| Function/method | camelCase (JS/TS), snake_case (Python) | `getUserById()`, `get_user_by_id()` |
+| Constant | SCREAMING_SNAKE_CASE | `MAX_RETRY_COUNT`, `API_BASE_URL` |
+| Environment variable | SCREAMING_SNAKE_CASE with project prefix | `ARC_CORTEX_URL`, `APP_SECRET_KEY` |
+| Branch | `<type>/<id>-<short-description>` | `feat/US-AUTH-001-login-flow` |
 | Commit | Conventional Commits | `feat(auth): add login endpoint` |
-| Test file | Stesso nome del file testato + `.test` o `.spec` | `auth-client.test.ts` |
+| Test file | Same name as the tested file + `.test` or `.spec` | `auth-client.test.ts` |
 
 ### 3.3 Conventional Commits
 
-Ogni commit message segue il formato:
+Every commit message follows the format:
 
 ```
 <type>(<scope>): <description>
 
-[body opzionale]
+[optional body]
 
-[footer opzionale]
+[optional footer]
 ```
 
-Tipi consentiti:
+Permitted types:
 
-| Tipo | Quando usarlo |
+| Type | When to use it |
 |------|--------------|
-| `feat` | Nuova funzionalità |
+| `feat` | New feature |
 | `fix` | Bugfix |
-| `docs` | Solo documentazione |
-| `style` | Formatting, semicolons, ecc. (nessun cambio di logica) |
-| `refactor` | Cambio di codice che non aggiunge feature né fix bug |
-| `test` | Aggiunta o modifica di test |
-| `chore` | Build, CI, dipendenze, tool |
-| `perf` | Miglioramento di performance |
-| `ci` | Modifiche alla pipeline CI/CD |
-| `revert` | Revert di un commit precedente |
-| `compat` | Cambiamento legato alla compatibilità con dipendenze esterne |
+| `docs` | Documentation only |
+| `style` | Formatting, semicolons, etc. (no logic change) |
+| `refactor` | Code change that neither adds a feature nor fixes a bug |
+| `test` | Adding or modifying tests |
+| `chore` | Build, CI, dependencies, tooling |
+| `perf` | Performance improvement |
+| `ci` | Changes to the CI/CD pipeline |
+| `revert` | Revert of a previous commit |
+| `compat` | Change related to compatibility with external dependencies |
 
-Il footer `BREAKING CHANGE:` è obbligatorio per qualunque cambio che rompe backward compatibility.
+The `BREAKING CHANGE:` footer is mandatory for any change that breaks backward compatibility.
 
-### 3.4 Linting e formatting
+### 3.4 Linting and formatting
 
-Ogni progetto DEVE avere:
+Every project MUST have:
 
-- **Linter** configurato e integrato nel CI. Il CI fallisce se ci sono errori di lint.
-- **Formatter** configurato con regole identiche al linter. Nessun dibattito su stile: il formatter decide.
-- **Pre-commit hook** (opzionale ma raccomandato) che esegue lint + format prima di ogni commit.
+- **Linter** configured and integrated into CI. CI fails if there are lint errors.
+- **Formatter** configured with rules identical to the linter. No debate on style: the formatter decides.
+- **Pre-commit hook** (optional but recommended) that runs lint + format before every commit.
 
-Configurazione raccomandata per linguaggio:
+Recommended configuration by language:
 
-| Linguaggio | Linter | Formatter | Config file |
+| Language | Linter | Formatter | Config file |
 |-----------|--------|-----------|-------------|
 | TypeScript/JavaScript | ESLint (flat config) | Prettier | `eslint.config.js`, `.prettierrc` |
-| Python | Ruff (lint + format) | Ruff | `ruff.toml` o `pyproject.toml` |
+| Python | Ruff (lint + format) | Ruff | `ruff.toml` or `pyproject.toml` |
 | Rust | Clippy | rustfmt | `clippy.toml`, `rustfmt.toml` |
 | Go | golangci-lint | gofmt | `.golangci.yml` |
 | Bash | ShellCheck | shfmt | `.shellcheckrc` |
 
-**Regola zero:** nessun commit entra nel repo con warning di lint. Warning è errore.
+**Rule zero:** no commit enters the repo with lint warnings. A warning is an error.
 
-### 3.5 Complessità e metriche
+### 3.5 Complexity and metrics
 
-Soglie che il CI DEVE applicare:
+Thresholds that CI MUST enforce:
 
-| Metrica | Soglia | Azione se superata |
+| Metric | Threshold | Action if exceeded |
 |---------|--------|-------------------|
-| Complessità ciclomatica per funzione | ≤ 15 | CI fail |
-| Linee per funzione | ≤ 50 (indicativo) | Warning |
-| Linee per file | ≤ 400 (indicativo) | Warning |
-| Profondità di nesting | ≤ 4 livelli | CI fail |
-| Parametri per funzione | ≤ 5 | Warning, suggerire oggetto opzioni |
-| Import circolari | 0 | CI fail |
-| `any` type (TypeScript) | 0 in produzione | CI fail (consentito in test con giustificazione) |
-| `// @ts-ignore` o `# type: ignore` | 0 in produzione | CI fail (consentito con commento che spiega perché) |
+| Cyclomatic complexity per function | ≤ 15 | CI fail |
+| Lines per function | ≤ 50 (indicative) | Warning |
+| Lines per file | ≤ 400 (indicative) | Warning |
+| Nesting depth | ≤ 4 levels | CI fail |
+| Parameters per function | ≤ 5 | Warning, suggest options object |
+| Circular imports | 0 | CI fail |
+| `any` type (TypeScript) | 0 in production | CI fail (permitted in tests with justification) |
+| `// @ts-ignore` or `# type: ignore` | 0 in production | CI fail (permitted with an explanatory comment) |
 
-### 3.6 Gestione degli errori
+### 3.6 Error handling
 
-Regole universali:
+Universal rules:
 
-- **Mai ingoiare errori silenziosamente.** Ogni `catch` deve loggare, rilanciare, o gestire esplicitamente. Un `catch` vuoto è un bug.
-- **Errori tipizzati.** Definire classi/tipi di errore per ogni dominio dell'app. Non usare stringhe come errori.
-- **Error boundary.** Ogni layer dell'architettura (UI, business logic, adapter, infra) ha il proprio error boundary che traduce errori del layer inferiore in errori significativi per il layer superiore.
-- **Retry con backoff.** Le chiamate a servizi esterni devono avere retry con exponential backoff e limite massimo di tentativi. Mai retry infinito.
-- **Timeout espliciti.** Ogni chiamata esterna ha un timeout configurato. Nessuna chiamata attende indefinitamente.
+- **Never swallow errors silently.** Every `catch` must log, rethrow, or handle explicitly. An empty `catch` is a bug.
+- **Typed errors.** Define error classes/types for every domain of the application. Do not use strings as errors.
+- **Error boundary.** Every layer of the architecture (UI, business logic, adapter, infra) has its own error boundary that translates errors from the lower layer into errors meaningful to the upper layer.
+- **Retry with backoff.** Calls to external services must have retry with exponential backoff and a maximum number of attempts. Never infinite retry.
+- **Explicit timeouts.** Every external call has a configured timeout. No call waits indefinitely.
 
-### 3.7 Gestione delle dipendenze
+### 3.7 Dependency management
 
-- **Lock file** sempre committato (`package-lock.json`, `Pipfile.lock`, `Cargo.lock`, `go.sum`).
-- **Versioni esatte** per dipendenze dirette in produzione. Range (`^`, `~`) consentiti solo per dipendenze di sviluppo.
-- **Audit regolare.** `npm audit`, `pip-audit`, `cargo audit` eseguiti nel CI su ogni PR.
-- **Aggiornamento intenzionale.** Le dipendenze non si aggiornano "perché c'è una nuova versione" — si aggiornano quando c'è un motivo (bugfix, security patch, feature necessaria). L'aggiornamento è un task tracciato, non un effetto collaterale.
-- **Dipendenze fantasma.** Il CI verifica che non ci siano import di pacchetti non dichiarati nelle dipendenze. Tool: `depcheck` (npm), `deptry` (Python).
+- **Lock file** always committed (`package-lock.json`, `Pipfile.lock`, `Cargo.lock`, `go.sum`).
+- **Exact versions** for direct production dependencies. Ranges (`^`, `~`) permitted only for development dependencies.
+- **Regular audit.** `npm audit`, `pip-audit`, `cargo audit` run in CI on every PR.
+- **Intentional updates.** Dependencies are not updated "because a new version is available" — they are updated when there is a reason (bugfix, security patch, required feature). An update is a tracked task, not a side effect.
+- **Phantom dependencies.** CI verifies that there are no imports of packages not declared in the dependencies. Tools: `depcheck` (npm), `deptry` (Python).
 
 ### 3.8 Branching strategy
 
-**Trunk-based development** per sviluppatori singoli e piccoli team:
+**Trunk-based development** for individual developers and small teams:
 
-- `main` è sempre deployabile
-- Feature branch di breve durata (max 3-5 giorni)
-- Nessun branch `develop` — è overhead inutile per team piccoli
-- Branch naming: `<tipo>/<id>-<descrizione>` (es. `feat/US-AUTH-001-login`)
-- Merge via squash (un commit per feature branch)
-- Tag per release: `v<major>.<minor>.<patch>`
+- `main` is always deployable
+- Short-lived feature branches (max 3–5 days)
+- No `develop` branch — it is unnecessary overhead for small teams
+- Branch naming: `<type>/<id>-<description>` (e.g. `feat/US-AUTH-001-login`)
+- Merge via squash (one commit per feature branch)
+- Tags for releases: `v<major>.<minor>.<patch>`
 
 ---
 
-## 4. Requisiti di sicurezza
+## 4. Security requirements
 
-### 4.1 Principi fondamentali
+### 4.1 Fundamental principles
 
-**Defence in depth.** Nessun singolo controllo è sufficiente. Ogni layer valida i propri input indipendentemente.
+**Defence in depth.** No single control is sufficient. Every layer validates its own inputs independently.
 
-**Least privilege.** Ogni componente ha solo i permessi minimi necessari. Token API, database user, file system access — tutto è ridotto al minimo.
+**Least privilege.** Every component has only the minimum permissions necessary. API tokens, database users, file system access — everything is reduced to the minimum.
 
-**Zero trust on input.** Tutto l'input è ostile fino a prova contraria: query parameter, body di request, header, file upload, variabili d'ambiente, dati da API esterne.
+**Zero trust on input.** All input is hostile until proven otherwise: query parameters, request bodies, headers, file uploads, environment variables, data from external APIs.
 
 ### 4.2 Input validation
 
-Ogni punto di ingresso dell'applicazione DEVE validare l'input:
+Every entry point of the application MUST validate input:
 
-| Layer | Cosa validare | Come |
+| Layer | What to validate | How |
 |-------|--------------|------|
-| **API endpoint** | Tipo, formato, range, lunghezza di ogni parametro | Schema validation (Zod, Pydantic, JSON Schema) |
-| **Form UI** | Formato, lunghezza, caratteri consentiti | Validazione client-side + server-side (mai solo client) |
-| **File upload** | Tipo MIME reale (non solo estensione), dimensione, contenuto | Magic bytes check, antivirus se disponibile |
-| **Database query** | Parametri query, injection | Prepared statement / parametrised query (mai concatenazione di stringhe) |
-| **Dati da API esterne** | Schema della risposta, campi obbligatori, tipi | Stessa validazione dell'input utente — un API esterna può essere compromessa |
+| **API endpoint** | Type, format, range, length of every parameter | Schema validation (Zod, Pydantic, JSON Schema) |
+| **UI form** | Format, length, permitted characters | Client-side + server-side validation (never client-only) |
+| **File upload** | Real MIME type (not just extension), size, content | Magic bytes check, antivirus if available |
+| **Database query** | Query parameters, injection | Prepared statement / parameterised query (never string concatenation) |
+| **Data from external APIs** | Response schema, mandatory fields, types | Same validation as user input — an external API can be compromised |
 
-**Regola:** la validazione è dichiarativa (schema), non imperativa (catena di `if`). Uno schema è testabile, documentabile, e riutilizzabile.
+**Rule:** validation is declarative (schema), not imperative (chain of `if` statements). A schema is testable, documentable, and reusable.
 
-### 4.3 Autenticazione e autorizzazione
+### 4.3 Authentication and authorisation
 
-- **Password.** Mai in chiaro, mai in log, mai in URL. Hash con bcrypt/argon2, salt unico per utente.
-- **Token.** JWT con scadenza breve (15 min access, 7 giorni refresh). Refresh token rotato ad ogni uso.
-- **Session.** Cookie `HttpOnly`, `Secure`, `SameSite=Strict`. Session ID rigenerato dopo login.
-- **API key.** Mai nel codice sorgente. Mai nel frontend. Sempre in variabile d'ambiente o secret manager.
-- **Autorizzazione.** Controllata ad ogni request, non solo al login. RBAC o ABAC esplicito, mai hard-coded.
+- **Passwords.** Never in plain text, never in logs, never in URLs. Hashed with bcrypt/argon2, unique salt per user.
+- **Tokens.** JWT with short expiry (15 min access, 7 days refresh). Refresh token rotated on every use.
+- **Session.** `HttpOnly`, `Secure`, `SameSite=Strict` cookies. Session ID regenerated after login.
+- **API keys.** Never in source code. Never in the frontend. Always in an environment variable or secret manager.
+- **Authorisation.** Checked on every request, not only at login. Explicit RBAC or ABAC, never hard-coded.
 
 ### 4.4 Secrets management
 
-| Regola | Dettaglio |
+| Rule | Detail |
 |--------|----------|
-| **Mai nel codice** | Nessun secret in file sorgente, commit, o log. `.gitignore` include `.env`, `*.key`, `*.pem` |
-| **Variabili d'ambiente** | Metodo primario per secret in locale e CI |
-| **Secret manager** | Per produzione: GitHub Secrets, Vault, AWS SSM, o equivalente |
-| **Rotazione** | Ogni secret ha una data di scadenza. La rotazione è automatizzata o calendarizzata |
-| **Audit** | Ogni accesso a secret è loggato. Se un secret è compromesso, va ruotato immediatamente |
-| **`.env.example`** | Il repo contiene un `.env.example` con i nomi delle variabili (senza valori) e commenti esplicativi |
+| **Never in code** | No secrets in source files, commits, or logs. `.gitignore` includes `.env`, `*.key`, `*.pem` |
+| **Environment variables** | Primary method for secrets in local and CI environments |
+| **Secret manager** | For production: GitHub Secrets, Vault, AWS SSM, or equivalent |
+| **Rotation** | Every secret has an expiry date. Rotation is automated or scheduled |
+| **Audit** | Every access to a secret is logged. If a secret is compromised, it must be rotated immediately |
+| **`.env.example`** | The repo contains a `.env.example` with variable names (without values) and explanatory comments |
 
-### 4.5 Checklist di sicurezza per ogni PR
+### 4.5 Security checklist for every PR
 
-- [ ] Nessun secret committato (verificato da tool: `trufflehog`, `gitleaks`)
-- [ ] Input validato con schema a ogni boundary
-- [ ] Query parametrizzate (nessuna concatenazione SQL)
-- [ ] Errori non espongono stack trace o dettagli interni all'utente
-- [ ] Header di sicurezza presenti (CSP, X-Frame-Options, X-Content-Type-Options)
-- [ ] Dipendenze senza vulnerability note (`npm audit` / `pip-audit` clean)
-- [ ] Rate limiting configurato per endpoint pubblici
-- [ ] Log non contengono PII o secret
+- [ ] No secrets committed (verified by tools: `trufflehog`, `gitleaks`)
+- [ ] Input validated with schema at every boundary
+- [ ] Parameterised queries (no SQL concatenation)
+- [ ] Errors do not expose stack traces or internal details to the user
+- [ ] Security headers present (CSP, X-Frame-Options, X-Content-Type-Options)
+- [ ] Dependencies free of known vulnerabilities (`npm audit` / `pip-audit` clean)
+- [ ] Rate limiting configured for public endpoints
+- [ ] Logs do not contain PII or secrets
 
-### 4.6 OWASP Top 10 come baseline
+### 4.6 OWASP Top 10 as baseline
 
-Ogni applicazione web DEVE essere protetta contro le OWASP Top 10 correnti. Il team rivede la lista annualmente e verifica che ogni voce sia coperta da test o configurazione.
+Every web application MUST be protected against the current OWASP Top 10. The team reviews the list annually and verifies that every item is covered by tests or configuration.
 
 ---
 
-## 5. Strategia di testing
+## 5. Testing strategy
 
-### 5.1 Piramide dei test
+### 5.1 Testing pyramid
 
 ```
           ┌─────────┐
-          │   E2E   │  Pochi, lenti, costosi. Validano flussi utente completi.
+          │   E2E   │  Few, slow, costly. Validate complete user flows.
          ┌┴─────────┴┐
-         │Integration │  Medi. Verificano che i moduli funzionino insieme.
+         │Integration │  Medium. Verify that modules work together.
         ┌┴───────────┴┐
-        │  Scenarios   │  Contract test contro servizi reali o emulati.
+        │  Scenarios   │  Contract tests against real or emulated services.
        ┌┴─────────────┴┐
-       │     Unit       │  Molti, veloci, economici. Una funzione, un comportamento.
+       │     Unit       │  Many, fast, cheap. One function, one behaviour.
        └────────────────┘
 ```
 
-| Tier | Cosa testa | Ambiente | Velocità | Quantità |
+| Tier | What it tests | Environment | Speed | Quantity |
 |------|-----------|----------|----------|----------|
-| **Unit** | Funzione singola, logica pura | In-memory, mock completo | < 1s per test | Centinaia |
-| **Scenario** | Contratto con servizio esterno | Emulatore o container reale | < 5s per test | Decine |
-| **Integration** | Moduli che interagiscono | Container reale, database reale | < 30s per test | Decine |
-| **E2E** | Flusso utente completo | Stack completo, browser reale | < 2min per test | Una manciata |
+| **Unit** | Single function, pure logic | In-memory, full mock | < 1s per test | Hundreds |
+| **Scenario** | Contract with external service | Emulator or real container | < 5s per test | Dozens |
+| **Integration** | Interacting modules | Real container, real database | < 30s per test | Dozens |
+| **E2E** | Complete user flow | Full stack, real browser | < 2min per test | A handful |
 
-### 5.2 Regole per ogni tier
+### 5.2 Rules for each tier
 
-**Unit test:**
-- Ogni funzione pubblica ha almeno un test
-- Test il comportamento, non l'implementazione — se il refactor rompe il test ma non il comportamento, il test è sbagliato
-- Nessuna dipendenza esterna (rete, file system, database) — tutto mockato
-- Naming: `describe('functionName', () => { it('should <comportamento> when <condizione>') })`
+**Unit tests:**
+- Every public function has at least one test
+- Test the behaviour, not the implementation — if a refactor breaks the test but not the behaviour, the test is wrong
+- No external dependencies (network, file system, database) — everything mocked
+- Naming: `describe('functionName', () => { it('should <behaviour> when <condition>') })`
 
-**Scenario/Contract test:**
-- Ogni superficie nella surface map ha almeno un contract test
-- La validazione usa JSON Schema con `additionalProperties: true` (campi nuovi non rompono)
-- I fixture sono generati da interazioni reali, non scritti a mano
-- Set-based assertion per risposte con ordinamento non garantito
+**Scenario/Contract tests:**
+- Every surface in the surface map has at least one contract test
+- Validation uses JSON Schema with `additionalProperties: true` (new fields do not break it)
+- Fixtures are generated from real interactions, not written by hand
+- Set-based assertion for responses with non-guaranteed ordering
 
-**Integration test:**
-- Ogni flusso critico (login, CRUD principale, pagamento) ha almeno un integration test
-- I test creano i propri dati e li puliscono — nessuna dipendenza da stato preesistente
-- Dynamic port binding per container paralleli — nessuna porta hard-coded
+**Integration tests:**
+- Every critical flow (login, main CRUD, payment) has at least one integration test
+- Tests create their own data and clean it up — no dependency on pre-existing state
+- Dynamic port binding for parallel containers — no hard-coded ports
 
-**E2E test:**
-- Copertura dei flussi utente critici (happy path + principali error path)
-- Tool: Playwright (web), Detox (mobile), o equivalente
-- Retry automatico per flaky test (max 2 retry), ma i test flaky vanno fixati, non ignorati
-- Screenshot/video su failure per debug
+**E2E tests:**
+- Coverage of critical user flows (happy path + main error paths)
+- Tools: Playwright (web), Detox (mobile), or equivalent
+- Automatic retry for flaky tests (max 2 retries), but flaky tests must be fixed, not ignored
+- Screenshot/video on failure for debugging
 
 ### 5.3 Coverage
 
-**Ratchet model:** la coverage può solo salire, mai scendere.
+**Ratchet model:** coverage can only increase, never decrease.
 
-| Metrica | Soglia minima | Enforcement |
+| Metric | Minimum threshold | Enforcement |
 |---------|--------------|-------------|
-| Line coverage | Definita nel baseline file, ratchet up-only | CI fail se scende |
-| Branch coverage | Definita nel baseline file, ratchet up-only | CI fail se scende |
-| Per-file coverage | Nessun file nuovo sotto il 70% | CI fail |
-| Coverage delta su PR | ≥ 0% (la PR non può abbassare la coverage) | CI fail |
+| Line coverage | Defined in the baseline file, ratchet up-only | CI fail if it drops |
+| Branch coverage | Defined in the baseline file, ratchet up-only | CI fail if it drops |
+| Per-file coverage | No new file below 70% | CI fail |
+| Coverage delta on PR | ≥ 0% (the PR cannot lower coverage) | CI fail |
 
-**Baseline file:** `coverage-baseline.json` nella root del progetto. Contiene la coverage per-file corrente. Il CI confronta e fallisce se una qualunque chiave scende.
+**Baseline file:** `coverage-baseline.json` in the project root. Contains per-file coverage for the current state. CI compares and fails if any key decreases.
 
-**Escape valve:** una PR può abbassare la coverage solo con un footer nel commit message che spiega il motivo:
+**Escape valve:** a PR may lower coverage only with a footer in the commit message explaining the reason:
 
 ```
-Low-Coverage-Reason: Refactor di auth-client.ts — test in follow-up PR #123
+Low-Coverage-Reason: Refactor of auth-client.ts — tests in follow-up PR #123
 ```
 
-L'escape valve è tracciata e rivista settimanalmente. Nessun escape valve può restare aperto per più di 2 settimane.
+The escape valve is tracked and reviewed weekly. No escape valve may remain open for more than 2 weeks.
 
 ### 5.4 Test data strategy
 
-- **Inline creation.** I test creano i dati di cui hanno bisogno inline, non da file fixture condivisi. Questo rende ogni test auto-documentato e indipendente.
-- **Factory pattern.** Per dati complessi, usare factory function che producono oggetti validi con default sensati e override puntuali.
-- **Golden files.** Solo per snapshot testing (UI rendering, schema di risposta). Aggiornati esplicitamente con flag (`--update-snapshots`), mai silenziosamente.
-- **Seed script.** Per database di sviluppo, uno script deterministico che popola dati realistici. Separato dai test.
+- **Inline creation.** Tests create the data they need inline, not from shared fixture files. This makes every test self-documenting and independent.
+- **Factory pattern.** For complex data, use factory functions that produce valid objects with sensible defaults and targeted overrides.
+- **Golden files.** Only for snapshot testing (UI rendering, response schema). Updated explicitly with a flag (`--update-snapshots`), never silently.
+- **Seed script.** For development databases, a deterministic script that populates realistic data. Separate from the tests.
 
-### 5.5 Test nel CI
+### 5.5 Tests in CI
 
-| Trigger | Tier eseguiti | Timeout | Parallelismo |
+| Trigger | Tiers executed | Timeout | Parallelism |
 |---------|-------------|---------|-------------|
-| Push su feature branch | Unit + lint | 5 min | Massimo |
-| PR verso main | Unit + scenario + integration | 15 min | Per-tier |
-| Merge su main | Unit + scenario + integration + E2E | 30 min | Per-tier |
-| Scheduled (nightly) | Tutti + compat matrix completa | 60 min | Per-slot |
-| Release tag | Tutti + smoke test su staging | 45 min | Sequenziale |
+| Push to feature branch | Unit + lint | 5 min | Maximum |
+| PR towards main | Unit + scenario + integration | 15 min | Per-tier |
+| Merge to main | Unit + scenario + integration + E2E | 30 min | Per-tier |
+| Scheduled (nightly) | All + full compat matrix | 60 min | Per-slot |
+| Release tag | All + smoke tests on staging | 45 min | Sequential |
 
 ---
 
-## 6. Documentazione
+## 6. Documentation
 
-### 6.1 Documenti obbligatori
+### 6.1 Required documents
 
-| Documento | Contenuto | Aggiornamento |
+| Document | Content | Update |
 |-----------|----------|---------------|
-| **README.md** | Scopo del progetto, quick start, architettura high-level, link ai doc | Ad ogni cambio significativo |
-| **CHANGELOG.md** | Storico dei cambiamenti per release, formato Keep a Changelog | Ad ogni release |
-| **DEPENDENCIES.md** | Dipendenze critiche, versioni, contratti, link a doc ufficiale | Quando cambia una dipendenza |
-| **COMPATIBILITY.md** | Stato di compatibilità con dipendenze esterne (generato) | Automatico |
-| **PROJECT_STATUS.md** | Stato corrente del progetto | Ad ogni sessione |
-| **docs/prd/** | PRD e documenti di requisiti | Quando cambiano i requisiti |
-| **docs/adr/** | Architecture Decision Records | Ad ogni decisione architetturale |
-| **docs/runbooks/** | Procedure operative (deploy, rollback, incident response) | Ad ogni cambio di processo |
+| **README.md** | Project purpose, quick start, high-level architecture, links to docs | On every significant change |
+| **CHANGELOG.md** | History of changes per release, Keep a Changelog format | On every release |
+| **DEPENDENCIES.md** | Critical dependencies, versions, contracts, links to official docs | When a dependency changes |
+| **COMPATIBILITY.md** | Compatibility status with external dependencies (generated) | Automatic |
+| **PROJECT_STATUS.md** | Current project status | Every session |
+| **docs/prd/** | PRD and requirements documents | When requirements change |
+| **docs/adr/** | Architecture Decision Records | On every architectural decision |
+| **docs/runbooks/** | Operational procedures (deploy, rollback, incident response) | On every process change |
 
-### 6.2 Documentazione del codice
+### 6.2 Code documentation
 
-**Commenti nel codice — quando e come:**
+**Code comments — when and how:**
 
-| Commenta | Non commentare |
+| Comment | Do not comment |
 |----------|---------------|
-| Il **perché** di una decisione non ovvia | Il **cosa** (il codice lo dice già) |
-| Workaround con link al bug/issue | Codice ovvio (`i++; // increment i`) |
-| Assunzioni che potrebbero non essere vere in futuro | Codice che dovrebbe essere riscritto invece che commentato |
-| Contratti e invarianti | TODO senza issue di riferimento |
+| The **why** behind a non-obvious decision | The **what** (the code already says it) |
+| Workarounds with a link to the bug/issue | Obvious code (`i++; // increment i`) |
+| Assumptions that may not hold in future | Code that should be rewritten rather than commented |
+| Contracts and invariants | TODOs without a reference issue |
 
-**TODO/FIXME/HACK:** consentiti SOLO con riferimento a un issue:
+**TODO/FIXME/HACK:** permitted ONLY with a reference to an issue:
 
 ```typescript
 // TODO(US-AUTH-042): Replace with OAuth2 PKCE flow when Stripe supports it
 // HACK(#issue-789): Workaround for upstream bug in synapse-client v2.237
 ```
 
-TODO senza issue = il CI emette un warning. TODO più vecchi di 30 giorni senza issue = CI fail.
+TODOs without an issue = CI emits a warning. TODOs older than 30 days without an issue = CI fail.
 
-### 6.3 Documentazione API
+### 6.3 API documentation
 
-Ogni API pubblica (REST, SDK, CLI) DEVE avere documentazione generata dal codice:
+Every public API (REST, SDK, CLI) MUST have documentation generated from the code:
 
-| Tipo | Tool raccomandato | Output |
+| Type | Recommended tool | Output |
 |------|------------------|--------|
-| REST API | OpenAPI/Swagger (da annotazioni) | `docs/api/openapi.yaml` |
+| REST API | OpenAPI/Swagger (from annotations) | `docs/api/openapi.yaml` |
 | TypeScript SDK | TypeDoc | `docs/api/` |
 | Python SDK | Sphinx + autodoc | `docs/api/` |
-| CLI | `--help` + man page generata | `docs/cli/` |
+| CLI | `--help` + generated man page | `docs/cli/` |
 
-La documentazione API è generata nel CI e pubblicata automaticamente. Documentazione API scritta a mano diverge dal codice — è un bug annunciato.
+API documentation is generated in CI and published automatically. Manually written API documentation that diverges from the code is an announced bug.
 
 ### 6.4 CHANGELOG.md
 
-Formato Keep a Changelog (`keepachangelog.com`):
+Keep a Changelog format (`keepachangelog.com`):
 
 ```markdown
 ## [Unreleased]
 
 ### Added
-- Nuovo endpoint POST /api/v1/users (#123)
+- New endpoint POST /api/v1/users (#123)
 
 ### Changed
-- Migrato auth da session a JWT (#456)
+- Migrated auth from session to JWT (#456)
 
 ### Deprecated
-- Endpoint GET /api/v1/legacy-users — usare /api/v1/users
+- Endpoint GET /api/v1/legacy-users — use /api/v1/users
 
 ### Removed
-- Supporto per Node.js 16
+- Support for Node.js 16
 
 ### Fixed
-- Fix race condition nel WebSocket reconnect (#789)
+- Fix race condition in WebSocket reconnect (#789)
 
 ### Security
-- Aggiornato stripe-sdk per CVE-2026-1234
+- Updated stripe-sdk for CVE-2026-1234
 ```
 
-Il CHANGELOG è scritto dagli umani (o dall'agente AI), non generato dai commit. I commit sono troppo granulari; il CHANGELOG è per gli utenti del software.
+The CHANGELOG is written by humans (or the AI agent), not generated from commits. Commits are too granular; the CHANGELOG is for the software's users.
 
 ---
 
-## 7. CI/CD e deploy
+## 7. CI/CD and deployment
 
 ### 7.1 Pipeline overview
 
@@ -690,104 +690,104 @@ Il CHANGELOG è scritto dagli umani (o dall'agente AI), non generato dai commit.
      │              │              │              │              │
      ▼              ▼              ▼              ▼              ▼
   lint +         compile       unit +         smoke +        health
-  format +       bundle       scenario +      E2E su        check +
+  format +       bundle       scenario +      E2E on        check +
   secret         Docker       integration    staging        rollback
   scan           image                                       ready
 ```
 
-### 7.2 Fasi della pipeline
+### 7.2 Pipeline stages
 
 #### 7.2.1 Build
 
-- **Compilazione** del codice sorgente (TypeScript → JavaScript, ecc.)
-- **Bundle** per produzione (tree shaking, minification, source map)
-- **Build Docker image** con tag basato su commit SHA + versione semantica
-- **Artefatti:** il build produce artefatti immutabili. Lo stesso artefatto testato in staging è quello deployato in produzione. Mai rebuilddare per produzione.
+- **Compilation** of the source code (TypeScript → JavaScript, etc.)
+- **Bundle** for production (tree shaking, minification, source map)
+- **Docker image build** tagged based on commit SHA + semantic version
+- **Artefacts:** the build produces immutable artefacts; the same artefact tested on staging is the one deployed to production. Never rebuild for production.
 
 #### 7.2.2 Test
 
-Esecuzione dei tier di test secondo la tabella in §5.5.
+Execution of the test tiers according to the table in §5.5.
 
 #### 7.2.3 Stage
 
-- **Deploy automatico su staging** dopo test verdi su `main`
-- **Smoke test** su staging: subset di E2E che verifica le funzionalità critiche
-- **E2E completo** su staging per release candidate
-- **Staging è una replica di produzione** (stessa infra, stessi secret [rotati], stesso database schema)
+- **Automatic deploy to staging** after green tests on `main`
+- **Smoke tests** on staging: subset of E2E that verifies critical functionality
+- **Full E2E** on staging for release candidates
+- **Staging is a replica of production** (same infrastructure, same secrets [rotated], same database schema)
 
 #### 7.2.4 Deploy
 
-- **Deploy a produzione** triggerato da tag di release (`v*.*.*`)
-- **Rolling update** o **blue-green** — mai deploy "big bang" senza rollback automatico
-- **Health check** post-deploy: l'applicazione risponde su `/healthz` entro 60 secondi
-- **Automatic rollback** se il health check fallisce dopo 3 tentativi
-- **Feature flag** per feature rischiose: deploy il codice disabilitato, abilita gradualmente
+- **Production deploy** triggered by a release tag (`v*.*.*`)
+- **Rolling update** or **blue-green** — never a "big bang" deploy without automatic rollback
+- **Health check** post-deploy: the application responds on `/healthz` within 60 seconds
+- **Automatic rollback** if the health check fails after 3 attempts
+- **Feature flags** for risky features: deploy the disabled code, enable gradually
 
 ### 7.3 Rollback
 
-Ogni deploy DEVE essere reversibile. Il rollback è un'operazione di primo livello, non un'emergenza.
+Every deploy MUST be reversible. Rollback is a first-class operation, not an emergency.
 
-| Scenario | Azione | Tempo target |
+| Scenario | Action | Target time |
 |----------|--------|-------------|
-| Health check fallisce post-deploy | Rollback automatico alla versione precedente | < 2 minuti |
-| Bug critico scoperto in produzione | Rollback manuale via CI (un bottone/comando) | < 5 minuti |
-| Data migration fallita | Restore da backup + rollback applicazione | < 30 minuti |
-| Rollback non possibile (migration irreversibile) | Hotfix forward, deploy immediato | Dipende dalla fix |
+| Health check fails post-deploy | Automatic rollback to the previous version | < 2 minutes |
+| Critical bug discovered in production | Manual rollback via CI (one button/command) | < 5 minutes |
+| Data migration failed | Restore from backup + application rollback | < 30 minutes |
+| Rollback not possible (irreversible migration) | Hotfix forward, immediate deploy | Depends on the fix |
 
-**Regola:** se un deploy include una database migration irreversibile, deve essere taggato come `BREAKING` nel CHANGELOG e richiede approvazione esplicita prima del deploy.
+**Rule:** if a deploy includes an irreversible database migration, it must be tagged as `BREAKING` in the CHANGELOG and requires explicit approval before deploying.
 
 ### 7.4 Database migration
 
-- **Migration forward-only.** Ogni migration ha un file `up` e un file `down`. Il `down` è testato — non è un placeholder vuoto.
-- **Migration separata dal deploy dell'app.** La migration gira prima del deploy. Se la migration fallisce, il deploy non parte.
-- **Backward compatibility.** La nuova versione del codice DEVE funzionare con la vecchia e la nuova versione del database per almeno un ciclo di deploy. Questo permette rollback senza rollback del database.
-- **Data migration vs schema migration.** Le due sono separate. Schema prima, data dopo. Mai nella stessa migration.
+- **Forward-only migration.** Every migration has an `up` file and a `down` file. The `down` is tested — it is not an empty placeholder.
+- **Migration separate from the application deploy.** The migration runs before the deploy. If the migration fails, the deploy does not start.
+- **Backward compatibility.** The new version of the code MUST work with both the old and the new version of the database for at least one deploy cycle. This allows rollback without rolling back the database.
+- **Data migration vs schema migration.** The two are separate. Schema first, data after. Never in the same migration.
 
-### 7.5 Ambienti
+### 7.5 Environments
 
-| Ambiente | Scopo | Dati | Deploy |
+| Environment | Purpose | Data | Deploy |
 |----------|-------|------|--------|
-| **Local** | Sviluppo | Seed script | Manuale |
-| **CI** | Test automatizzati | Generati dai test | Automatico su push |
-| **Staging** | Validazione pre-produzione | Copia anonimizzata di produzione | Automatico su merge a main |
-| **Production** | Utenti reali | Reali | Manuale/automatico su tag |
+| **Local** | Development | Seed script | Manual |
+| **CI** | Automated tests | Generated by tests | Automatic on push |
+| **Staging** | Pre-production validation | Anonymised copy of production | Automatic on merge to main |
+| **Production** | Real users | Real | Manual/automatic on tag |
 
-### 7.6 Configurazione come codice
+### 7.6 Configuration as code
 
-- Tutta la configurazione CI/CD è nel repo (`.github/workflows/`, `.gitlab-ci.yml`, ecc.)
-- Nessuna configurazione "a clic" nel forge — se non è nel repo, non esiste
-- Configurazione specifica del forge in `ci/adapters/<forge>/`
-- La logica di business del CI (script, classificatore, aggregatore) vive fuori dalla directory del forge — è portabile
+- All CI/CD configuration is in the repository (`.github/workflows/`, `.gitlab-ci.yml`, etc.)
+- No "click-ops" configuration in the forge — if it is not in the repository, it does not exist
+- Forge-specific configuration in `ci/adapters/<forge>/`
+- CI business logic (scripts, classifier, aggregator) lives outside the forge directory — it is portable
 
-### 7.7 Adapter pattern per CI
+### 7.7 Adapter pattern for CI
 
-Tutta la logica CI che è specifica di GitHub Actions (o GitLab, o Forgejo) vive sotto `ci/adapters/<forge>/`. Il resto (script, classificatore, aggregatore, compat database) è portabile. Migrare a un nuovo forge è un single-directory swap + nuovo adapter.
+All CI logic that is specific to GitHub Actions (or GitLab, or Forgejo) lives under `ci/adapters/<forge>/`. The rest (scripts, classifier, aggregator, compatibility database) is portable. Migrating to a new forge is a single-directory swap plus a new adapter.
 
 ---
 
-# PARTE II — SORVEGLIANZA E MANUTENZIONE
+# PART II — SURVEILLANCE AND MAINTENANCE
 
 ---
 
 ## 8. Dependency Surface Map
 
-La surface map è il cuore del sistema di sorveglianza. Risponde alla domanda: **dove esattamente nel codice consumo ogni dipendenza esterna?**
+The surface map is the heart of the surveillance system. It answers the question: **where exactly in the code do I consume each external dependency?**
 
-### 8.1 Definizione di superficie
+### 8.1 Definition of surface
 
-Una "superficie" è qualunque punto di contatto tra il codice dell'app e una risorsa esterna:
+A "surface" is any point of contact between the application code and an external resource:
 
-| Tipo | Esempi |
+| Type | Examples |
 |------|--------|
 | REST endpoint | `GET /api/v1/users`, `POST /api/v2/auth/login` |
 | WebSocket | `wss://service.example.com/events` |
 | SDK method | `client.users.list()`, `db.query()` |
-| Data model | Schema JSON, protobuf, modelli ORM |
-| Config/env | Variabili d'ambiente, feature flag, chiavi API |
+| Data model | JSON schema, protobuf, ORM models |
+| Config/env | Environment variables, feature flags, API keys |
 | File format | CSV ingest, JSON export, binary protocol |
-| CLI tool | Comandi di build, linting, deploy |
+| CLI tool | Build, linting, deploy commands |
 
-### 8.2 Formato della surface map
+### 8.2 Surface map format
 
 ```json
 {
@@ -811,25 +811,25 @@ Una "superficie" è qualunque punto di contatto tra il codice dell'app e una ris
 }
 ```
 
-### 8.3 Generazione
+### 8.3 Generation
 
-Tre strategie, in ordine di affidabilità:
+Three strategies, in order of reliability:
 
-1. **AST walker** (migliore) — analisi statica del codice sorgente. Risolve template literal, import dinamici, type inference. Strumenti: `ts-morph` per TypeScript, `ast` per Python, `go/ast` per Go.
-2. **Grep strutturato** — ricerca pattern con `ripgrep`. Veloce ma perde i percorsi dinamici.
-3. **Manuale** — file curato a mano. Accettabile come stub iniziale, da sostituire appena possibile.
+1. **AST walker** (best) — static analysis of the source code. Resolves template literals, dynamic imports, type inference. Tools: `ts-morph` for TypeScript, `ast` for Python, `go/ast` for Go.
+2. **Structured grep** — pattern search with `ripgrep`. Fast but misses dynamic paths.
+3. **Manual** — file curated by hand. Acceptable as an initial stub, to be replaced as soon as possible.
 
-### 8.4 Guardia di cardinalità
+### 8.4 Cardinality guard
 
-Se il conteggio totale delle superfici cala di oltre il 10% tra una generazione e l'altra, il CI DEVE fallire. Cattura: refactor che spostano chiamate API fuori dal pattern riconosciuto, cambi di configurazione che escludono file, aggiornamenti del walker.
+If the total surface count drops by more than 10% between one generation and the next, CI MUST fail. Catches: refactors that move API calls outside the recognised pattern, configuration changes that exclude files, walker updates.
 
 ---
 
-## 9. Agenti di sorveglianza
+## 9. Surveillance agents
 
-Gli agenti sono processi autonomi che monitorano le dipendenze esterne a intervalli regolari.
+Agents are autonomous processes that monitor external dependencies at regular intervals.
 
-### 9.1 Architettura
+### 9.1 Architecture
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -852,7 +852,7 @@ Gli agenti sono processi autonomi che monitorano le dipendenze esterne a interva
                   ▼
    ┌─────────────────────────────────────┐
    │         IMPACT ANALYSER             │
-   │    (cross-ref con surface map)      │
+   │    (cross-ref with surface map)     │
    └──────────────┬──────────────────────┘
                   │
           ┌───────┴────────┐
@@ -863,350 +863,350 @@ Gli agenti sono processi autonomi che monitorano le dipendenze esterne a interva
    └────────────┘   └────────────┘
 ```
 
-### 9.2 Tipi di agente
+### 9.2 Agent types
 
-**9.2.1 Package Watch** — rileva nuove versioni delle dipendenze. Frequenza: 5 min (RSS) o 1h (JSON API). Filtro: solo release stabili.
+**9.2.1 Package Watch** — detects new versions of dependencies. Frequency: 5 min (RSS) or 1h (JSON API). Filter: stable releases only.
 
-**9.2.2 API Probe** — esegue contract test contro ogni endpoint nella surface map. Frequenza: 6h per endpoint critici, 24h per gli altri. Verifica: raggiungibilità, schema, semantica, campi nuovi/mancanti, deprecation header, rate limit, versioning.
+**9.2.2 API Probe** — runs contract tests against every endpoint in the surface map. Frequency: 6h for critical endpoints, 24h for others. Verifies: reachability, schema, semantics, new/missing fields, deprecation headers, rate limits, versioning.
 
-**9.2.3 Docs Watch** — monitora changelog e documentazione ufficiale. Frequenza: 24h. Metodo: fetch + diff testuale.
+**9.2.3 Docs Watch** — monitors changelogs and official documentation. Frequency: 24h. Method: fetch + textual diff.
 
-**9.2.4 Security Watch** — rileva advisory di sicurezza. Frequenza: 15 min. Sorgente: GHSA, NVD, audit tool nativi. Qualunque advisory forza L2.
+**9.2.4 Security Watch** — detects security advisories. Frequency: 15 min. Sources: GHSA, NVD, native audit tools. Any advisory forces L2.
 
-**9.2.5 Container/Image Watch** — rileva nuove immagini Docker. Frequenza: 15 min. Timeout: 90 min con backoff.
+**9.2.5 Container/Image Watch** — detects new Docker images. Frequency: 15 min. Timeout: 90 min with backoff.
 
-**9.2.6 State-of-the-Art Scout** — agente dedicato alla ricerca dello stato dell'arte. Diverso dagli altri agenti: non monitora una singola dipendenza, ma scandaglia il panorama tecnologico intorno al progetto. Frequenza: trimestrale per componenti stabili, mensile per componenti in sviluppo attivo.
+**9.2.6 State-of-the-Art Scout** — an agent dedicated to state-of-the-art research. Unlike the other agents: it does not monitor a single dependency, but scans the technological landscape around the project. Frequency: quarterly for stable components, monthly for components under active development.
 
-Cosa fa ad ogni ciclo:
+What it does each cycle:
 
-1. **Technology health check.** Per ogni tecnologia significativa del progetto, verifica: ultima release, frequenza di release nell'ultimo anno, trend issue aperti, stato documentazione, annunci di deprecation o end-of-life.
+1. **Technology health check.** For every significant technology in the project, verifies: latest release, release frequency over the past year, open issue trends, documentation status, deprecation or end-of-life announcements.
 
-2. **Alternative scanning.** Cerca nuove librerie o servizi che risolvono lo stesso problema di una dipendenza esistente con approccio diverso o migliore. Non suggerisce di cambiare — segnala che l'alternativa esiste e lascia la decisione all'umano.
+2. **Alternative scanning.** Searches for new libraries or services that solve the same problem as an existing dependency with a different or better approach. Does not suggest switching — it flags that the alternative exists and leaves the decision to the human.
 
-3. **Pattern evolution.** Verifica se i pattern architetturali usati nel progetto sono ancora best practice o se la community si è mossa verso approcci diversi. Cerca: aggiornamenti a styleguide ufficiali, nuovi RFC, talk da conferenze chiave.
+3. **Pattern evolution.** Verifies whether the architectural patterns used in the project are still best practice or whether the community has moved towards different approaches. Looks for: updates to official style guides, new RFCs, talks from key conferences.
 
-4. **Security landscape.** Verifica se le practice di sicurezza sono allineate con le raccomandazioni correnti (OWASP, NIST, CIS).
+4. **Security landscape.** Verifies whether security practices are aligned with current recommendations (OWASP, NIST, CIS).
 
-5. **Ecosystem health.** Valuta la salute dell'ecosistema: community in crescita o declino, fork significativi, controversie (licenza, governance, ownership).
+5. **Ecosystem health.** Assesses the health of the ecosystem: growing or declining community, significant forks, controversies (licence, governance, ownership).
 
-Output: report in `docs/research/` con segnalazioni classificate in 5 livelli: `healthy` (nessuna azione), `watch` (monitorare nel prossimo ciclo), `evaluate` (creare ADR con confronto), `migrate` (pianificare migrazione nel backlog), `urgent` (azione immediata — end-of-life, vulnerability critica, fork ostile).
+Output: report in `docs/research/` with findings classified into 5 levels: `healthy` (no action), `watch` (monitor in the next cycle), `evaluate` (create ADR with comparison), `migrate` (plan migration in the backlog), `urgent` (immediate action — end-of-life, critical vulnerability, hostile fork).
 
-L'agente suggerisce proattivamente la ricerca quando: si inizia un nuovo progetto, si aggiunge una dipendenza, si propone una scelta architetturale, il progetto entra in una nuova fase, o sono passati N mesi dall'ultima ricerca su un componente. Dettagli completi in §1.7.
+The agent proactively suggests research when: a new project is started, a dependency is added, an architectural choice is proposed, the project enters a new phase, or N months have passed since the last research on a component. Full details in §1.7.
 
 ### 9.3 Heartbeat
 
-Ogni agente, ad ogni ciclo — anche quando non rileva nulla — emette un heartbeat. Alert se il più recente è più vecchio di 6 ore.
+Every agent, every cycle — even when nothing is detected — emits a heartbeat. Alert if the most recent is older than 6 hours.
 
-### 9.4 Configurazione multi-sorgente
+### 9.4 Multi-source configuration
 
-Per ogni dipendenza critica, almeno due sorgenti con ruoli diversi: primaria (trigger rapido) e backstop (recovery). Il backstop riconcilia le versioni mancate quando la primaria torna attiva.
+For every critical dependency, at least two sources with different roles: primary (fast trigger) and backstop (recovery). The backstop reconciles missed versions when the primary comes back online.
 
 ---
 
-## 10. Classificazione dei cambiamenti
+## 10. Change classification
 
-### 10.1 Bucket
+### 10.1 Buckets
 
-| Bucket | Descrizione |
+| Bucket | Description |
 |--------|-------------|
-| `data-model` | Cambiamenti a schemi, modelli, tipi |
-| `api-endpoint` | Endpoint aggiunti, rimossi, modificati |
-| `sdk-method` | Metodi di libreria cambiati |
-| `auth` | Autenticazione, permessi, policy |
-| `config` | Variabili d'ambiente, feature flag |
-| `docs-only` | Solo documentazione |
-| `internal` | Refactoring interni, nessun impatto sulla superficie |
-| `security` | Patch di sicurezza |
-| `deprecation` | Deprecazione di superfici esistenti |
-| `migration` | Migrazioni che modificano dati esistenti |
+| `data-model` | Changes to schemas, models, types |
+| `api-endpoint` | Endpoints added, removed, modified |
+| `sdk-method` | Library methods changed |
+| `auth` | Authentication, permissions, policies |
+| `config` | Environment variables, feature flags |
+| `docs-only` | Documentation only |
+| `internal` | Internal refactoring, no surface impact |
+| `security` | Security patches |
+| `deprecation` | Deprecation of existing surfaces |
+| `migration` | Migrations that modify existing data |
 
-### 10.2 Severità
+### 10.2 Severity
 
-| Severità | Definizione | Azione |
-|----------|-------------|--------|
-| `safe` | Solo `internal` o `docs-only` | Auto-merge dopo CI verde |
-| `additive` | Nuovi endpoint, nuovi campi, nuove librerie | PR con report |
-| `breaking` | Superfici rimosse, rinominate, firma cambiata | Draft PR + revisione umana |
-| `p0` | Security advisory, cambio protocollo | Draft PR + notifica immediata |
+| Severity | Definition | Action |
+|----------|------------|--------|
+| `safe` | `internal` or `docs-only` only | Auto-merge after green CI |
+| `additive` | New endpoints, new fields, new libraries | PR with report |
+| `breaking` | Surfaces removed, renamed, signature changed | Draft PR + human review |
+| `p0` | Security advisory, protocol change | Draft PR + immediate notification |
 
 ### 10.3 Never-auto-merge list
 
-Condizioni che forzano sempre la revisione umana: rimozione/rinomina endpoint, cambio formato risposta, cambio protocollo auth, riduzione rate limit, rimozione metodo SDK, migration che riscrive dati, security advisory critical/high, cambio campo richiesto, cambio WebSocket handshake, regressione test funzionali.
+Conditions that always force human review: endpoint removal/rename, response format change, auth protocol change, rate limit reduction, SDK method removal, migration that rewrites data, critical/high security advisory, required field change, WebSocket handshake change, functional test regression.
 
 ---
 
-## 11. Matrice di test di compatibilità
+## 11. Compatibility test matrix
 
-### 11.1 Slot
+### 11.1 Slots
 
-| Slot | Definizione | Scopo |
-|------|-------------|-------|
-| `latest` | Versione che ha triggerato il ciclo | Compatibilità con la novità |
-| `recent` | Versione stabile più recente (finestra 21 giorni) | Regressioni mascherate |
-| `baseline` | Versione pinnata, rivista trimestralmente | Contratto dichiarato |
+| Slot | Definition | Purpose |
+|------|------------|---------|
+| `latest` | Version that triggered the cycle | Compatibility with the new change |
+| `recent` | Most recent stable version (21-day window) | Masked regressions |
+| `baseline` | Pinned version, reviewed quarterly | Declared contract |
 
 ### 11.2 Run manifest
 
-All'inizio di ogni ciclo, prima di qualunque test, il sistema congela le versioni in un manifest JSON. Elimina ambiguità se la matrice si risolve diversamente tra step.
+At the start of each cycle, before any test, the system freezes versions in a JSON manifest. Eliminates ambiguity if the matrix resolves differently between steps.
 
 ### 11.3 Test data
 
-1. **Seed workload** — crea dati che esercitano ogni superficie consumata
-2. **Golden queries** — query con risultati attesi per verificare integrità post-migrazione
-3. **Snapshot regression** — carica snapshot di versioni precedenti e verifica accessibilità dati
+1. **Seed workload** — creates data that exercises every consumed surface
+2. **Golden queries** — queries with expected results to verify post-migration integrity
+3. **Snapshot regression** — loads snapshots from previous versions and verifies data accessibility
 
 ---
 
 ## 12. Remediation workflow
 
-### 12.1 Livelli di autonomia
+### 12.1 Autonomy levels
 
-| Livello | Trigger | Azione | Approvazione |
-|---------|---------|--------|-------------|
-| **L0** | `safe`, test verdi | Auto-merge | Nessuna |
-| **L1** | `additive`, fix agentiva supera correctness gate | PR con fix-claim | Revisione umana |
-| **L2** | `breaking`, `p0`, never-auto-merge match | Draft PR + notifica | Intervento umano |
+| Level | Trigger | Action | Approval |
+|-------|---------|--------|----------|
+| **L0** | `safe`, green tests | Auto-merge | None |
+| **L1** | `additive`, agentic fix passes correctness gate | PR with fix-claim | Human review |
+| **L2** | `breaking`, `p0`, never-auto-merge match | Draft PR + notification | Human intervention |
 
 ### 12.2 Correctness gate (L1)
 
-CI verde non basta. L'agente DEVE: validare contro lo schema specifico che ha triggerato il failure, includere fix-claim strutturato, aggiungere regression test, limitare le modifiche al client/adapter layer.
+Green CI is not sufficient. The agent MUST: validate against the specific schema that triggered the failure, include a structured fix-claim, add a regression test, limit changes to the client/adapter layer.
 
 ### 12.3 Circuit breaker
 
-3 PR L1 aperte OPPURE 5 tentativi in 14 giorni → loop agentivo in pausa, tutto degrada a L2, ack umano richiesto.
+3 open L1 PRs OR 5 attempts in 14 days → agentic loop paused, everything degrades to L2, human acknowledgement required.
 
 ### 12.4 Adoption workflow
 
-Quando il classificatore rileva capacità nuove: cross-reference con surface map, aggiungere wrapper nel client, scrivere contract test, aprire PR di adoption + issue di tracking per le modifiche UI.
+When the classifier detects new capabilities: cross-reference with surface map, add wrapper in the client, write contract test, open adoption PR + tracking issue for UI changes.
 
 ### 12.5 Deprecation tracking
 
-Registrare la deprecazione, cross-reference con surface map, aprire issue `deprecation-watch`. La migrazione è sempre umana.
+Record the deprecation, cross-reference with surface map, open `deprecation-watch` issue. Migration is always human-led.
 
 ### 12.6 Major version protocol
 
-L1 disabilitato, coverage baseline resettabile, surface map rigenerata obbligatoriamente, test harness verificato, issue come tracking epic.
+L1 disabled, coverage baseline resettable, surface map mandatorily regenerated, test harness verified, issue as tracking epic.
 
-### 12.7 Report all'umano
+### 12.7 Human report
 
-Per ogni cambiamento: cosa è cambiato, classificazione, dove impatta (file e righe), cosa va modificato per mantenere operatività, cosa si può adottare, risultati test, azione raccomandata.
-
----
-
-## 13. Database di compatibilità
-
-### 13.1 Formato
-
-JSON flat in repo, un file per versione per dipendenza. Nessun database esterno.
-
-### 13.2 Eventi (append-only)
-
-L'array `events` è l'audit trail completo. Mai modificare o rimuovere eventi.
-
-### 13.3 Aggregazione
-
-Ogni slot produce il suo payload, un job di aggregazione li fonde. `pass` solo se tutti gli slot sono `pass`. Se un qualunque slot è `fail`, il rollup è `fail`. Se uno slot è `error`, il rollup è `partial`.
-
-### 13.4 Portabilità
-
-Plain JSON nel repo. Migrare a un altro forge = copia directory + nuovo adapter CI.
+For each change: what changed, classification, where it impacts (files and lines), what must be modified to maintain operability, what can be adopted, test results, recommended action.
 
 ---
 
-## 14. Self-testing e osservabilità
+## 13. Compatibility database
+
+### 13.1 Format
+
+Flat JSON in the repo, one file per version per dependency. No external database.
+
+### 13.2 Events (append-only)
+
+The `events` array is the complete audit trail. Never modify or remove events.
+
+### 13.3 Aggregation
+
+Each slot produces its own payload; an aggregation job merges them. `pass` only if all slots are `pass`. If any slot is `fail`, the rollup is `fail`. If a slot is `error`, the rollup is `partial`.
+
+### 13.4 Portability
+
+Plain JSON in the repo. Migrating to another forge = copy directory + new CI adapter.
+
+---
+
+## 14. Self-testing and observability
 
 ### 14.1 Detection heartbeat
 
-Ogni ciclo di polling emette un heartbeat. Alert se il più recente è più vecchio di 6 ore.
+Every polling cycle emits a heartbeat. Alert if the most recent is older than 6 hours.
 
 ### 14.2 Classifier retrospective
 
-Job mensile: rivede tutti i record `safe` auto-merged negli ultimi 30 giorni. Tasso falsi negativi > 10% → alert per ricalibrare.
+Monthly job: reviews all `safe` auto-merged records from the past 30 days. False negative rate > 10% → alert to recalibrate.
 
 ### 14.3 End-to-end canary
 
-Job settimanale: inietta record sintetico per verificare l'intero percorso detection → classification → issue → surface-map cross-ref → event emission. Pulisce dopo la verifica.
+Weekly job: injects a synthetic record to verify the entire detection → classification → issue → surface-map cross-ref → event emission path. Cleans up after verification.
 
 ### 14.4 Surface map cardinality guard
 
-Se il conteggio superfici cala > 10%, il CI fallisce.
+If the surface count drops > 10%, CI fails.
 
 ---
 
-# PARTE III — GESTIONE
+# PART III — MANAGEMENT
 
 ---
 
-## 15. Ciclo di vita del progetto
+## 15. Project lifecycle
 
-### 15.1 Fase 0 — Ideazione e requisiti
+### 15.1 Phase 0 — Ideation and requirements
 
-1. Scrivere il PRD (§1.2)
-2. Definire user story con acceptance criteria (§1.3, §1.4)
-3. Documentare le decisioni architetturali in ADR (§1.5)
-4. Creare il backlog ordinato per priorità (§1.6)
-5. Definire la Definition of Done (§1.7)
-6. Identificare le dipendenze critiche e documentarle in `DEPENDENCIES.md`
+1. Write the PRD (§1.2)
+2. Define user stories with acceptance criteria (§1.3, §1.4)
+3. Document architectural decisions in ADRs (§1.5)
+4. Create the backlog ordered by priority (§1.6)
+5. Define the Definition of Done (§1.7)
+6. Identify critical dependencies and document them in `DEPENDENCIES.md`
 
-### 15.2 Fase 1 — Bootstrap tecnico
+### 15.2 Phase 1 — Technical bootstrap
 
-1. Creare la struttura di directory (§2.1)
-2. Configurare linting, formatting, pre-commit hook (§3.4)
-3. Configurare la pipeline CI base (build + lint + unit test) (§7)
-4. Scrivere `CLAUDE.md` con le regole operative (§2.3)
-5. Generare la surface map iniziale (§8)
-6. Configurare gli agenti di sorveglianza (§9)
-7. Creare il primo record di compatibilità (`untested`)
-8. Scrivere `.env.example` con tutte le variabili documentate (§4.4)
-9. Scrivere il seed script per il database di sviluppo (§5.4)
+1. Create the directory structure (§2.1)
+2. Configure linting, formatting, pre-commit hooks (§3.4)
+3. Configure the base CI pipeline (build + lint + unit test) (§7)
+4. Write `CLAUDE.md` with operating rules (§2.3)
+5. Generate the initial surface map (§8)
+6. Configure surveillance agents (§9)
+7. Create the first compatibility record (`untested`)
+8. Write `.env.example` with all variables documented (§4.4)
+9. Write the seed script for the development database (§5.4)
 
-### 15.3 Fase 2 — Sviluppo attivo
+### 15.3 Phase 2 — Active development
 
-1. Lavorare per user story, rispettando la Definition of Done (§1.7)
-2. Aggiornare `PROJECT_STATUS.md` ad ogni sessione (§2.2)
-3. Scrivere test per ogni tier appropriato (§5)
-4. Mantenere la coverage ratchet (§5.3)
-5. Aggiornare documentazione API e CHANGELOG (§6)
-6. Gli agenti girano in background e producono record di compatibilità
-7. Le PR di fix e adoption vengono revisionate e merged
-8. Mantenere la surface map aggiornata dopo refactor significativi
+1. Work by User Story, respecting the Definition of Done (§1.7)
+2. Update `PROJECT_STATUS.md` at every session (§2.2)
+3. Write tests for every appropriate tier (§5)
+4. Maintain the coverage ratchet (§5.3)
+5. Update API documentation and CHANGELOG (§6)
+6. Agents run in the background and produce compatibility records
+7. Fix and adoption PRs are reviewed and merged
+8. Keep the surface map up to date after significant refactors
 
-### 15.4 Fase 3 — Maturità e manutenzione
+### 15.4 Phase 3 — Maturity and maintenance
 
-1. Gli agenti continuano la sorveglianza
-2. Le fix sono principalmente L0/L1
-3. Revisione trimestrale della baseline e delle soglie
-4. Retrospective mensile del classificatore
-5. Aggiornamento della never-auto-merge list
-6. Revisione annuale della OWASP Top 10 e delle security practice
+1. Agents continue surveillance
+2. Fixes are primarily L0/L1
+3. Quarterly review of baseline and thresholds
+4. Monthly classifier retrospective
+5. Update the never-auto-merge list
+6. Annual review of OWASP Top 10 and security practices
 
-### 15.5 Fase 4 — Major upgrade di dipendenza
+### 15.5 Phase 4 — Major dependency upgrade
 
-1. Il major-version protocol si attiva (§12.6)
-2. L1 disabilitato, tutto è L2
-3. Surface map rigenerata
-4. Coverage baseline resettata
-5. Test harness verificato
-6. Ritorno a fase 3 dopo la migrazione
-
----
-
-## 16. Convenzioni per agenti AI
-
-### 16.1 Regole generali
-
-- L'agente legge `CLAUDE.md` prima di qualunque azione
-- L'agente aggiorna `PROJECT_STATUS.md` dopo ogni sessione
-- L'agente non modifica mai file nella never-auto-merge list senza conferma umana
-- L'agente non modifica mai la logica di business — solo client/adapter layer e test
-- L'agente include sempre un regression test per ogni fix
-- L'agente non finge di eseguire operazioni — se non può fare qualcosa, lo dice
-
-### 16.2 Grounding su dati live
-
-Il primo step di qualunque fix loop DEVE essere: recuperare i dati live dalla dipendenza e pinnarli nel contesto. Previene l'allucinazione di firme, endpoint, o comportamenti inesistenti.
-
-### 16.3 Fix-claim obbligatorio
-
-Ogni PR prodotta dall'agente DEVE includere un fix-claim strutturato (§12.2).
-
-### 16.4 Scope limitato
-
-L'agente L1 può SOLO aggiungere nuovi file, nuove export, modificare file nel client/adapter layer, aggiungere test.
-
-L'agente L1 NON può modificare metodi esistenti, cambiare call site esistenti, alterare comportamento UI, modificare configurazione di deploy, cancellare file o codice.
-
-### 16.5 Proposta prima del codice
-
-Per feature complesse, l'agente DEVE proporre l'approccio in forma scritta (document o commento) e attendere l'approvazione dell'umano prima di scrivere codice. Nessun codice "a sorpresa".
-
-### 16.6 Logging strutturato
-
-Ogni azione dell'agente è loggata come evento nel database di compatibilità. Tutto è tracciabile, riproducibile, e auditabile.
+1. The major-version protocol activates (§12.6)
+2. L1 disabled, everything is L2
+3. Surface map regenerated
+4. Coverage baseline reset
+5. Test harness verified
+6. Return to phase 3 after migration
 
 ---
 
-## Appendice A — Checklist per fase
+## 16. Conventions for AI agents
 
-### A.1 Checklist Fase 0 (Requisiti)
+### 16.1 General rules
 
-- [ ] PRD scritto con tutte le sezioni obbligatorie (§1.2)
-- [ ] Ricerca stato dell'arte condotta per il dominio del progetto (§1.7)
-- [ ] Pre-implementation checklist nel PRD compilata e verificata
-- [ ] User story con acceptance criteria per il primo sprint
-- [ ] ADR per le decisioni architetturali fondamentali (con "Alternatives rejected" da ricerca reale)
-- [ ] Backlog creato e ordinato per priorità
-- [ ] Definition of Done definita e condivisa
-- [ ] Dipendenze critiche identificate in `DEPENDENCIES.md` (con confronto alternative §1.7.1)
+- The agent reads `CLAUDE.md` before any action
+- The agent updates `PROJECT_STATUS.md` after every session
+- The agent never modifies files on the never-auto-merge list without human confirmation
+- The agent never modifies business logic — only the client/adapter layer and tests
+- The agent always includes a regression test for every fix
+- The agent does not pretend to execute operations — if it cannot do something, it says so
 
-### A.2 Checklist Fase 1 (Bootstrap)
+### 16.2 Grounding on live data
 
-- [ ] Struttura directory creata (§2.1)
-- [ ] Linter + formatter configurati e integrati nel CI (§3.4)
-- [ ] Pipeline CI base funzionante (build + lint + unit) (§7)
-- [ ] `CLAUDE.md` scritto (§2.3)
-- [ ] Surface map generata (anche manuale) (§8)
-- [ ] Agenti di sorveglianza configurati (§9)
-- [ ] Primo record di compatibilità creato (`untested`)
-- [ ] `.env.example` con tutte le variabili documentate (§4.4)
-- [ ] Secret scan configurato nel CI (§4.5)
-- [ ] Seed script per database di sviluppo (§5.4)
-- [ ] Coverage baseline iniziale committata (§5.3)
-- [ ] Heartbeat alert configurato (soglia: 6 ore) (§14.1)
+The first step of any fix loop MUST be: retrieve live data from the dependency and pin it in context. Prevents hallucination of non-existent signatures, endpoints, or behaviours.
 
-### A.3 Checklist per ogni PR
+### 16.3 Mandatory fix-claim
 
-- [ ] Il codice rispetta le convenzioni di naming (§3.2)
-- [ ] Commit message in formato Conventional Commits (§3.3)
-- [ ] Nessun warning di lint (§3.4)
-- [ ] Nessun secret committato (§4.5)
-- [ ] Input validato con schema a ogni boundary (§4.2)
-- [ ] Test scritti per il codice nuovo/modificato (§5)
-- [ ] Coverage non scesa sotto il baseline (§5.3)
-- [ ] Documentazione aggiornata se necessario (§6)
-- [ ] Surface map aggiornata se aggiunte/rimosse dipendenze (§8)
-- [ ] Errori gestiti esplicitamente, nessun catch vuoto (§3.6)
+Every PR produced by the agent MUST include a structured fix-claim (§12.2).
 
-### A.4 Checklist per release
+### 16.4 Limited scope
 
-- [ ] Tutti i test passano su tutti i tier (§5.5)
-- [ ] CHANGELOG.md aggiornato (§6.4)
-- [ ] Tag di versione creato (§3.8)
-- [ ] Deploy su staging riuscito con smoke test verde (§7.2.3)
-- [ ] Rollback testato (§7.3)
-- [ ] Database migration testata (up E down) (§7.4)
-- [ ] Documentazione API aggiornata (§6.3)
-- [ ] Compat database aggiornato con lo stato corrente (§13)
+The L1 agent may ONLY add new files, new exports, modify files in the client/adapter layer, and add tests.
 
-### A.5 Checklist per sorveglianza
+The L1 agent may NOT modify existing methods, change existing call sites, alter UI behaviour, modify deploy configuration, or delete files or code.
 
-- [ ] Agenti attivi con heartbeat recente (< 6 ore) (§14.1)
-- [ ] Canary settimanale superato (§14.3)
-- [ ] Retrospective mensile eseguita (§14.2)
-- [ ] Never-auto-merge list rivista (§10.3)
-- [ ] Coverage baseline aggiornata (§5.3)
-- [ ] Surface map rigenerata dopo refactor (§8)
-- [ ] Thresholds riviste trimestralmente (§14)
-- [ ] State-of-the-Art Scout eseguito nel trimestre corrente (§1.7.5, §9.2.6)
-- [ ] Report SOTA rivisti e azioni pianificate per segnalazioni `evaluate` o `migrate`
+### 16.5 Proposal before code
+
+For complex features, the agent MUST propose the approach in written form (document or comment) and await human approval before writing code. No "surprise" code.
+
+### 16.6 Structured logging
+
+Every agent action is logged as an event in the compatibility database. Everything is traceable, reproducible, and auditable.
 
 ---
 
-## Appendice B — Template
+## Appendix A — Phase checklists
 
-### B.1 Template PRD
+### A.1 Phase 0 checklist (Requirements)
+
+- [ ] PRD written with all mandatory sections (§1.2)
+- [ ] State-of-the-art research conducted for the project domain (§1.7)
+- [ ] Pre-implementation checklist in the PRD completed and verified
+- [ ] User stories with acceptance criteria for the first sprint
+- [ ] ADRs for fundamental architectural decisions (with "Alternatives rejected" from real research)
+- [ ] Backlog created and ordered by priority
+- [ ] Definition of Done defined and shared
+- [ ] Critical dependencies identified in `DEPENDENCIES.md` (with alternatives comparison §1.7.1)
+
+### A.2 Phase 1 checklist (Bootstrap)
+
+- [ ] Directory structure created (§2.1)
+- [ ] Linter + formatter configured and integrated into CI (§3.4)
+- [ ] Base CI pipeline working (build + lint + unit) (§7)
+- [ ] `CLAUDE.md` written (§2.3)
+- [ ] Surface map generated (even manually) (§8)
+- [ ] Surveillance agents configured (§9)
+- [ ] First compatibility record created (`untested`)
+- [ ] `.env.example` with all variables documented (§4.4)
+- [ ] Secret scan configured in CI (§4.5)
+- [ ] Seed script for development database (§5.4)
+- [ ] Initial coverage baseline committed (§5.3)
+- [ ] Heartbeat alert configured (threshold: 6 hours) (§14.1)
+
+### A.3 Checklist for every PR
+
+- [ ] Code follows naming conventions (§3.2)
+- [ ] Commit message in Conventional Commits format (§3.3)
+- [ ] No lint warnings (§3.4)
+- [ ] No secrets committed (§4.5)
+- [ ] Input validated with schema at every boundary (§4.2)
+- [ ] Tests written for new/modified code (§5)
+- [ ] Coverage has not dropped below baseline (§5.3)
+- [ ] Documentation updated where necessary (§6)
+- [ ] Surface map updated if dependencies added/removed (§8)
+- [ ] Errors handled explicitly, no empty catch blocks (§3.6)
+
+### A.4 Checklist for release
+
+- [ ] All tests pass across all tiers (§5.5)
+- [ ] CHANGELOG.md updated (§6.4)
+- [ ] Version tag created (§3.8)
+- [ ] Staging deploy succeeded with green smoke test (§7.2.3)
+- [ ] Rollback tested (§7.3)
+- [ ] Database migration tested (up AND down) (§7.4)
+- [ ] API documentation updated (§6.3)
+- [ ] Compat database updated with current state (§13)
+
+### A.5 Surveillance checklist
+
+- [ ] Agents active with recent heartbeat (< 6 hours) (§14.1)
+- [ ] Weekly canary passed (§14.3)
+- [ ] Monthly retrospective executed (§14.2)
+- [ ] Never-auto-merge list reviewed (§10.3)
+- [ ] Coverage baseline updated (§5.3)
+- [ ] Surface map regenerated after refactor (§8)
+- [ ] Thresholds reviewed quarterly (§14)
+- [ ] State-of-the-Art Scout run in the current quarter (§1.7.5, §9.2.6)
+- [ ] SOTA reports reviewed and actions planned for `evaluate` or `migrate` signals
+
+---
+
+## Appendix B — Templates
+
+### B.1 PRD template
 
 ```markdown
-# [Nome Progetto] — Product Requirements Document
+# [Project Name] — Product Requirements Document
 
 **Status:** Draft v1
-**Owner:** [nome]
-**Last updated:** [data]
+**Owner:** [name]
+**Last updated:** [date]
 
 ### Pre-implementation checklist
 
-- [ ] [Decisione 1 già confermata]
-- [ ] [Decisione 2 già confermata]
+- [ ] [Decision 1 already confirmed]
+- [ ] [Decision 2 already confirmed]
 
 ---
 
@@ -1238,110 +1238,110 @@ Ogni azione dell'agente è loggata come evento nel database di compatibilità. T
 ## Appendices
 ```
 
-### B.2 Template User Story
+### B.2 User Story template
 
 ```markdown
-# US-[AREA]-[NUMERO]: [Titolo breve]
+# US-[AREA]-[NUMBER]: [Short title]
 
-**Priorità:** P0 | P1 | P2 | P3
-**Stima:** [ore/punti]
-**PRD ref:** §[sezione]
-**Dipendenze:** US-[xxx], US-[yyy]
+**Priority:** P0 | P1 | P2 | P3
+**Estimate:** [hours/points]
+**PRD ref:** §[section]
+**Dependencies:** US-[xxx], US-[yyy]
 
 ## Story
-Come [ruolo]
-Voglio [azione]
-In modo da [beneficio]
+As a [role]
+I want [action]
+So that [benefit]
 
 ## Acceptance Criteria
 
-1. DATO [contesto]
-   QUANDO [azione]
-   ALLORA [risultato]
+1. GIVEN [context]
+   WHEN [action]
+   THEN [result]
 
-2. DATO [contesto]
-   QUANDO [azione]
-   ALLORA [risultato]
+2. GIVEN [context]
+   WHEN [action]
+   THEN [result]
 
-## Note tecniche
-[appunti per l'implementatore]
+## Technical notes
+[notes for the implementer]
 ```
 
-### B.3 Template ADR
+### B.3 ADR template
 
 ```markdown
-# ADR-[NUMERO]: [Titolo]
+# ADR-[NUMBER]: [Title]
 
 **Status:** proposed | accepted | deprecated | superseded by ADR-[n]
 **Date:** YYYY-MM-DD
 
 ## Context
-[Perché questa decisione è necessaria]
+[Why this decision is necessary]
 
 ## Decision
-[Cosa è stato deciso]
+[What was decided]
 
 ## Consequences
-[Impatto positivo e negativo]
+[Positive and negative impact]
 
 ## Alternatives rejected
-[Cosa è stato considerato e scartato, con motivazione]
+[What was considered and discarded, with rationale]
 ```
 
-### B.4 Template DEPENDENCIES.md
+### B.4 DEPENDENCIES.md template
 
 ```markdown
 # Dependencies
 
 ## Critical dependencies
 
-### [Nome dipendenza]
+### [Dependency name]
 - **Type:** REST API | SDK | Database | Service
-- **Version:** [versione corrente]
-- **Contract:** [link a documentazione del contratto]
-- **Surface count:** [numero superfici nella surface map]
-- **Surveillance agent:** [id agente]
-- **Last verified:** [data]
-- **Notes:** [note particolari, quirk noti, workaround]
+- **Version:** [current version]
+- **Contract:** [link to contract documentation]
+- **Surface count:** [number of surfaces in surface map]
+- **Surveillance agent:** [agent id]
+- **Last verified:** [date]
+- **Notes:** [particular notes, known quirks, workarounds]
 
 ## Development dependencies
 
-### [Nome]
-- **Purpose:** [a cosa serve]
-- **Version:** [versione]
+### [Name]
+- **Purpose:** [what it is used for]
+- **Version:** [version]
 - **Pinned:** yes | no (range)
 ```
 
 ---
 
-## Appendice C — Glossario
+## Appendix C — Glossary
 
-| Termine | Definizione |
-|---------|-------------|
-| **PRD** | Product Requirements Document — specifica del cosa e del perché |
-| **ADR** | Architecture Decision Record — decisione architetturale documentata |
-| **User Story** | Requisito funzionale dal punto di vista dell'utente |
-| **Acceptance Criteria** | Condizioni binarie che definiscono "fatto" |
-| **Definition of Done** | Checklist universale applicata a ogni item di lavoro |
-| **Superficie** | Punto di contatto tra il codice dell'app e una risorsa esterna |
-| **Surface map** | Inventario strutturato di tutte le superfici |
-| **Bucket** | Categoria di cambiamento (api-endpoint, data-model, ecc.) |
-| **Severità** | Livello di impatto del cambiamento (safe, additive, breaking, p0) |
-| **Slot** | Una versione nella matrice di test (latest, recent, baseline) |
-| **L0/L1/L2** | Livelli di autonomia nella remediation |
-| **Heartbeat** | Segnale periodico che conferma che un agente è attivo |
-| **Canary** | Test sintetico end-to-end del sistema di sorveglianza |
-| **Golden query** | Query con risultato atteso per verificare integrità dati |
-| **Fix-claim** | Dichiarazione strutturata che accompagna ogni fix agentiva |
-| **Circuit breaker** | Meccanismo che disabilita l'automazione dopo troppi fallimenti |
-| **Never-auto-merge** | Condizioni che forzano sempre la revisione umana |
-| **Ratchet** | Meccanismo che impedisce alla coverage di scendere |
-| **Escape valve** | Eccezione temporanea tracciata a una regola del ratchet |
-| **Conventional Commits** | Standard per messaggi di commit strutturati |
-| **Blue-green deploy** | Strategia di deploy con due ambienti alternati |
-| **Rolling update** | Deploy graduale che sostituisce le istanze una alla volta |
-| **Feature flag** | Toggle che abilita/disabilita una feature senza deploy |
-| **SOTA Scout** | Agente che ricerca lo stato dell'arte per tecnologie e pattern del progetto |
-| **Technology health check** | Verifica periodica della salute di una tecnologia (release, community, trend) |
-| **Alternative scanning** | Ricerca di librerie o servizi alternativi a quelli in uso |
-| **Pattern evolution** | Monitoraggio dell'evoluzione delle best practice architetturali nel settore |
+| Term | Definition |
+|------|------------|
+| **PRD** | Product Requirements Document — specification of the what and the why |
+| **ADR** | Architecture Decision Record — documented architectural decision |
+| **User Story** | Functional requirement from the user's perspective |
+| **Acceptance Criteria** | Binary conditions that define "done" |
+| **Definition of Done** | Universal checklist applied to every work item |
+| **Surface** | Point of contact between application code and an external resource |
+| **Surface map** | Structured inventory of all surfaces |
+| **Bucket** | Change category (api-endpoint, data-model, etc.) |
+| **Severity** | Level of impact of the change (safe, additive, breaking, p0) |
+| **Slot** | A version in the test matrix (latest, recent, baseline) |
+| **L0/L1/L2** | Autonomy levels in remediation |
+| **Heartbeat** | Periodic signal confirming that an agent is active |
+| **Canary** | Synthetic end-to-end test of the surveillance system |
+| **Golden query** | Query with expected result to verify data integrity |
+| **Fix-claim** | Structured declaration accompanying every agentic fix |
+| **Circuit breaker** | Mechanism that disables automation after too many failures |
+| **Never-auto-merge** | Conditions that always force human review |
+| **Ratchet** | Mechanism that prevents coverage from dropping |
+| **Escape valve** | Tracked temporary exception to a ratchet rule |
+| **Conventional Commits** | Standard for structured commit messages |
+| **Blue-green deploy** | Deployment strategy using two alternating environments |
+| **Rolling update** | Gradual deployment that replaces instances one at a time |
+| **Feature flag** | Toggle that enables/disables a feature without deployment |
+| **SOTA Scout** | Agent that researches the state of the art for project technologies and patterns |
+| **Technology health check** | Periodic health verification of a technology (releases, community, trends) |
+| **Alternative scanning** | Search for libraries or services alternative to those in use |
+| **Pattern evolution** | Monitoring of the evolution of architectural best practices in the industry |
