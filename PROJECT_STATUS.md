@@ -1,16 +1,20 @@
 # Project Status — dev_playbook
 
 ## Objective
-Manage and evolve the universal software development playbook — the Single Source of Truth for development methodology, conventions, and tooling for LLM-assisted projects. All documentation and work is conducted in **British English**.
+Evolve `software-development-playbook.md` into a universal Meta-Framework for LLM-assisted software development, extracting general patterns from `example/00-prd.md` (Cortex project) and promoting them into the playbook.
+
+All documentation and commits are in **British English**.
+
+## Current Phase
+Design. The repository has been stripped of premature scaffolding (templates, bootstrap scripts, CI). Only the playbook, the reference example, and the multi-agent configuration remain. Tooling will be produced once the playbook design stabilises.
 
 ## Modified Files
-- `STRATEGY_TRANSFORMATION.md`: Created English (UK) roadmap for meta-framework transition.
-- `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `README.md`, `PROJECT_STATUS.md`: Updated to explicitly state British English as the working language.
-- `.claude/agents/`: Removed redundant versions (v2, v3, v4), keeping only the consolidated `proofreader.yaml`.
-- `software-development-playbook.md`: Translated to English (UK) via 4-agent swarm; QA verified.
+_Session-by-session additions go here._
 
 ## Logical State
-All core playbook content and documentation is in English (UK). The project has transitioned to a Meta-Framework strategy. The proofreading ecosystem is consolidated to v4.0.0.
+- Playbook: `software-development-playbook.md` v2.0.0 Draft — prescriptive, to be refactored per the Meta-Framework direction.
+- Reference example: `example/00-prd.md` (Cortex) — unchanged; source of patterns.
+- Roadmap: `STRATEGY_TRANSFORMATION.md` — design notes guiding the refactor; to be absorbed into the playbook and removed.
 
 ## Next Action
-Begin refactoring `software-development-playbook.md` into modular sections starting with Emergent Architecture.
+Begin the playbook refactor. Candidate starting point: "Emergent Architecture" and abstract "Boundary Contracts" (Hardware, UI, Data, API) per `STRATEGY_TRANSFORMATION.md` §3 Phase A.
