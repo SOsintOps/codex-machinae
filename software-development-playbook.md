@@ -247,18 +247,34 @@ In addition to the dependency surveillance agents (§9), the playbook includes a
 
 ### 1.8 Definition of Done
 
-An item is "done" when ALL of the following conditions are met:
+The Definition of Done is split into two layers. **Core DoD** applies to every item in every project, regardless of domain, phase, or tooling. **Contextual DoD** applies only when its precondition holds — the item need not satisfy a contextual check when the trigger has not fired.
 
-- [ ] State-of-the-art research has been conducted where applicable (§1.7)
-- [ ] Code is written and complies with style conventions (§3)
-- [ ] All Acceptance Criteria are satisfied
-- [ ] Tests are written and pass (§5)
-- [ ] Coverage has not dropped below the threshold (§5.3)
-- [ ] Documentation is up to date (§6)
-- [ ] Code has been reviewed (self-review or peer review)
-- [ ] CI is green
-- [ ] The contract map is updated if external dependencies have been added or removed (§8)
+An item is "done" when all applicable checks below pass.
+
+#### 1.8.1 Core DoD (process integrity — always applies)
+
+- [ ] The planned change is actually complete — no half-finished edits, no placeholder stubs left behind
+- [ ] Commit messages follow Conventional Commits (§3.3)
 - [ ] `PROJECT_STATUS.md` is updated
+- [ ] Protected paths have not been modified without prior approval (agent-config protected-paths list)
+- [ ] Cross-references (§…) still resolve; broken links fixed or removed
+
+#### 1.8.2 Contextual DoD (applies when the precondition holds)
+
+| Check | Precondition |
+|-------|--------------|
+| Code complies with style conventions (§3) | Code was written or modified |
+| All Acceptance Criteria are satisfied | The item is backed by a User Story (§1.3) |
+| Tests are written and pass (§5) | The project has adopted a testing strategy |
+| Coverage has not dropped below the threshold (§5.3) | A coverage threshold is declared |
+| CI is green | CI is configured for the project |
+| Documentation is up to date (§6) | External-facing behaviour changed |
+| Code has been reviewed (self- or peer-) | The project's practice requires review |
+| Boundary Contract Map updated (§8) | A contract was added, removed, or changed |
+| State-of-the-art research has been conducted (§1.7) | A §1.7 trigger fired for this item |
+| ADR written (§1.5) | A significant architectural decision was taken |
+
+An agent MUST declare, for each contextual check, whether the precondition held; checks whose precondition did not hold are recorded as `n/a` rather than silently skipped. This keeps the audit trail explicit.
 
 ---
 
