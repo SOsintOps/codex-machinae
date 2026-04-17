@@ -3,6 +3,8 @@
 > Agent-specific configuration for Claude (Anthropic).
 > **Shared rules are in `AI-AGENTS.md` — read that first. This file only adds Claude-specific behaviour.**
 
+**Working Language:** All documentation, comments, and commits MUST be in **British English**.
+
 ---
 
 ## Naming Conventions (§3.2)
