@@ -1,14 +1,14 @@
 # AI-AGENTS.md — Shared Agent Configuration
 
 > **Source of truth for all AI agents working on this project.**
-> All agent-specific files (CLAUDE.md, GEMINI.md, etc.) MUST align with this document.
+> All agent-specific files (`CLAUDE.md`, `GEMINI.md`, …) MUST align with this document.
 > When a rule here conflicts with an agent-specific file, this file wins.
 
 ---
 
 ## Multi-Agent Alignment Protocol
 
-This project is worked on by multiple AI agents (Claude, Gemini, etc.) across separate sessions.
+This project is worked on by multiple AI agents (Claude, Gemini, and others) across separate sessions.
 Each agent has its own config file for agent-specific syntax and tooling.
 All shared rules live here. Agent-specific files must not contradict this document.
 
@@ -22,7 +22,9 @@ All shared rules live here. Agent-specific files must not contradict this docume
 ## Project Overview
 
 **Name:** dev_playbook
-**Description:** Universal software development playbook — source of truth for methodology, conventions, and tooling.
+**Description:** Universal software development playbook under active design. The repo contains the playbook itself and a reference example (`example/00-prd.md`) used to derive general patterns.
+
+**Current scope:** design only. No templates, scaffolds, scripts, or CI until the playbook design stabilises.
 
 ---
 
@@ -40,8 +42,9 @@ All shared rules live here. Agent-specific files must not contradict this docume
 
 ## Protected Paths
 
-- Core playbook sections §1, §8, §9 — no changes without prior human confirmation or an Issue/PR.
+- `software-development-playbook.md` core sections §1, §8, §9 — no changes without prior human confirmation or an Issue/PR.
 - Severity and autonomy parameters §10, §12 — no changes unless explicitly requested to evolve the system.
+- `example/00-prd.md` — read-only reference. Do not modify; patterns are extracted from it and promoted into the playbook.
 
 ## Workflow (all agents)
 
@@ -56,6 +59,10 @@ All shared rules live here. Agent-specific files must not contradict this docume
 - Maximum line length: 120 characters.
 - Always use first-level headings for each main document.
 - Keep cross-references (§...) up to date.
+
+## Out of Scope (for this phase)
+
+Tooling artefacts — templates, bootstrap scripts, CI workflows, release automation — are explicitly deferred. They will be produced once the playbook design is stable. Do not reintroduce them pre-emptively.
 
 ---
 
