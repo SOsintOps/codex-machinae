@@ -264,40 +264,53 @@ An item is "done" when ALL of the following conditions are met:
 
 ## 2. Project structure
 
-### 2.1 Mandatory files in the root
+The playbook follows an **emergent architecture** principle: a project starts with the smallest possible footprint and grows only when justified by its PRD and phase. Scaffolding folders up front — "just in case" — is waste and locks the project into structure it may never need.
 
-Every project MUST contain:
+### 2.1 Minimum Core of Existence
+
+Every project MUST contain, at initialisation, only these files:
 
 ```
 project-root/
-├── CLAUDE.md                    # Rules for AI agents
-├── PROJECT_STATUS.md            # Current status (4 fixed sections)
-├── DEPENDENCIES.md              # Critical dependency map and contracts
-├── CHANGELOG.md                 # History of changes per release
-├── COMPATIBILITY.md             # Compatibility status with external dependencies (generated)
-├── docs/
-│   ├── prd/                     # PRD and requirements documents
-│   │   └── 00-prd.md
-│   ├── adr/                     # Architecture Decision Records
-│   │   ├── 001-<title>.md
-│   │   └── ...
-│   ├── api/                     # API documentation (generated or manual)
-│   └── runbooks/                # Operational procedures (deploy, rollback, incident)
-├── src/                         # Source code
-├── tests/                       # Tests (structure mirroring src/)
-├── scripts/                     # Build, seed, utility scripts
-├── ci/                          # CI/CD configuration
-│   └── adapters/                # Adapters for specific forges (github/, gitlab/, etc.)
-├── compat-data/                 # Compatibility database
-├── compatibility/               # Schema, surface map, catalogues
-├── surveillance/                # Surveillance agent configuration
-└── .config/                     # Linting, formatting configuration, etc.
-    ├── eslint.config.js
-    ├── prettier.config.js
-    └── ...
+├── README.md                    # One-paragraph orientation
+├── PROJECT_STATUS.md            # Current session state (§2.3)
+└── <agent-config>               # Rules for the AI agent(s) working on the project (§2.4)
 ```
 
-### 2.2 PROJECT_STATUS.md
+Nothing else is mandatory at Phase 0. Every further folder or file is introduced through the Emergent Expansion Protocol (§2.2) when a trigger fires.
+
+### 2.2 Emergent Expansion Protocol
+
+Rather than creating folders defensively, the AI agent proposes expansions as the PRD and the project evolve. When a trigger fires, the agent MUST surface a proposal in this form:
+
+> "I suggest adding `<path>` to cover <concern> because <trigger>. Cost of omission: <what breaks if we don't>."
+
+The human accepts, rejects, or defers. No folder is created without an accepted proposal.
+
+**Expansion catalogue (non-exhaustive).** Folders are added only when their trigger fires:
+
+| Path | Trigger | Covers |
+|------|---------|--------|
+| `docs/prd/00-prd.md` | A PRD is being written (always, Phase 0 of any non-trivial project) | Requirements |
+| `docs/adr/` | First architectural decision needs recording | Decision history |
+| `docs/api/` | Project exposes or consumes a programmatic API | API surface |
+| `docs/runbooks/` | Project is deployed to any environment | Operational procedures |
+| `docs/research/` | State-of-the-art research is triggered (§1.7) | Research register |
+| `src/`, `tests/` | Code is about to be written | Implementation |
+| `scripts/` | First automation script is needed | Local tooling |
+| `ci/` | Automated checks are enabled | CI/CD configuration |
+| `ci/adapters/<forge>/` | A specific forge is adopted (GitHub, GitLab, …) | Forge-specific glue |
+| `DEPENDENCIES.md` | First external runtime dependency is added | Dependency contracts |
+| `CHANGELOG.md` | Project reaches its first release (v0.1.0+) | Release history |
+| `COMPATIBILITY.md` | Dependency Surface Map is populated (§8) | Generated compatibility status |
+| `compat-data/`, `compatibility/`, `surveillance/` | Surveillance agents are activated (§9) | External dependency monitoring |
+| `.config/` | Linting/formatting rules diverge from tool defaults | Tooling configuration |
+
+**Rule:** no folder without a fired trigger. Empty scaffolds and `.gitkeep` files are forbidden.
+
+**Rule:** the agent also proposes **removal** when a folder loses its trigger (e.g. last surveillance agent removed → `surveillance/` can be archived).
+
+### 2.3 PROJECT_STATUS.md
 
 Updated at every working session. Four fixed sections:
 
@@ -315,16 +328,25 @@ Current status: what works, what does not, what is blocked.
 The next concrete action to perform.
 ```
 
-### 2.3 CLAUDE.md
+### 2.4 Agent configuration
 
-Operational rules for AI agents. Minimum content:
+Operational rules for the AI agent(s) live in one of two layouts, depending on how many agents collaborate on the project:
+
+**Single-agent project.** A single file (e.g. `CLAUDE.md`, `GEMINI.md`) contains all rules.
+
+**Multi-agent project.** Rules are split into two layers:
+
+- `AI-AGENTS.md` — shared source of truth for all agents. When a rule here conflicts with an agent-specific file, this file wins.
+- `CLAUDE.md`, `GEMINI.md`, … — per-agent files covering only agent-specific syntax, tool use, and permissions. They must not contradict `AI-AGENTS.md`.
+
+Whichever layout is used, the configuration MUST cover:
 
 - Language and writing style (e.g. British English, active voice, short sentences)
-- List of forbidden words
-- Scope of permitted modifications per autonomy level (L0/L1/L2)
+- List of forbidden words, if any
+- Scope of permitted modifications per autonomy level (L0/L1/L2 — see §12)
 - Naming conventions for branches, commits, files
 - Protected paths (files the agent cannot modify without human confirmation)
-- Editorial rules (no em dash, max line length, etc.)
+- Editorial rules (max line length, punctuation constraints, etc.)
 
 ---
 

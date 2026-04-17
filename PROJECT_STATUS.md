@@ -9,7 +9,7 @@ All documentation and commits are in **British English**.
 Design. The repository has been stripped of premature scaffolding (templates, bootstrap scripts, CI). Only the playbook, the reference example, and the multi-agent configuration remain. Tooling will be produced once the playbook design stabilises.
 
 ## Modified Files
-_Session-by-session additions go here._
+- `software-development-playbook.md` §2: replaced prescriptive mandatory folder tree with "Minimum Core of Existence" + "Emergent Expansion Protocol"; §2.4 now covers both single- and multi-agent configurations.
 
 ## Logical State
 - Playbook: `software-development-playbook.md` v2.0.0 Draft — prescriptive, to be refactored per the Meta-Framework direction.
@@ -17,4 +17,7 @@ _Session-by-session additions go here._
 - Roadmap: `STRATEGY_TRANSFORMATION.md` — design notes guiding the refactor; to be absorbed into the playbook and removed.
 
 ## Next Action
-Begin the playbook refactor. Candidate starting point: "Emergent Architecture" and abstract "Boundary Contracts" (Hardware, UI, Data, API) per `STRATEGY_TRANSFORMATION.md` §3 Phase A.
+Continue Phase A of the Meta-Framework refactor:
+1. Generalise §8 "Dependency Surface Map" into abstract "Boundary Contracts" (Hardware, UI, Data, API) — requires human confirmation (§8 is a protected section).
+2. Split §1.8 Definition of Done into **Core DoD** (process integrity) and **Contextual DoD** (project goals) — requires human confirmation (§1 is a protected section).
+3. Recast §12 Remediation (L0-L2) as a pattern applicable by risk rather than a per-dependency requirement.
