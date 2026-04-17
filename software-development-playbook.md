@@ -22,7 +22,7 @@ This playbook defines the entire lifecycle of a software project: from requireme
 
 ### Part II — Surveillance and maintenance
 
-8. [Dependency Surface Map](#8-dependency-surface-map)
+8. [Boundary Contracts](#8-boundary-contracts)
 9. [Surveillance agents](#9-surveillance-agents)
 10. [Change classification](#10-change-classification)
 11. [Compatibility test matrix](#11-compatibility-test-matrix)
@@ -257,7 +257,7 @@ An item is "done" when ALL of the following conditions are met:
 - [ ] Documentation is up to date (§6)
 - [ ] Code has been reviewed (self-review or peer review)
 - [ ] CI is green
-- [ ] The surface map is updated if external dependencies have been added or removed (§8)
+- [ ] The contract map is updated if external dependencies have been added or removed (§8)
 - [ ] `PROJECT_STATUS.md` is updated
 
 ---
@@ -302,7 +302,7 @@ The human accepts, rejects, or defers. No folder is created without an accepted 
 | `ci/adapters/<forge>/` | A specific forge is adopted (GitHub, GitLab, …) | Forge-specific glue |
 | `DEPENDENCIES.md` | First external runtime dependency is added | Dependency contracts |
 | `CHANGELOG.md` | Project reaches its first release (v0.1.0+) | Release history |
-| `COMPATIBILITY.md` | Dependency Surface Map is populated (§8) | Generated compatibility status |
+| `COMPATIBILITY.md` | Boundary Contract Map is populated (§8) | Generated compatibility status |
 | `compat-data/`, `compatibility/`, `surveillance/` | Surveillance agents are activated (§9) | External dependency monitoring |
 | `.config/` | Linting/formatting rules diverge from tool defaults | Tooling configuration |
 
@@ -567,7 +567,7 @@ Every web application MUST be protected against the current OWASP Top 10. The te
 - Naming: `describe('functionName', () => { it('should <behaviour> when <condition>') })`
 
 **Scenario/Contract tests:**
-- Every surface in the surface map has at least one contract test
+- Every contract in the Boundary Contract Map has at least one contract test
 - Validation uses JSON Schema with `additionalProperties: true` (new fields do not break it)
 - Fixtures are generated from real interactions, not written by hand
 - Set-based assertion for responses with non-guaranteed ordering
@@ -791,36 +791,45 @@ All CI logic that is specific to GitHub Actions (or GitLab, or Forgejo) lives un
 
 ---
 
-## 8. Dependency Surface Map
+## 8. Boundary Contracts
 
-The surface map is the heart of the surveillance system. It answers the question: **where exactly in the code do I consume each external dependency?**
+A **boundary contract** is any promise the system makes to something outside its own implementation: a device, a human, a data store, another piece of code. The **Boundary Contract Map** is the structured inventory of these promises. It answers the question: **where exactly in the code does each contract live, and who is its counterparty?**
 
-### 8.1 Definition of surface
+The map is the substrate on which classification (§10), compatibility testing (§11), and remediation (§12) operate.
 
-A "surface" is any point of contact between the application code and an external resource:
+**Applicability.** This part of the playbook activates when a project has at least one external boundary worth tracking. A purely internal script with no inbound or outbound contracts does not need a map; a service that exposes APIs, consumes dependencies, drives hardware, or renders a UI does.
 
-| Type | Examples |
-|------|--------|
-| REST endpoint | `GET /api/v1/users`, `POST /api/v2/auth/login` |
-| WebSocket | `wss://service.example.com/events` |
-| SDK method | `client.users.list()`, `db.query()` |
-| Data model | JSON schema, protobuf, ORM models |
-| Config/env | Environment variables, feature flags, API keys |
-| File format | CSV ingest, JSON export, binary protocol |
-| CLI tool | Build, linting, deploy commands |
+### 8.1 Contract axes
 
-### 8.2 Surface map format
+Every contract sits on one of four axes. A single contract may touch multiple axes when its shape spans them (for example, a REST endpoint that takes a JSON Schema body is both `api` and `data`).
+
+| Axis | What it covers | Examples |
+|------|----------------|----------|
+| **Hardware** | Physical or virtual device interfaces | Sensor I/O, GPIO, serial/USB, device drivers, hardware event streams |
+| **UI** | Interfaces exposed to humans | Web pages, mobile screens, CLI commands, voice prompts, desktop widgets |
+| **Data** | Schemas and serialisation agreements | JSON Schema, protobuf, ORM models, database tables, file formats (CSV, Parquet), on-wire message shapes, environment variables and feature flags |
+| **API** | Programmatic interfaces consumed by other code | REST/GraphQL/gRPC endpoints, SDK methods, RPC, webhooks, CLIs invoked by other programs |
+
+Direction matters. Each contract is either:
+
+- **Inbound** — the project exposes it; the counterparty is downstream.
+- **Outbound** — the project consumes it; the counterparty is upstream.
+
+Both directions are tracked. Inbound contracts are watched against the promise the project makes to its consumers (regression). Outbound contracts are watched against the promise the upstream makes to the project (drift).
+
+### 8.2 Contract map format
 
 ```json
 {
-  "surfaces": [
+  "contracts": [
     {
-      "dependency": "stripe-api",
-      "surface": "rest",
-      "endpoint": "POST /v1/charges",
+      "id": "stripe.charges.create",
+      "axis": "api",
+      "direction": "outbound",
+      "counterparty": "stripe-api",
+      "shape": "POST /v1/charges",
       "file": "src/payments/stripe-client.ts",
       "line": 42,
-      "method": "POST",
       "context": "createCharge()",
       "risk_weight": "high",
       "test_coverage": true,
@@ -829,21 +838,25 @@ A "surface" is any point of contact between the application code and an external
   ],
   "generated_at": "2026-04-15T10:00:00Z",
   "generator": "manual|ast-walker|grep",
-  "surface_count": 47
+  "contract_count": 47
 }
 ```
+
+The `shape` field is axis-specific: method + path for `api`, a schema identifier for `data`, a device path or event name for `hardware`, a screen or command identifier for `ui`.
 
 ### 8.3 Generation
 
 Three strategies, in order of reliability:
 
-1. **AST walker** (best) — static analysis of the source code. Resolves template literals, dynamic imports, type inference. Tools: `ts-morph` for TypeScript, `ast` for Python, `go/ast` for Go.
-2. **Structured grep** — pattern search with `ripgrep`. Fast but misses dynamic paths.
-3. **Manual** — file curated by hand. Acceptable as an initial stub, to be replaced as soon as possible.
+1. **AST walker** (best) — static analysis of the source code. Resolves template literals, dynamic imports, type inference. Tools: `ts-morph` for TypeScript, `ast` for Python, `go/ast` for Go. Applies primarily to `api` and `data` contracts.
+2. **Structured grep** — pattern search with `ripgrep`. Fast but misses dynamic paths. Useful for `hardware` device paths, CLI contracts, and well-patterned API calls.
+3. **Manual** — curated by hand. Acceptable as an initial stub, to be replaced as soon as an automated generator is viable. Often the only option for `ui` contracts.
+
+Different axes can use different generators; the resulting entries are merged into a single map.
 
 ### 8.4 Cardinality guard
 
-If the total surface count drops by more than 10% between one generation and the next, CI MUST fail. Catches: refactors that move API calls outside the recognised pattern, configuration changes that exclude files, walker updates.
+If the total contract count drops by more than 10% between one generation and the next, CI MUST fail. The guard applies per-axis as well as globally — a 20% drop in `api` contracts with no corresponding PRD change is a red flag even if the total remains stable. Catches: refactors that move calls outside the recognised pattern, configuration changes that exclude files, walker updates.
 
 ---
 
@@ -874,7 +887,7 @@ Agents are autonomous processes that monitor external dependencies at regular in
                   ▼
    ┌─────────────────────────────────────┐
    │         IMPACT ANALYSER             │
-   │    (cross-ref with surface map)     │
+   │    (cross-ref with contract map)     │
    └──────────────┬──────────────────────┘
                   │
           ┌───────┴────────┐
@@ -889,7 +902,7 @@ Agents are autonomous processes that monitor external dependencies at regular in
 
 **9.2.1 Package Watch** — detects new versions of dependencies. Frequency: 5 min (RSS) or 1h (JSON API). Filter: stable releases only.
 
-**9.2.2 API Probe** — runs contract tests against every endpoint in the surface map. Frequency: 6h for critical endpoints, 24h for others. Verifies: reachability, schema, semantics, new/missing fields, deprecation headers, rate limits, versioning.
+**9.2.2 API Probe** — runs contract tests against every endpoint in the contract map. Frequency: 6h for critical endpoints, 24h for others. Verifies: reachability, schema, semantics, new/missing fields, deprecation headers, rate limits, versioning.
 
 **9.2.3 Docs Watch** — monitors changelogs and official documentation. Frequency: 24h. Method: fetch + textual diff.
 
@@ -937,9 +950,9 @@ For every critical dependency, at least two sources with different roles: primar
 | `auth` | Authentication, permissions, policies |
 | `config` | Environment variables, feature flags |
 | `docs-only` | Documentation only |
-| `internal` | Internal refactoring, no surface impact |
+| `internal` | Internal refactoring, no contract impact |
 | `security` | Security patches |
-| `deprecation` | Deprecation of existing surfaces |
+| `deprecation` | Deprecation of existing contracts |
 | `migration` | Migrations that modify existing data |
 
 ### 10.2 Severity
@@ -948,7 +961,7 @@ For every critical dependency, at least two sources with different roles: primar
 |----------|------------|--------|
 | `safe` | `internal` or `docs-only` only | Auto-merge after green CI |
 | `additive` | New endpoints, new fields, new libraries | PR with report |
-| `breaking` | Surfaces removed, renamed, signature changed | Draft PR + human review |
+| `breaking` | Contracts removed, renamed, signature changed | Draft PR + human review |
 | `p0` | Security advisory, protocol change | Draft PR + immediate notification |
 
 ### 10.3 Never-auto-merge list
@@ -973,7 +986,7 @@ At the start of each cycle, before any test, the system freezes versions in a JS
 
 ### 11.3 Test data
 
-1. **Seed workload** — creates data that exercises every consumed surface
+1. **Seed workload** — creates data that exercises every outbound contract
 2. **Golden queries** — queries with expected results to verify post-migration integrity
 3. **Snapshot regression** — loads snapshots from previous versions and verifies data accessibility
 
@@ -999,15 +1012,15 @@ Green CI is not sufficient. The agent MUST: validate against the specific schema
 
 ### 12.4 Adoption workflow
 
-When the classifier detects new capabilities: cross-reference with surface map, add wrapper in the client, write contract test, open adoption PR + tracking issue for UI changes.
+When the classifier detects new capabilities: cross-reference with contract map, add wrapper in the client, write contract test, open adoption PR + tracking issue for UI changes.
 
 ### 12.5 Deprecation tracking
 
-Record the deprecation, cross-reference with surface map, open `deprecation-watch` issue. Migration is always human-led.
+Record the deprecation, cross-reference with contract map, open `deprecation-watch` issue. Migration is always human-led.
 
 ### 12.6 Major version protocol
 
-L1 disabled, coverage baseline resettable, surface map mandatorily regenerated, test harness verified, issue as tracking epic.
+L1 disabled, coverage baseline resettable, contract map mandatorily regenerated, test harness verified, issue as tracking epic.
 
 ### 12.7 Human report
 
@@ -1047,11 +1060,11 @@ Monthly job: reviews all `safe` auto-merged records from the past 30 days. False
 
 ### 14.3 End-to-end canary
 
-Weekly job: injects a synthetic record to verify the entire detection → classification → issue → surface-map cross-ref → event emission path. Cleans up after verification.
+Weekly job: injects a synthetic record to verify the entire detection → classification → issue → contract-map cross-ref → event emission path. Cleans up after verification.
 
-### 14.4 Surface map cardinality guard
+### 14.4 Boundary Contract Map cardinality guard
 
-If the surface count drops > 10%, CI fails.
+If the contract count drops > 10%, CI fails.
 
 ---
 
@@ -1076,7 +1089,7 @@ If the surface count drops > 10%, CI fails.
 2. Configure linting, formatting, pre-commit hooks (§3.4)
 3. Configure the base CI pipeline (build + lint + unit test) (§7)
 4. Write `CLAUDE.md` with operating rules (§2.3)
-5. Generate the initial surface map (§8)
+5. Generate the initial contract map (§8)
 6. Configure surveillance agents (§9)
 7. Create the first compatibility record (`untested`)
 8. Write `.env.example` with all variables documented (§4.4)
@@ -1091,7 +1104,7 @@ If the surface count drops > 10%, CI fails.
 5. Update API documentation and CHANGELOG (§6)
 6. Agents run in the background and produce compatibility records
 7. Fix and adoption PRs are reviewed and merged
-8. Keep the surface map up to date after significant refactors
+8. Keep the contract map up to date after significant refactors
 
 ### 15.4 Phase 3 — Maturity and maintenance
 
@@ -1106,7 +1119,7 @@ If the surface count drops > 10%, CI fails.
 
 1. The major-version protocol activates (§12.6)
 2. L1 disabled, everything is L2
-3. Surface map regenerated
+3. Contract map regenerated
 4. Coverage baseline reset
 5. Test harness verified
 6. Return to phase 3 after migration
@@ -1167,7 +1180,7 @@ Every agent action is logged as an event in the compatibility database. Everythi
 - [ ] Linter + formatter configured and integrated into CI (§3.4)
 - [ ] Base CI pipeline working (build + lint + unit) (§7)
 - [ ] `CLAUDE.md` written (§2.3)
-- [ ] Surface map generated (even manually) (§8)
+- [ ] Contract map generated (even manually) (§8)
 - [ ] Surveillance agents configured (§9)
 - [ ] First compatibility record created (`untested`)
 - [ ] `.env.example` with all variables documented (§4.4)
@@ -1186,7 +1199,7 @@ Every agent action is logged as an event in the compatibility database. Everythi
 - [ ] Tests written for new/modified code (§5)
 - [ ] Coverage has not dropped below baseline (§5.3)
 - [ ] Documentation updated where necessary (§6)
-- [ ] Surface map updated if dependencies added/removed (§8)
+- [ ] Contract map updated if dependencies added/removed (§8)
 - [ ] Errors handled explicitly, no empty catch blocks (§3.6)
 
 ### A.4 Checklist for release
@@ -1207,7 +1220,7 @@ Every agent action is logged as an event in the compatibility database. Everythi
 - [ ] Monthly retrospective executed (§14.2)
 - [ ] Never-auto-merge list reviewed (§10.3)
 - [ ] Coverage baseline updated (§5.3)
-- [ ] Surface map regenerated after refactor (§8)
+- [ ] Contract map regenerated after refactor (§8)
 - [ ] Thresholds reviewed quarterly (§14)
 - [ ] State-of-the-Art Scout run in the current quarter (§1.7.5, §9.2.6)
 - [ ] SOTA reports reviewed and actions planned for `evaluate` or `migrate` signals
@@ -1321,7 +1334,7 @@ So that [benefit]
 - **Type:** REST API | SDK | Database | Service
 - **Version:** [current version]
 - **Contract:** [link to contract documentation]
-- **Surface count:** [number of surfaces in surface map]
+- **Contract count:** [number of contracts in Boundary Contract Map, by axis]
 - **Surveillance agent:** [agent id]
 - **Last verified:** [date]
 - **Notes:** [particular notes, known quirks, workarounds]
@@ -1345,8 +1358,8 @@ So that [benefit]
 | **User Story** | Functional requirement from the user's perspective |
 | **Acceptance Criteria** | Binary conditions that define "done" |
 | **Definition of Done** | Universal checklist applied to every work item |
-| **Surface** | Point of contact between application code and an external resource |
-| **Surface map** | Structured inventory of all surfaces |
+| **Boundary contract** | A promise the system makes to something outside its own implementation (hardware, UI, data, API); can be inbound (exposed) or outbound (consumed) |
+| **Boundary Contract Map** | Structured inventory of all boundary contracts, tagged by axis and direction (§8) |
 | **Bucket** | Change category (api-endpoint, data-model, etc.) |
 | **Severity** | Level of impact of the change (safe, additive, breaking, p0) |
 | **Slot** | A version in the test matrix (latest, recent, baseline) |
