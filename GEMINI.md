@@ -11,6 +11,22 @@
 Manage, maintain, and evolve the universal software development framework with the support of LLMs and autonomous agents.
 This repository acts as the **Single Source of Truth** for the team's development methodology.
 
+**Working Language:** The official written working language for all project documentation, commits, and agent outputs is **British English**.
+
+---
+
+## Current Status (from Senior Analysis)
+
+1. **Strategic Audit:** Completed analysis of the Playbook v2 vs Cortex Example v4. Identified the need for a Meta-Framework transition.
+2. **Strategy Roadmap:** Created `STRATEGY_TRANSFORMATION.md` to guide the modular evolution and removal of over-engineered components.
+
+## Next Actions for Gemini CLI
+
+1. **Refactor Playbook (§1 & §2):** Transition from a prescriptive folder structure to an "Emergent Architecture" model where the LLM proposes expansion based on PRD complexity.
+2. **Surface Abstraction:** Rewrite the "Surfaces" section to be technology-agnostic (Hardware, UI, Data, API).
+3. **Agent Consolidation:** Clean up `.claude/agents/` to keep only v4 as the official "Guest Agent" for proofreading.
+4. **DoD Modularization:** Implement the split between "Core DoD" (Process Integrity) and "Contextual DoD" (Project Goals).
+
 ---
 
 ## Core Mandates

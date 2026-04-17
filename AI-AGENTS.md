@@ -28,7 +28,7 @@ All shared rules live here. Agent-specific files must not contradict this docume
 
 ## Language and Style
 
-- **Primary language:** English (UK).
+- **Working Language:** The official written working language for all project documentation, commits, and agent outputs is **British English**.
 - **Tone:** Professional, technical, concise.
 - **Technical terms:** Standard industry English.
 
