@@ -1010,37 +1010,43 @@ At the start of each cycle, before any test, the system freezes versions in a JS
 
 ## 12. Remediation workflow
 
+Remediation is a **risk-modulated response pattern**. It applies to any change that passes through classification (§10) — a dependency bump, an inbound contract update, an internal refactor, a config edit — not only to dependency upgrades.
+
+**When to adopt.** The pattern scales down to "everything is L2" (all changes require a human) and scales up to "L0 is enabled for well-tested safe changes". A small project with no CI and no automated classifier operates entirely at L2 by default; that is a valid adoption of the pattern, not an absence of it. L0 and L1 activate only when the project has the machinery to support them (CI, correctness gate, regression tests, classifier). Projects adopt levels as their risk tolerance and tooling maturity allow.
+
 ### 12.1 Autonomy levels
 
-| Level | Trigger | Action | Approval |
-|-------|---------|--------|----------|
-| **L0** | `safe`, green tests | Auto-merge | None |
-| **L1** | `additive`, agentic fix passes correctness gate | PR with fix-claim | Human review |
-| **L2** | `breaking`, `p0`, never-auto-merge match | Draft PR + notification | Human intervention |
+| Level | Applies when | Action | Approval |
+|-------|--------------|--------|----------|
+| **L0** | Change classified `safe` (§10) and all tests green | Auto-merge | None |
+| **L1** | Change classified `additive` and the agent's fix passes the correctness gate (§12.2) | PR with fix-claim | Human review |
+| **L2** | Change classified `breaking` or `p0`, or matches any never-auto-merge rule, or the project does not yet have L0/L1 machinery | Draft PR + notification | Human intervention |
+
+The levels are a ladder. A project unable to meet L0's preconditions simply stays at L2 for that class of change; no step is mandatory.
 
 ### 12.2 Correctness gate (L1)
 
-Green CI is not sufficient. The agent MUST: validate against the specific schema that triggered the failure, include a structured fix-claim, add a regression test, limit changes to the client/adapter layer.
+Green CI is not sufficient to clear L1. The agent MUST: validate against the specific schema that triggered the failure, include a structured fix-claim, add a regression test, and limit changes to the client/adapter layer.
 
 ### 12.3 Circuit breaker
 
-3 open L1 PRs OR 5 attempts in 14 days → agentic loop paused, everything degrades to L2, human acknowledgement required.
+3 open L1 PRs OR 5 attempts in 14 days → agentic loop paused, everything degrades to L2, human acknowledgement required before re-enabling.
 
 ### 12.4 Adoption workflow
 
-When the classifier detects new capabilities: cross-reference with contract map, add wrapper in the client, write contract test, open adoption PR + tracking issue for UI changes.
+When the classifier detects new capabilities in an existing contract: cross-reference with the Boundary Contract Map, add a wrapper in the client, write a contract test, open an adoption PR + tracking issue for UI changes.
 
 ### 12.5 Deprecation tracking
 
-Record the deprecation, cross-reference with contract map, open `deprecation-watch` issue. Migration is always human-led.
+Record the deprecation, cross-reference with the Boundary Contract Map, open a `deprecation-watch` issue. Migration is always human-led.
 
-### 12.6 Major version protocol
+### 12.6 Contract-breaking change protocol
 
-L1 disabled, coverage baseline resettable, contract map mandatorily regenerated, test harness verified, issue as tracking epic.
+Triggered whenever a tracked contract breaks (major version bump of an outbound dependency, incompatible schema change, endpoint removal, hardware protocol revision, UI-flow breaking change). Actions: L1 disabled for the affected contract, coverage baseline resettable, Boundary Contract Map mandatorily regenerated, test harness verified end-to-end, issue opened as a tracking epic.
 
 ### 12.7 Human report
 
-For each change: what changed, classification, where it impacts (files and lines), what must be modified to maintain operability, what can be adopted, test results, recommended action.
+For each change, the agent produces a report with: what changed, classification, where it impacts (files and lines), what must be modified to maintain operability, what can be adopted, test results, recommended action, and the autonomy level selected with justification.
 
 ---
 
