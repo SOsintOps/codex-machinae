@@ -231,14 +231,14 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] Update TOC to reflect the new parts
 - [x] Commit: `refactor(playbook): add module and domain scaffolding`
 
-### Phase 2 — Surveillance Module (M1)
+### Phase 2 — Surveillance Module (M1) — ✅ CLOSED 2026-04-18
 
-- [ ] Move §§9, 11, 13, 14 into `M1 Surveillance` (Part III)
-- [ ] Rewrite the module intro: activation trigger = "Boundary Contract Map populated with at least
+- [x] Move §§9, 11, 13, 14 into `M1 Surveillance` (Part III)
+- [x] Rewrite the module intro: activation trigger = "Boundary Contract Map populated with at least
       one outbound contract worth monitoring"
-- [ ] Scrub surveillance-specific wording from Core §8, §10, §12 (they stay in Core)
-- [ ] **Renumber Core** to close the gaps left by the extraction; sweep all (§...) cross-references
-- [ ] Commit: `refactor(playbook): extract Surveillance Module (M1) from Part II`
+- [x] Scrub surveillance-specific wording from Core §8, §10, §12 (they stay in Core)
+- [x] **Renumber Core** to close the gaps left by the extraction; sweep all (§...) cross-references
+- [x] Commit: `refactor(playbook): extract Surveillance Module (M1) from Part II`
 
 ### Phase 3 — Security split (Core §4 ↔ M2)
 
@@ -401,3 +401,16 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   AND MAINTENANCE` and `PART III — MANAGEMENT` body headers removed; sections §§8–16 now live
   flat under `PART I — CORE`. D1, D4, D5, M1, M2, M4 scaffolded with phase references for their
   full-content fill; D2, D3, D6, D7, M3 scaffolded as stubs. Ready for Phase 2 (M1 extraction).
+- 2026-04-18 — Phase 2 intent: extract §§9, 11, 13, 14 into M1 as M1.1–M1.4; renumber Core
+  §10→§9 (Change classification), §12→§10 (Remediation), §15→§11 (Lifecycle), §16→§12 (Agent
+  conventions); scrub surveillance-specific prose from Core §8 and the new §9/§10; sweep all
+  (§X.Y) cross-references. Two sub-commits: (a) wip checkpoint — extract to M1 and fix refs
+  to moved sections; (b) final — renumber remaining Core, scrub prose, sweep refs, close phase.
+- 2026-04-18 — Phase 2 executed as a single commit (extraction + renumber + sweep + prose
+  scrub all coherent). M1.1–M1.4 populated verbatim from §§9, 11, 13, 14 with headings
+  reshaped (### M1.X / #### M1.X.Y). Core renumbered to contiguous §§1–12. Cross-reference
+  sweep done via sed (§9→M1.1, §10→§9, §11→M1.2, §12→§10, §13→M1.3, §14→M1.4, §15→§11,
+  §16→§12) plus heading renumbering. Scrubs applied: §8 explicitly scopes compatibility
+  testing to M1; §10.3 replaces "agentic loop" with "L1 automation"; §10.4 replaces "the
+  classifier detects" with "a change is classified as". TOC updated; Part I header note on
+  "candidates for extraction" removed. Ready for Phase 3 (security split).

@@ -20,14 +20,10 @@ This playbook defines the entire lifecycle of a software project: from requireme
 6. [Documentation](#6-documentation)
 7. [CI/CD and deployment](#7-cicd-and-deployment)
 8. [Boundary Contracts](#8-boundary-contracts)
-9. [Surveillance agents](#9-surveillance-agents) *(candidate for M1 extraction)*
-10. [Change classification](#10-change-classification)
-11. [Compatibility test matrix](#11-compatibility-test-matrix) *(candidate for M1 extraction)*
-12. [Remediation workflow](#12-remediation-workflow)
-13. [Compatibility database](#13-compatibility-database) *(candidate for M1 extraction)*
-14. [Self-testing and observability](#14-self-testing-and-observability) *(candidate for M1 extraction)*
-15. [Project lifecycle](#15-project-lifecycle)
-16. [Conventions for AI agents](#16-conventions-for-ai-agents)
+9. [Change classification](#9-change-classification)
+10. [Remediation workflow](#10-remediation-workflow)
+11. [Project lifecycle](#11-project-lifecycle)
+12. [Conventions for AI agents](#12-conventions-for-ai-agents)
 
 ### Part II — Domain Appendices (activate per project type)
 
@@ -58,9 +54,8 @@ This playbook defines the entire lifecycle of a software project: from requireme
 
 The Core applies to every project regardless of type. Domain Appendices (Part II) and
 Cross-cutting Modules (Part III) add content on top of the Core when their activation trigger
-fires. Some Core sections below are marked as *candidates for module extraction* — they remain
-in Core during the in-flight modularisation and will move to the indicated module when the
-relevant phase of `MODULARISATION_PLAN.md` runs.
+fires. When the Core and a module disagree, the Core wins unless the module explicitly marks
+the override.
 
 ---
 
@@ -236,7 +231,7 @@ Report format:
 
 #### 1.7.5 State-of-the-art research agent (State-of-the-Art Scout)
 
-In addition to the dependency surveillance agents (§9), the playbook includes an agent dedicated to state-of-the-art research. This agent operates differently from the others: it does not monitor a single dependency, but scans the technological landscape surrounding the project.
+In addition to the dependency surveillance agents (M1.1), the playbook includes an agent dedicated to state-of-the-art research. This agent operates differently from the others: it does not monitor a single dependency, but scans the technological landscape surrounding the project.
 
 **Frequency:** quarterly for stable components, monthly for components under active development.
 
@@ -336,7 +331,7 @@ The human accepts, rejects, or defers. No folder is created without an accepted 
 | `DEPENDENCIES.md` | First external runtime dependency is added | Dependency contracts |
 | `CHANGELOG.md` | Project reaches its first release (v0.1.0+) | Release history |
 | `COMPATIBILITY.md` | Boundary Contract Map is populated (§8) | Generated compatibility status |
-| `compat-data/`, `compatibility/`, `surveillance/` | Surveillance agents are activated (§9) | External dependency monitoring |
+| `compat-data/`, `compatibility/`, `surveillance/` | Surveillance agents are activated (M1.1) | External dependency monitoring |
 | `.config/` | Linting/formatting rules diverge from tool defaults | Tooling configuration |
 
 **Rule:** no folder without a fired trigger. Empty scaffolds and `.gitkeep` files are forbidden.
@@ -376,7 +371,7 @@ Whichever layout is used, the configuration MUST cover:
 
 - Language and writing style (e.g. British English, active voice, short sentences)
 - List of forbidden words, if any
-- Scope of permitted modifications per autonomy level (L0/L1/L2 — see §12)
+- Scope of permitted modifications per autonomy level (L0/L1/L2 — see §10)
 - Naming conventions for branches, commits, files
 - Protected paths (files the agent cannot modify without human confirmation)
 - Editorial rules (max line length, punctuation constraints, etc.)
@@ -674,7 +669,7 @@ Rules:
 - The schema is the source of truth; fixture payloads exist to exercise the schema, not to pin exact bytes
 - `additionalProperties: true` on inbound contracts (tolerant reader), `additionalProperties: false` on outbound contracts owned by the project (strict producer)
 - Enum values are never duplicated across schema and code — both point to a single declaration (see §6.3)
-- A schema change on a shared contract is a contract-breaking change (§12.6) regardless of whether any current consumer happens to tolerate it
+- A schema change on a shared contract is a contract-breaking change (§10.6) regardless of whether any current consumer happens to tolerate it
 
 Golden-file equality is reserved for artefacts where the whole byte sequence *is* the contract (rendered UI snapshots, generated documents, wire-format fixtures). Using golden files for structured API responses couples the test to ordering and serialisation choices that the contract does not actually guarantee.
 
@@ -698,7 +693,7 @@ Rules:
 - Golden queries live alongside the migration script, version-controlled with it
 - They are executed automatically against a pre-migration snapshot and the post-migration state; any unexplained divergence blocks promotion of the migration
 - Each query has a short rationale explaining which invariant it protects (row counts per tenant, aggregate totals, referential integrity across renamed tables, …)
-- "Intentional difference" entries are not free-form prose: they are a structured list referenced from the migration's remediation record (§12)
+- "Intentional difference" entries are not free-form prose: they are a structured list referenced from the migration's remediation record (§10)
 
 Golden queries are complementary to schema migrations' own tests; they catch semantic drift that schema-level checks miss (e.g. a column renamed correctly but backfilled with the wrong default).
 
@@ -872,9 +867,9 @@ All CI logic that is specific to GitHub Actions (or GitLab, or Forgejo) lives un
 
 A **boundary contract** is any promise the system makes to something outside its own implementation: a device, a human, a data store, another piece of code. The **Boundary Contract Map** is the structured inventory of these promises. It answers the question: **where exactly in the code does each contract live, and who is its counterparty?**
 
-The map is the substrate on which classification (§10), compatibility testing (§11), and remediation (§12) operate.
+The map is the substrate on which classification (§9) and remediation (§10) operate. When M1 Surveillance is active, it is also the target of compatibility testing (M1.2).
 
-**Applicability.** This part of the playbook activates when a project has at least one external boundary worth tracking. A purely internal script with no inbound or outbound contracts does not need a map; a service that exposes APIs, consumes dependencies, drives hardware, or renders a UI does.
+**Applicability.** Boundary Contracts are universal: they apply whenever a project has at least one external boundary worth tracking. A purely internal script with no inbound or outbound contracts does not need a map; a service that exposes APIs, consumes dependencies, drives hardware, or renders a UI does.
 
 ### 8.1 Contract axes
 
@@ -937,87 +932,9 @@ If the total contract count drops by more than 10% between one generation and th
 
 ---
 
-## 9. Surveillance agents
+## 9. Change classification
 
-Agents are autonomous processes that monitor external dependencies at regular intervals.
-
-### 9.1 Architecture
-
-```
-┌─────────────────────────────────────────────────┐
-│                  SCHEDULER                       │
-│  (cron / CI schedule / workflow_dispatch)         │
-└──────┬──────┬──────┬──────┬──────┬───────────────┘
-       │      │      │      │      │
-       ▼      ▼      ▼      ▼      ▼
-   ┌──────┐┌──────┐┌──────┐┌──────┐┌──────┐
-   │Agent ││Agent ││Agent ││Agent ││Agent │
-   │Pkg   ││Docker││GitHub││API   ││Docs  │
-   │Watch ││Watch ││Watch ││Probe ││Watch │
-   └──┬───┘└──┬───┘└──┬───┘└──┬───┘└──┬───┘
-      │       │       │       │       │
-      ▼       ▼       ▼       ▼       ▼
-   ┌─────────────────────────────────────┐
-   │         CHANGE CLASSIFIER           │
-   └──────────────┬──────────────────────┘
-                  │
-                  ▼
-   ┌─────────────────────────────────────┐
-   │         IMPACT ANALYSER             │
-   │    (cross-ref with contract map)     │
-   └──────────────┬──────────────────────┘
-                  │
-          ┌───────┴────────┐
-          ▼                ▼
-   ┌────────────┐   ┌────────────┐
-   │ REMEDIATION│   │  ADOPTION  │
-   │   (fix)    │   │  (improve) │
-   └────────────┘   └────────────┘
-```
-
-### 9.2 Agent types
-
-**9.2.1 Package Watch** — detects new versions of dependencies. Frequency: 5 min (RSS) or 1h (JSON API). Filter: stable releases only.
-
-**9.2.2 API Probe** — runs contract tests against every endpoint in the contract map. Frequency: 6h for critical endpoints, 24h for others. Verifies: reachability, schema, semantics, new/missing fields, deprecation headers, rate limits, versioning.
-
-**9.2.3 Docs Watch** — monitors changelogs and official documentation. Frequency: 24h. Method: fetch + textual diff.
-
-**9.2.4 Security Watch** — detects security advisories. Frequency: 15 min. Sources: GHSA, NVD, native audit tools. Any advisory forces L2.
-
-**9.2.5 Container/Image Watch** — detects new Docker images. Frequency: 15 min. Timeout: 90 min with backoff.
-
-**9.2.6 State-of-the-Art Scout** — an agent dedicated to state-of-the-art research. Unlike the other agents: it does not monitor a single dependency, but scans the technological landscape around the project. Frequency: quarterly for stable components, monthly for components under active development.
-
-What it does each cycle:
-
-1. **Technology health check.** For every significant technology in the project, verifies: latest release, release frequency over the past year, open issue trends, documentation status, deprecation or end-of-life announcements.
-
-2. **Alternative scanning.** Searches for new libraries or services that solve the same problem as an existing dependency with a different or better approach. Does not suggest switching — it flags that the alternative exists and leaves the decision to the human.
-
-3. **Pattern evolution.** Verifies whether the architectural patterns used in the project are still best practice or whether the community has moved towards different approaches. Looks for: updates to official style guides, new RFCs, talks from key conferences.
-
-4. **Security landscape.** Verifies whether security practices are aligned with current recommendations (OWASP, NIST, CIS).
-
-5. **Ecosystem health.** Assesses the health of the ecosystem: growing or declining community, significant forks, controversies (licence, governance, ownership).
-
-Output: report in `docs/research/` with findings classified into 5 levels: `healthy` (no action), `watch` (monitor in the next cycle), `evaluate` (create ADR with comparison), `migrate` (plan migration in the backlog), `urgent` (immediate action — end-of-life, critical vulnerability, hostile fork).
-
-The agent proactively suggests research when: a new project is started, a dependency is added, an architectural choice is proposed, the project enters a new phase, or N months have passed since the last research on a component. Full details in §1.7.
-
-### 9.3 Heartbeat
-
-Every agent, every cycle — even when nothing is detected — emits a heartbeat. Alert if the most recent is older than 6 hours.
-
-### 9.4 Multi-source configuration
-
-For every critical dependency, at least two sources with different roles: primary (fast trigger) and backstop (recovery). The backstop reconciles missed versions when the primary comes back online.
-
----
-
-## 10. Change classification
-
-### 10.1 Buckets
+### 9.1 Buckets
 
 | Bucket | Description |
 |--------|-------------|
@@ -1032,7 +949,7 @@ For every critical dependency, at least two sources with different roles: primar
 | `deprecation` | Deprecation of existing contracts |
 | `migration` | Migrations that modify existing data |
 
-### 10.2 Severity
+### 9.2 Severity
 
 | Severity | Definition | Action |
 |----------|------------|--------|
@@ -1041,119 +958,57 @@ For every critical dependency, at least two sources with different roles: primar
 | `breaking` | Contracts removed, renamed, signature changed | Draft PR + human review |
 | `p0` | Security advisory, protocol change | Draft PR + immediate notification |
 
-### 10.3 Never-auto-merge list
+### 9.3 Never-auto-merge list
 
 Conditions that always force human review: endpoint removal/rename, response format change, auth protocol change, rate limit reduction, SDK method removal, migration that rewrites data, critical/high security advisory, required field change, WebSocket handshake change, functional test regression.
 
 ---
 
-## 11. Compatibility test matrix
+## 10. Remediation workflow
 
-### 11.1 Slots
-
-| Slot | Definition | Purpose |
-|------|------------|---------|
-| `latest` | Version that triggered the cycle | Compatibility with the new change |
-| `recent` | Most recent stable version (21-day window) | Masked regressions |
-| `baseline` | Pinned version, reviewed quarterly | Declared contract |
-
-### 11.2 Run manifest
-
-At the start of each cycle, before any test, the system freezes versions in a JSON manifest. Eliminates ambiguity if the matrix resolves differently between steps.
-
-### 11.3 Test data
-
-1. **Seed workload** — creates data that exercises every outbound contract
-2. **Golden queries** — queries with expected results to verify post-migration integrity
-3. **Snapshot regression** — loads snapshots from previous versions and verifies data accessibility
-
----
-
-## 12. Remediation workflow
-
-Remediation is a **risk-modulated response pattern**. It applies to any change that passes through classification (§10) — a dependency bump, an inbound contract update, an internal refactor, a config edit — not only to dependency upgrades.
+Remediation is a **risk-modulated response pattern**. It applies to any change that passes through classification (§9) — a dependency bump, an inbound contract update, an internal refactor, a config edit — not only to dependency upgrades.
 
 **When to adopt.** The pattern scales down to "everything is L2" (all changes require a human) and scales up to "L0 is enabled for well-tested safe changes". A small project with no CI and no automated classifier operates entirely at L2 by default; that is a valid adoption of the pattern, not an absence of it. L0 and L1 activate only when the project has the machinery to support them (CI, correctness gate, regression tests, classifier). Projects adopt levels as their risk tolerance and tooling maturity allow.
 
-### 12.1 Autonomy levels
+### 10.1 Autonomy levels
 
 | Level | Applies when | Action | Approval |
 |-------|--------------|--------|----------|
-| **L0** | Change classified `safe` (§10) and all tests green | Auto-merge | None |
-| **L1** | Change classified `additive` and the agent's fix passes the correctness gate (§12.2) | PR with fix-claim | Human review |
+| **L0** | Change classified `safe` (§9) and all tests green | Auto-merge | None |
+| **L1** | Change classified `additive` and the agent's fix passes the correctness gate (§10.2) | PR with fix-claim | Human review |
 | **L2** | Change classified `breaking` or `p0`, or matches any never-auto-merge rule, or the project does not yet have L0/L1 machinery | Draft PR + notification | Human intervention |
 
 The levels are a ladder. A project unable to meet L0's preconditions simply stays at L2 for that class of change; no step is mandatory.
 
-### 12.2 Correctness gate (L1)
+### 10.2 Correctness gate (L1)
 
 Green CI is not sufficient to clear L1. The agent MUST: validate against the specific schema that triggered the failure, include a structured fix-claim, add a regression test, and limit changes to the client/adapter layer.
 
-### 12.3 Circuit breaker
+### 10.3 Circuit breaker
 
-3 open L1 PRs OR 5 attempts in 14 days → agentic loop paused, everything degrades to L2, human acknowledgement required before re-enabling.
+3 open L1 PRs OR 5 attempts in 14 days → L1 automation paused, everything degrades to L2, human acknowledgement required before re-enabling.
 
-### 12.4 Adoption workflow
+### 10.4 Adoption workflow
 
-When the classifier detects new capabilities in an existing contract: cross-reference with the Boundary Contract Map, add a wrapper in the client, write a contract test, open an adoption PR + tracking issue for UI changes.
+When a change is classified as introducing new capabilities in an existing contract: cross-reference with the Boundary Contract Map, add a wrapper in the client, write a contract test, open an adoption PR + tracking issue for UI changes.
 
-### 12.5 Deprecation tracking
+### 10.5 Deprecation tracking
 
 Record the deprecation, cross-reference with the Boundary Contract Map, open a `deprecation-watch` issue. Migration is always human-led.
 
-### 12.6 Contract-breaking change protocol
+### 10.6 Contract-breaking change protocol
 
 Triggered whenever a tracked contract breaks (major version bump of an outbound dependency, incompatible schema change, endpoint removal, hardware protocol revision, UI-flow breaking change). Actions: L1 disabled for the affected contract, coverage baseline resettable, Boundary Contract Map mandatorily regenerated, test harness verified end-to-end, issue opened as a tracking epic.
 
-### 12.7 Human report
+### 10.7 Human report
 
 For each change, the agent produces a report with: what changed, classification, where it impacts (files and lines), what must be modified to maintain operability, what can be adopted, test results, recommended action, and the autonomy level selected with justification.
 
 ---
 
-## 13. Compatibility database
+## 11. Project lifecycle
 
-### 13.1 Format
-
-Flat JSON in the repo, one file per version per dependency. No external database.
-
-### 13.2 Events (append-only)
-
-The `events` array is the complete audit trail. Never modify or remove events.
-
-### 13.3 Aggregation
-
-Each slot produces its own payload; an aggregation job merges them. `pass` only if all slots are `pass`. If any slot is `fail`, the rollup is `fail`. If a slot is `error`, the rollup is `partial`.
-
-### 13.4 Portability
-
-Plain JSON in the repo. Migrating to another forge = copy directory + new CI adapter.
-
----
-
-## 14. Self-testing and observability
-
-### 14.1 Detection heartbeat
-
-Every polling cycle emits a heartbeat. Alert if the most recent is older than 6 hours.
-
-### 14.2 Classifier retrospective
-
-Monthly job: reviews all `safe` auto-merged records from the past 30 days. False negative rate > 10% → alert to recalibrate.
-
-### 14.3 End-to-end canary
-
-Weekly job: injects a synthetic record to verify the entire detection → classification → issue → contract-map cross-ref → event emission path. Cleans up after verification.
-
-### 14.4 Boundary Contract Map cardinality guard
-
-If the contract count drops > 10%, CI fails.
-
----
-
-## 15. Project lifecycle
-
-### 15.1 Phase 0 — Ideation and requirements
+### 11.1 Phase 0 — Ideation and requirements
 
 1. Write the PRD (§1.2)
 2. Define user stories with acceptance criteria (§1.3, §1.4)
@@ -1162,19 +1017,19 @@ If the contract count drops > 10%, CI fails.
 5. Define the Definition of Done (§1.7)
 6. Identify critical dependencies and document them in `DEPENDENCIES.md`
 
-### 15.2 Phase 1 — Technical bootstrap
+### 11.2 Phase 1 — Technical bootstrap
 
 1. Create the directory structure (§2.1)
 2. Configure linting, formatting, pre-commit hooks (§3.4)
 3. Configure the base CI pipeline (build + lint + unit test) (§7)
 4. Write `CLAUDE.md` with operating rules (§2.3)
 5. Generate the initial contract map (§8)
-6. Configure surveillance agents (§9)
+6. Configure surveillance agents (M1.1)
 7. Create the first compatibility record (`untested`)
 8. Write `.env.example` with all variables documented (§4.4)
 9. Write the seed script for the development database (§5.4)
 
-### 15.3 Phase 2 — Active development
+### 11.3 Phase 2 — Active development
 
 1. Work by User Story, respecting the Definition of Done (§1.7)
 2. Update `PROJECT_STATUS.md` at every session (§2.2)
@@ -1185,7 +1040,7 @@ If the contract count drops > 10%, CI fails.
 7. Fix and adoption PRs are reviewed and merged
 8. Keep the contract map up to date after significant refactors
 
-### 15.4 Phase 3 — Maturity and maintenance
+### 11.4 Phase 3 — Maturity and maintenance
 
 1. Agents continue surveillance
 2. Fixes are primarily L0/L1
@@ -1194,9 +1049,9 @@ If the contract count drops > 10%, CI fails.
 5. Update the never-auto-merge list
 6. Annual review of OWASP Top 10 and security practices
 
-### 15.5 Phase 4 — Major dependency upgrade
+### 11.5 Phase 4 — Major dependency upgrade
 
-1. The major-version protocol activates (§12.6)
+1. The major-version protocol activates (§10.6)
 2. L1 disabled, everything is L2
 3. Contract map regenerated
 4. Coverage baseline reset
@@ -1205,9 +1060,9 @@ If the contract count drops > 10%, CI fails.
 
 ---
 
-## 16. Conventions for AI agents
+## 12. Conventions for AI agents
 
-### 16.1 General rules
+### 12.1 General rules
 
 - The agent reads `CLAUDE.md` before any action
 - The agent updates `PROJECT_STATUS.md` after every session
@@ -1216,25 +1071,25 @@ If the contract count drops > 10%, CI fails.
 - The agent always includes a regression test for every fix
 - The agent does not pretend to execute operations — if it cannot do something, it says so
 
-### 16.2 Grounding on live data
+### 12.2 Grounding on live data
 
 The first step of any fix loop MUST be: retrieve live data from the dependency and pin it in context. Prevents hallucination of non-existent signatures, endpoints, or behaviours.
 
-### 16.3 Mandatory fix-claim
+### 12.3 Mandatory fix-claim
 
-Every PR produced by the agent MUST include a structured fix-claim (§12.2).
+Every PR produced by the agent MUST include a structured fix-claim (§10.2).
 
-### 16.4 Limited scope
+### 12.4 Limited scope
 
 The L1 agent may ONLY add new files, new exports, modify files in the client/adapter layer, and add tests.
 
 The L1 agent may NOT modify existing methods, change existing call sites, alter UI behaviour, modify deploy configuration, or delete files or code.
 
-### 16.5 Proposal before code
+### 12.5 Proposal before code
 
 For complex features, the agent MUST propose the approach in written form (document or comment) and await human approval before writing code. No "surprise" code.
 
-### 16.6 Structured logging
+### 12.6 Structured logging
 
 Every agent action is logged as an event in the compatibility database. Everything is traceable, reproducible, and auditable.
 
@@ -1331,11 +1186,145 @@ Each module adds content to the Core; it never replaces Core rules.
 
 **Activation trigger.** The Boundary Contract Map (§8) contains at least one outbound contract
 (dependency, upstream API, device driver, external data source) whose evolution must be
-tracked over time.
+tracked over time. A project with no outbound contracts — a pure offline utility, a one-shot
+script — does not need this module.
 
-**In addition to Core.** *To be filled in Phase 2 (extraction of §§9, 11, 13, 14) and polished
-in Phase 8.4. Will include surveillance agents, compatibility test matrix, compatibility
-database, and self-testing/observability patterns.*
+**In addition to Core.** Surveillance runs autonomous agents against outbound contracts at
+regular intervals; detected changes flow through Core classification (§9) and remediation
+(§10), and the detection path itself is self-tested so the loop stays honest. Every action
+produced by the module is an event in the compatibility database, which is the audit trail.
+
+### M1.1 Surveillance agents
+
+Agents are autonomous processes that monitor external dependencies at regular intervals.
+
+#### M1.1.1 Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│                  SCHEDULER                       │
+│  (cron / CI schedule / workflow_dispatch)         │
+└──────┬──────┬──────┬──────┬──────┬───────────────┘
+       │      │      │      │      │
+       ▼      ▼      ▼      ▼      ▼
+   ┌──────┐┌──────┐┌──────┐┌──────┐┌──────┐
+   │Agent ││Agent ││Agent ││Agent ││Agent │
+   │Pkg   ││Docker││GitHub││API   ││Docs  │
+   │Watch ││Watch ││Watch ││Probe ││Watch │
+   └──┬───┘└──┬───┘└──┬───┘└──┬───┘└──┬───┘
+      │       │       │       │       │
+      ▼       ▼       ▼       ▼       ▼
+   ┌─────────────────────────────────────┐
+   │         CHANGE CLASSIFIER           │
+   └──────────────┬──────────────────────┘
+                  │
+                  ▼
+   ┌─────────────────────────────────────┐
+   │         IMPACT ANALYSER             │
+   │    (cross-ref with contract map)     │
+   └──────────────┬──────────────────────┘
+                  │
+          ┌───────┴────────┐
+          ▼                ▼
+   ┌────────────┐   ┌────────────┐
+   │ REMEDIATION│   │  ADOPTION  │
+   │   (fix)    │   │  (improve) │
+   └────────────┘   └────────────┘
+```
+
+#### M1.1.2 Agent types
+
+**M1.1.2.1 Package Watch** — detects new versions of dependencies. Frequency: 5 min (RSS) or 1h (JSON API). Filter: stable releases only.
+
+**M1.1.2.2 API Probe** — runs contract tests against every endpoint in the contract map. Frequency: 6h for critical endpoints, 24h for others. Verifies: reachability, schema, semantics, new/missing fields, deprecation headers, rate limits, versioning.
+
+**M1.1.2.3 Docs Watch** — monitors changelogs and official documentation. Frequency: 24h. Method: fetch + textual diff.
+
+**M1.1.2.4 Security Watch** — detects security advisories. Frequency: 15 min. Sources: GHSA, NVD, native audit tools. Any advisory forces L2.
+
+**M1.1.2.5 Container/Image Watch** — detects new Docker images. Frequency: 15 min. Timeout: 90 min with backoff.
+
+**M1.1.2.6 State-of-the-Art Scout** — an agent dedicated to state-of-the-art research. Unlike the other agents: it does not monitor a single dependency, but scans the technological landscape around the project. Frequency: quarterly for stable components, monthly for components under active development.
+
+What it does each cycle:
+
+1. **Technology health check.** For every significant technology in the project, verifies: latest release, release frequency over the past year, open issue trends, documentation status, deprecation or end-of-life announcements.
+
+2. **Alternative scanning.** Searches for new libraries or services that solve the same problem as an existing dependency with a different or better approach. Does not suggest switching — it flags that the alternative exists and leaves the decision to the human.
+
+3. **Pattern evolution.** Verifies whether the architectural patterns used in the project are still best practice or whether the community has moved towards different approaches. Looks for: updates to official style guides, new RFCs, talks from key conferences.
+
+4. **Security landscape.** Verifies whether security practices are aligned with current recommendations (OWASP, NIST, CIS).
+
+5. **Ecosystem health.** Assesses the health of the ecosystem: growing or declining community, significant forks, controversies (licence, governance, ownership).
+
+Output: report in `docs/research/` with findings classified into 5 levels: `healthy` (no action), `watch` (monitor in the next cycle), `evaluate` (create ADR with comparison), `migrate` (plan migration in the backlog), `urgent` (immediate action — end-of-life, critical vulnerability, hostile fork).
+
+The agent proactively suggests research when: a new project is started, a dependency is added, an architectural choice is proposed, the project enters a new phase, or N months have passed since the last research on a component. Full details in §1.7.
+
+#### M1.1.3 Heartbeat
+
+Every agent, every cycle — even when nothing is detected — emits a heartbeat. Alert if the most recent is older than 6 hours.
+
+#### M1.1.4 Multi-source configuration
+
+For every critical dependency, at least two sources with different roles: primary (fast trigger) and backstop (recovery). The backstop reconciles missed versions when the primary comes back online.
+
+### M1.2 Compatibility test matrix
+
+#### M1.2.1 Slots
+
+| Slot | Definition | Purpose |
+|------|------------|---------|
+| `latest` | Version that triggered the cycle | Compatibility with the new change |
+| `recent` | Most recent stable version (21-day window) | Masked regressions |
+| `baseline` | Pinned version, reviewed quarterly | Declared contract |
+
+#### M1.2.2 Run manifest
+
+At the start of each cycle, before any test, the system freezes versions in a JSON manifest. Eliminates ambiguity if the matrix resolves differently between steps.
+
+#### M1.2.3 Test data
+
+1. **Seed workload** — creates data that exercises every outbound contract
+2. **Golden queries** — queries with expected results to verify post-migration integrity
+3. **Snapshot regression** — loads snapshots from previous versions and verifies data accessibility
+
+### M1.3 Compatibility database
+
+#### M1.3.1 Format
+
+Flat JSON in the repo, one file per version per dependency. No external database.
+
+#### M1.3.2 Events (append-only)
+
+The `events` array is the complete audit trail. Never modify or remove events.
+
+#### M1.3.3 Aggregation
+
+Each slot produces its own payload; an aggregation job merges them. `pass` only if all slots are `pass`. If any slot is `fail`, the rollup is `fail`. If a slot is `error`, the rollup is `partial`.
+
+#### M1.3.4 Portability
+
+Plain JSON in the repo. Migrating to another forge = copy directory + new CI adapter.
+
+### M1.4 Self-testing and observability
+
+#### M1.4.1 Detection heartbeat
+
+Every polling cycle emits a heartbeat. Alert if the most recent is older than 6 hours.
+
+#### M1.4.2 Classifier retrospective
+
+Monthly job: reviews all `safe` auto-merged records from the past 30 days. False negative rate > 10% → alert to recalibrate.
+
+#### M1.4.3 End-to-end canary
+
+Weekly job: injects a synthetic record to verify the entire detection → classification → issue → contract-map cross-ref → event emission path. Cleans up after verification.
+
+#### M1.4.4 Boundary Contract Map cardinality guard
+
+If the contract count drops > 10%, CI fails.
 
 ## M2 Security-sensitive
 
@@ -1394,13 +1383,13 @@ illustrative of adoption shape only.*
 - [ ] Base CI pipeline working (build + lint + unit) (§7)
 - [ ] `CLAUDE.md` written (§2.3)
 - [ ] Contract map generated (even manually) (§8)
-- [ ] Surveillance agents configured (§9)
+- [ ] Surveillance agents configured (M1.1)
 - [ ] First compatibility record created (`untested`)
 - [ ] `.env.example` with all variables documented (§4.4)
 - [ ] Secret scan configured in CI (§4.5)
 - [ ] Seed script for development database (§5.4)
 - [ ] Initial coverage baseline committed (§5.3)
-- [ ] Heartbeat alert configured (threshold: 6 hours) (§14.1)
+- [ ] Heartbeat alert configured (threshold: 6 hours) (M1.4.1)
 
 ### A.3 Checklist for every PR
 
@@ -1424,18 +1413,18 @@ illustrative of adoption shape only.*
 - [ ] Rollback tested (§7.3)
 - [ ] Database migration tested (up AND down) (§7.4)
 - [ ] API documentation updated (§6.3)
-- [ ] Compat database updated with current state (§13)
+- [ ] Compat database updated with current state (M1.3)
 
 ### A.5 Surveillance checklist
 
-- [ ] Agents active with recent heartbeat (< 6 hours) (§14.1)
-- [ ] Weekly canary passed (§14.3)
-- [ ] Monthly retrospective executed (§14.2)
-- [ ] Never-auto-merge list reviewed (§10.3)
+- [ ] Agents active with recent heartbeat (< 6 hours) (M1.4.1)
+- [ ] Weekly canary passed (M1.4.3)
+- [ ] Monthly retrospective executed (M1.4.2)
+- [ ] Never-auto-merge list reviewed (§9.3)
 - [ ] Coverage baseline updated (§5.3)
 - [ ] Contract map regenerated after refactor (§8)
-- [ ] Thresholds reviewed quarterly (§14)
-- [ ] State-of-the-Art Scout run in the current quarter (§1.7.5, §9.2.6)
+- [ ] Thresholds reviewed quarterly (M1.4)
+- [ ] State-of-the-Art Scout run in the current quarter (§1.7.5, M1.1.2.6)
 - [ ] SOTA reports reviewed and actions planned for `evaluate` or `migrate` signals
 
 ---
