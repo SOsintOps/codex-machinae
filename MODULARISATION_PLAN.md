@@ -264,14 +264,13 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] Renumbered Core §6 sub-sections contiguously; swept (§6.x) cross-references
 - [x] Commit: `refactor(playbook): split documentation into Core + domain appendices`
 
-### Phase 6 — CI/CD split (Core §7 ↔ D1/D5)
+### Phase 6 — CI/CD split (Core §7 ↔ D1/D5) — ✅ CLOSED 2026-04-18
 
-- [ ] Core §7 keeps: §7.1 pipeline concept, §7.2 abstract stages, §7.3 rollback principle,
-      §7.6 configuration-as-code, §7.7 CI adapter pattern
-- [ ] Move §7.2 deploy specifics (Docker, blue-green), §7.5 environments into `D1 Web Service`
-- [ ] Move §7.4 database migration into `D5 ML / Data Pipeline`
-- [ ] Renumber Core §7 sub-sections contiguously; sweep (§7.x) cross-references
-- [ ] Commit: `refactor(playbook): split CI/CD into Core + D1 Web Service + D5 Data`
+- [x] Core §7 kept: §7.1 pipeline overview (generalised diagram), §7.2 abstract stages (generalised Build/Stage/Deploy), §7.3 rollback principle (universalised table), §7.4 configuration-as-code (renumbered from §7.6), §7.5 CI adapter pattern (renumbered from §7.7)
+- [x] Moved §7.2 deploy specifics (blue-green, rolling, canary, /healthz, feature flags) → D1.2; §7.5 environments table → D1.3
+- [x] Moved §7.4 database migration → D5.2, including the irreversible-migration rule
+- [x] Renumbered Core §7 sub-sections contiguously; swept (§7.x) cross-references
+- [x] Commit: `refactor(playbook): split CI/CD into Core + D1 Web Service + D5 Data`
 
 ### Phase 7 — Lifecycle generalisation (Core §15)
 
@@ -467,3 +466,32 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   docs; §6.4 → §6.3 in Appendix A release checklist; §6.3 → "D1.1 / D2.1 / D3.1, where
   applicable" in the same checklist to make the conditional nature explicit. Ready for
   Phase 6 (CI/CD split Core §7 ↔ D1/D5).
+- 2026-04-18 — Phase 6 intent: generalise Core §7 so its pipeline, stages, and rollback
+  concepts are universal, and move web/data specifics into D1 and D5. Core §7 becomes
+  contiguous §§7.1–7.5: §7.1 pipeline overview (strip Docker/staging from the ASCII diagram
+  sub-text), §7.2 abstract pipeline stages (§7.2.1 Build loses "Docker image"; §7.2.3 Stage
+  becomes "pre-production validation"; §7.2.4 Deploy becomes abstract with a pointer to
+  domain appendices for strategy specifics), §7.3 rollback principle (drop the
+  data-migration row and the irreversible-migration rule; add one sentence that domain
+  appendices own class-specific rollback protocols), §7.4 configuration-as-code (was §7.6),
+  §7.5 CI adapter pattern (was §7.7). D1 gains D1.2 Deploy strategy (blue-green, rolling,
+  canary, /healthz, feature flags from §7.2.4 specifics) and D1.3 Environments (table from
+  §7.5). D5 gains D5.2 Database migration (§7.4 verbatim) plus the irreversible-migration
+  rule. Cross-references: line 1447 (§7.2.3) → "D1.2 where applicable" in release
+  checklist; line 1449 (§7.4) → D5.2; §7 whole-chapter references unchanged at lines 981
+  and 1418; D1 and D5 backlog markers rewritten to reflect what Phase 6 now fills vs what
+  remains for Phase 8.1/8.3. Single commit.
+- 2026-04-18 — Phase 6 executed as a single commit. Core §7 now contiguous §§7.1–7.5 with
+  universalised content throughout. §7.1 pipeline diagram sub-text reworked ("package
+  artefact" instead of "Docker image"; "pre-prod" instead of "staging"); explanatory
+  sentence added naming domain appendices as the source of concrete meanings. §7.2 stages
+  rewritten abstractly: Build covers binary/firmware/wheel/bundle; Stage covers
+  sandbox/simulator/HIL; Deploy names strategy specifics as domain-specific. §7.3 rollback
+  table pared to three universal rows (health-check, manual, irreversible) with a closing
+  sentence that hands class-specific protocols to the owning appendix. §7.6 and §7.7
+  renumbered to §7.4 and §7.5. D1.2 Deploy strategy and D1.3 Environments populated
+  verbatim from the old §7.2.4 and §7.5; D5.2 Database migration populated verbatim from
+  the old §7.4 plus the irreversible-migration rule (cross-ref to Core §7.3). Release
+  checklist line 1458 reworded to "Pre-production smoke tests green on promotion" so the
+  universal §7.2.3 reference still applies; line 1460 → "D5.2, where applicable". §7
+  whole-chapter references unchanged. Ready for Phase 7 (lifecycle generalisation).

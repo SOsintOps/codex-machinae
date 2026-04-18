@@ -744,20 +744,22 @@ The CHANGELOG is written by humans (or the AI agent), not generated from commits
 └──────────┘   └──────────┘   └──────────┘   └──────────┘   └──────────┘
      │              │              │              │              │
      ▼              ▼              ▼              ▼              ▼
-  lint +         compile       unit +         smoke +        health
-  format +       bundle       scenario +      E2E on        check +
-  secret         Docker       integration    staging        rollback
-  scan           image                                       ready
+  lint +         compile +      unit +         smoke +        release +
+  format +       package        integration    scenario       health
+  secret         artefact       + contract     tests in       check +
+  scan                                         pre-prod       rollback
+                                                              ready
 ```
+
+The five-stage skeleton is universal. What "package artefact", "pre-prod environment", and "release" mean concretely depends on the project type — see the relevant domain appendix (D1 for web services, D4 for firmware, D5 for data pipelines, …).
 
 ### 7.2 Pipeline stages
 
 #### 7.2.1 Build
 
-- **Compilation** of the source code (TypeScript → JavaScript, etc.)
-- **Bundle** for production (tree shaking, minification, source map)
-- **Docker image build** tagged based on commit SHA + semantic version
-- **Artefacts:** the build produces immutable artefacts; the same artefact tested on staging is the one deployed to production. Never rebuild for production.
+- **Compile** the source into runnable form (binary, bytecode, transpiled JS, firmware image, bundled assets, …)
+- **Package** the output as the distribution artefact (container image, wheel, executable, firmware blob, mobile bundle, …)
+- **Artefacts are immutable:** the artefact tested in the Stage environment is the same artefact released at Deploy. Never rebuild per environment.
 
 #### 7.2.2 Test
 
@@ -765,18 +767,18 @@ Execution of the test tiers according to the table in §5.5.
 
 #### 7.2.3 Stage
 
-- **Automatic deploy to staging** after green tests on `main`
-- **Smoke tests** on staging: subset of E2E that verifies critical functionality
-- **Full E2E** on staging for release candidates
-- **Staging is a replica of production** (same infrastructure, same secrets [rotated], same database schema)
+- **Install the artefact** in a pre-production environment (staging, sandbox, simulator, hardware-in-the-loop bench, …)
+- **Run smoke and scenario tests** against that environment before promotion
+- **Promotion to Deploy requires green smoke tests**
+
+The concrete shape of the pre-production environment depends on the project type (see the relevant appendix).
 
 #### 7.2.4 Deploy
 
-- **Production deploy** triggered by a release tag (`v*.*.*`)
-- **Rolling update** or **blue-green** — never a "big bang" deploy without automatic rollback
-- **Health check** post-deploy: the application responds on `/healthz` within 60 seconds
-- **Automatic rollback** if the health check fails after 3 attempts
-- **Feature flags** for risky features: deploy the disabled code, enable gradually
+- **Release the tested artefact** to its consumers (production servers, package registry, firmware fleet, app store, …)
+- **Validate the release** with a health check or acceptance verification appropriate to the artefact
+- **Keep the prior version's artefact available** so rollback stays cheap
+- **Strategy specifics** (blue-green, rolling, canary, OTA, staged rollout, store review) are domain-specific — see the relevant appendix
 
 ### 7.3 Rollback
 
@@ -785,36 +787,19 @@ Every deploy MUST be reversible. Rollback is a first-class operation, not an eme
 | Scenario | Action | Target time |
 |----------|--------|-------------|
 | Health check fails post-deploy | Automatic rollback to the previous version | < 2 minutes |
-| Critical bug discovered in production | Manual rollback via CI (one button/command) | < 5 minutes |
-| Data migration failed | Restore from backup + application rollback | < 30 minutes |
-| Rollback not possible (irreversible migration) | Hotfix forward, immediate deploy | Depends on the fix |
+| Critical bug discovered after release | Manual rollback (one button/command) | < 5 minutes |
+| Rollback not possible (irreversible change) | Hotfix forward, immediate release | Depends on the fix |
 
-**Rule:** if a deploy includes an irreversible database migration, it must be tagged as `BREAKING` in the CHANGELOG and requires explicit approval before deploying.
+When a specific class of change is inherently hard to reverse (a data migration, a breaking contract publication, a firmware flash), the domain appendix that owns that class defines the rollback protocol for it.
 
-### 7.4 Database migration
-
-- **Forward-only migration.** Every migration has an `up` file and a `down` file. The `down` is tested — it is not an empty placeholder.
-- **Migration separate from the application deploy.** The migration runs before the deploy. If the migration fails, the deploy does not start.
-- **Backward compatibility.** The new version of the code MUST work with both the old and the new version of the database for at least one deploy cycle. This allows rollback without rolling back the database.
-- **Data migration vs schema migration.** The two are separate. Schema first, data after. Never in the same migration.
-
-### 7.5 Environments
-
-| Environment | Purpose | Data | Deploy |
-|----------|-------|------|--------|
-| **Local** | Development | Seed script | Manual |
-| **CI** | Automated tests | Generated by tests | Automatic on push |
-| **Staging** | Pre-production validation | Anonymised copy of production | Automatic on merge to main |
-| **Production** | Real users | Real | Manual/automatic on tag |
-
-### 7.6 Configuration as code
+### 7.4 Configuration as code
 
 - All CI/CD configuration is in the repository (`.github/workflows/`, `.gitlab-ci.yml`, etc.)
 - No "click-ops" configuration in the forge — if it is not in the repository, it does not exist
 - Forge-specific configuration in `ci/adapters/<forge>/`
 - CI business logic (scripts, classifier, aggregator) lives outside the forge directory — it is portable
 
-### 7.7 Adapter pattern for CI
+### 7.5 Adapter pattern for CI
 
 All CI logic that is specific to GitHub Actions (or GitLab, or Forgejo) lives under `ci/adapters/<forge>/`. The rest (scripts, classifier, aggregator, compatibility database) is portable. Migrating to a new forge is a single-directory swap plus a new adapter.
 
@@ -1082,9 +1067,27 @@ Every public HTTP/REST, GraphQL, gRPC, or WebSocket endpoint MUST have documenta
 
 API documentation is generated in CI and published automatically. Manually written API documentation that diverges from the code is an announced bug.
 
-*Further D1 content (deploy strategy — blue-green, rolling, canary — extracted from §7.2
-specifics; environment taxonomy from §7.5; request-path testing patterns) to be filled in
-Phase 8.1.*
+### D1.2 Deploy strategy
+
+- **Production release** triggered by a release tag (`v*.*.*`)
+- **Rolling update** or **blue-green** — never a "big bang" deploy without automatic rollback
+- **Canary** for high-risk changes: route a small percentage of traffic to the new version first, promote only after stability metrics hold
+- **Health check** post-deploy: the application responds on `/healthz` within 60 seconds
+- **Automatic rollback** if the health check fails after 3 attempts
+- **Feature flags** for risky features: deploy the disabled code, enable gradually
+
+### D1.3 Environments
+
+| Environment | Purpose | Data | Deploy |
+|----------|-------|------|--------|
+| **Local** | Development | Seed script | Manual |
+| **CI** | Automated tests | Generated by tests | Automatic on push |
+| **Staging** | Pre-production validation | Anonymised copy of production | Automatic on merge to main |
+| **Production** | Real users | Real | Manual/automatic on tag |
+
+Staging is a replica of production: same infrastructure topology, same secrets (rotated), same database schema. A divergence between staging and production is a bug in the environment definition, not a feature.
+
+*Further D1 content (request-path testing patterns, rate-limiting and back-pressure, observability hooks) to be filled in Phase 8.1.*
 
 ## D2 Library / SDK
 
@@ -1163,8 +1166,16 @@ Rules:
 
 Golden queries are complementary to schema migrations' own tests; they catch semantic drift that schema-level checks miss (e.g. a column renamed correctly but backfilled with the wrong default).
 
-*Further D5 content (database migration protocol from §7.4, training-pipeline reproducibility,
-dataset versioning, drift monitoring, evaluation contracts) to be filled in Phase 8.3.*
+### D5.2 Database migration
+
+- **Forward-only migration.** Every migration has an `up` file and a `down` file. The `down` is tested — it is not an empty placeholder.
+- **Migration separate from the application deploy.** The migration runs before the deploy. If the migration fails, the deploy does not start.
+- **Backward compatibility.** The new version of the code MUST work with both the old and the new version of the database for at least one deploy cycle. This allows rollback without rolling back the database.
+- **Data migration vs schema migration.** The two are separate. Schema first, data after. Never in the same migration.
+
+**Irreversible-migration rule.** If a deploy includes an irreversible database migration, it must be tagged as `BREAKING` in the CHANGELOG and requires explicit approval before deploying. Because rolling back the application does not undo the migration, the rollback scenario for this class of change is "hotfix forward" — see Core §7.3.
+
+*Further D5 content (training-pipeline reproducibility, dataset versioning, drift monitoring, evaluation contracts) to be filled in Phase 8.3.*
 
 ## D6 Mobile App
 
@@ -1444,9 +1455,9 @@ illustrative of adoption shape only.*
 - [ ] All tests pass across all tiers (§5.5)
 - [ ] CHANGELOG.md updated (§6.3)
 - [ ] Version tag created (§3.8)
-- [ ] Staging deploy succeeded with green smoke test (§7.2.3)
+- [ ] Pre-production smoke tests green on promotion (§7.2.3)
 - [ ] Rollback tested (§7.3)
-- [ ] Database migration tested (up AND down) (§7.4)
+- [ ] Database migration tested (up AND down) (D5.2, where applicable)
 - [ ] API documentation updated (D1.1 / D2.1 / D3.1, where applicable)
 - [ ] Compat database updated with current state (M1.3)
 
