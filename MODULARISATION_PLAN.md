@@ -223,13 +223,13 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] All four Open Questions answered (see Decisions log)
 - [x] MVP scope frozen (see table above)
 
-### Phase 1 — Skeleton
+### Phase 1 — Skeleton — ✅ CLOSED 2026-04-18
 
-- [ ] Add `Part II — Domain Appendices` (D1–D7) and `Part III — Cross-cutting Modules` (M1–M4)
+- [x] Add `Part II — Domain Appendices` (D1–D7) and `Part III — Cross-cutting Modules` (M1–M4)
       with empty headings
-- [ ] Under each heading write only: activation trigger + "in addition to Core" placeholder
-- [ ] Update TOC to reflect the new parts
-- [ ] Commit: `refactor(playbook): add module and domain scaffolding`
+- [x] Under each heading write only: activation trigger + "in addition to Core" placeholder
+- [x] Update TOC to reflect the new parts
+- [x] Commit: `refactor(playbook): add module and domain scaffolding`
 
 ### Phase 2 — Surveillance Module (M1)
 
@@ -394,3 +394,10 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
 - 2026-04-18 — Added Resumption protocol (ground-truth hierarchy, resume steps, checkpoint
   commit policy). Split Phase 8 into sub-phases 8.1–8.7 so token exhaustion loses at most one
   module of work. Ready for Phase 1.
+- 2026-04-18 — Phase 1 intent: add Part II (D1–D7) and Part III (M1–M4) empty headings with
+  activation triggers + "in addition to Core" placeholders; update TOC. Single commit.
+- 2026-04-18 — Phase 1 executed. TOC reflects Core (flat §§1–16 with §§9, 11, 13, 14 marked
+  as M1-extraction candidates), Part II (D1–D7), Part III (M1–M4). Old `PART II — SURVEILLANCE
+  AND MAINTENANCE` and `PART III — MANAGEMENT` body headers removed; sections §§8–16 now live
+  flat under `PART I — CORE`. D1, D4, D5, M1, M2, M4 scaffolded with phase references for their
+  full-content fill; D2, D3, D6, D7, M3 scaffolded as stubs. Ready for Phase 2 (M1 extraction).
