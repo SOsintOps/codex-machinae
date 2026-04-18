@@ -527,15 +527,7 @@ Every entry point of the application MUST validate input:
 
 **Rule:** validation is declarative (schema), not imperative (chain of `if` statements). A schema is testable, documentable, and reusable.
 
-### 4.3 Authentication and authorisation
-
-- **Passwords.** Never in plain text, never in logs, never in URLs. Hashed with bcrypt/argon2, unique salt per user.
-- **Tokens.** JWT with short expiry (15 min access, 7 days refresh). Refresh token rotated on every use.
-- **Session.** `HttpOnly`, `Secure`, `SameSite=Strict` cookies. Session ID regenerated after login.
-- **API keys.** Never in source code. Never in the frontend. Always in an environment variable or secret manager.
-- **Authorisation.** Checked on every request, not only at login. Explicit RBAC or ABAC, never hard-coded.
-
-### 4.4 Secrets management
+### 4.3 Secrets management
 
 | Rule | Detail |
 |--------|----------|
@@ -546,20 +538,7 @@ Every entry point of the application MUST validate input:
 | **Audit** | Every access to a secret is logged. If a secret is compromised, it must be rotated immediately |
 | **`.env.example`** | The repo contains a `.env.example` with variable names (without values) and explanatory comments |
 
-### 4.5 Security checklist for every PR
-
-- [ ] No secrets committed (verified by tools: `trufflehog`, `gitleaks`)
-- [ ] Input validated with schema at every boundary
-- [ ] Parameterised queries (no SQL concatenation)
-- [ ] Errors do not expose stack traces or internal details to the user
-- [ ] Security headers present (CSP, X-Frame-Options, X-Content-Type-Options)
-- [ ] Dependencies free of known vulnerabilities (`npm audit` / `pip-audit` clean)
-- [ ] Rate limiting configured for public endpoints
-- [ ] Logs do not contain PII or secrets
-
-### 4.6 OWASP Top 10 as baseline
-
-Every web application MUST be protected against the current OWASP Top 10. The team reviews the list annually and verifies that every item is covered by tests or configuration.
+Authentication, authorisation, per-PR security checklist, and OWASP Top 10 coverage are handled by M2 Security-sensitive, which activates whenever the project handles authentication, authorisation, or PII; serves untrusted clients over a network; or processes attacker-controlled input.
 
 ---
 
@@ -1026,7 +1005,7 @@ For each change, the agent produces a report with: what changed, classification,
 5. Generate the initial contract map (§8)
 6. Configure surveillance agents (M1.1)
 7. Create the first compatibility record (`untested`)
-8. Write `.env.example` with all variables documented (§4.4)
+8. Write `.env.example` with all variables documented (§4.3)
 9. Write the seed script for the development database (§5.4)
 
 ### 11.3 Phase 2 — Active development
@@ -1332,9 +1311,32 @@ If the contract count drops > 10%, CI fails.
 identifiable information; OR serves untrusted clients over a network; OR processes
 attacker-controlled input.
 
-**In addition to Core.** *To be filled in Phase 3 (extraction of §4.3, §4.5, §4.6) and polished
-in Phase 8.5. Will include auth/authorisation patterns, security PR checklist, and OWASP
-Top 10 mitigations.*
+**In addition to Core.** Core §4 (Fundamental principles, Input validation, Secrets management)
+applies to every project. This module adds the patterns that make sense only when the trigger
+above fires: identity handling, a per-PR security checklist, and OWASP coverage.
+
+### M2.1 Authentication and authorisation
+
+- **Passwords.** Never in plain text, never in logs, never in URLs. Hashed with bcrypt/argon2, unique salt per user.
+- **Tokens.** JWT with short expiry (15 min access, 7 days refresh). Refresh token rotated on every use.
+- **Session.** `HttpOnly`, `Secure`, `SameSite=Strict` cookies. Session ID regenerated after login.
+- **API keys.** Never in source code. Never in the frontend. Always in an environment variable or secret manager.
+- **Authorisation.** Checked on every request, not only at login. Explicit RBAC or ABAC, never hard-coded.
+
+### M2.2 Security checklist for every PR
+
+- [ ] No secrets committed (verified by tools: `trufflehog`, `gitleaks`)
+- [ ] Input validated with schema at every boundary
+- [ ] Parameterised queries (no SQL concatenation)
+- [ ] Errors do not expose stack traces or internal details to the user
+- [ ] Security headers present (CSP, X-Frame-Options, X-Content-Type-Options)
+- [ ] Dependencies free of known vulnerabilities (`npm audit` / `pip-audit` clean)
+- [ ] Rate limiting configured for public endpoints
+- [ ] Logs do not contain PII or secrets
+
+### M2.3 OWASP Top 10 as baseline
+
+Every web application MUST be protected against the current OWASP Top 10. The team reviews the list annually and verifies that every item is covered by tests or configuration.
 
 ## M3 Release & Distribution
 
@@ -1385,8 +1387,8 @@ illustrative of adoption shape only.*
 - [ ] Contract map generated (even manually) (§8)
 - [ ] Surveillance agents configured (M1.1)
 - [ ] First compatibility record created (`untested`)
-- [ ] `.env.example` with all variables documented (§4.4)
-- [ ] Secret scan configured in CI (§4.5)
+- [ ] `.env.example` with all variables documented (§4.3)
+- [ ] Secret scan configured in CI (M2.2)
 - [ ] Seed script for development database (§5.4)
 - [ ] Initial coverage baseline committed (§5.3)
 - [ ] Heartbeat alert configured (threshold: 6 hours) (M1.4.1)
@@ -1396,7 +1398,7 @@ illustrative of adoption shape only.*
 - [ ] Code follows naming conventions (§3.2)
 - [ ] Commit message in Conventional Commits format (§3.3)
 - [ ] No lint warnings (§3.4)
-- [ ] No secrets committed (§4.5)
+- [ ] No secrets committed (M2.2)
 - [ ] Input validated with schema at every boundary (§4.2)
 - [ ] Tests written for new/modified code (§5)
 - [ ] Coverage has not dropped below baseline (§5.3)
