@@ -647,7 +647,7 @@ Rules:
 
 - The schema is the source of truth; fixture payloads exist to exercise the schema, not to pin exact bytes
 - `additionalProperties: true` on inbound contracts (tolerant reader), `additionalProperties: false` on outbound contracts owned by the project (strict producer)
-- Enum values are never duplicated across schema and code — both point to a single declaration (see §6.3)
+- Enum values are never duplicated across schema and code — both point to a single declaration
 - A schema change on a shared contract is a contract-breaking change (§10.6) regardless of whether any current consumer happens to tolerate it
 
 Golden-file equality is reserved for artefacts where the whole byte sequence *is* the contract (rendered UI snapshots, generated documents, wire-format fixtures). Using golden files for structured API responses couples the test to ordering and serialisation choices that the contract does not actually guarantee.
@@ -702,20 +702,9 @@ Data-migration-specific testing patterns (golden queries that compare pre- and p
 
 TODOs without an issue = CI emits a warning. TODOs older than 30 days without an issue = CI fail.
 
-### 6.3 API documentation
+API-surface documentation (REST endpoints, SDK exports, CLI contracts) is domain-specific and lives in the relevant appendix: D1.1 for web services, D2.1 for libraries/SDKs, D3.1 for command-line tools.
 
-Every public API (REST, SDK, CLI) MUST have documentation generated from the code:
-
-| Type | Recommended tool | Output |
-|------|------------------|--------|
-| REST API | OpenAPI/Swagger (from annotations) | `docs/api/openapi.yaml` |
-| TypeScript SDK | TypeDoc | `docs/api/` |
-| Python SDK | Sphinx + autodoc | `docs/api/` |
-| CLI | `--help` + generated man page | `docs/cli/` |
-
-API documentation is generated in CI and published automatically. Manually written API documentation that diverges from the code is an announced bug.
-
-### 6.4 CHANGELOG.md
+### 6.3 CHANGELOG.md
 
 Keep a Changelog format (`keepachangelog.com`):
 
@@ -1079,9 +1068,23 @@ Core disagree, the Core wins unless the appendix explicitly marks the override.
 **Activation trigger.** The project exposes HTTP, REST, GraphQL, WebSocket, or gRPC endpoints
 to clients outside its own process.
 
-**In addition to Core.** *To be filled in Phase 8.1 — will include API documentation
-conventions (extracted from §6.3), deploy strategy (blue-green, rolling, canary — extracted
-from §7.2 specifics), environment taxonomy (§7.5), and request-path testing patterns.*
+**In addition to Core.** Core §6 required documents, code docs, and CHANGELOG apply. This
+appendix adds the API-surface conventions and runtime/deploy patterns specific to networked
+services.
+
+### D1.1 API documentation
+
+Every public HTTP/REST, GraphQL, gRPC, or WebSocket endpoint MUST have documentation generated from the code:
+
+| Type | Recommended tool | Output |
+|------|------------------|--------|
+| REST API | OpenAPI/Swagger (from annotations) | `docs/api/openapi.yaml` |
+
+API documentation is generated in CI and published automatically. Manually written API documentation that diverges from the code is an announced bug.
+
+*Further D1 content (deploy strategy — blue-green, rolling, canary — extracted from §7.2
+specifics; environment taxonomy from §7.5; request-path testing patterns) to be filled in
+Phase 8.1.*
 
 ## D2 Library / SDK
 
@@ -1089,18 +1092,43 @@ from §7.2 specifics), environment taxonomy (§7.5), and request-path testing pa
 (npm, PyPI, Maven Central, crates.io, NuGet, RubyGems, Packagist, Go modules, …) or consumed
 directly via VCS reference as a library.
 
-**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover API surface
-documentation, semantic-versioning discipline for public contracts, deprecation policy,
-backwards-compatibility windows, and release notes.*
+**In addition to Core.** Core §6 required documents, code docs, and CHANGELOG apply. This
+appendix adds the patterns specific to published packages.
+
+### D2.1 API documentation
+
+Every public SDK surface (exported modules, classes, functions, types) MUST have documentation generated from the code:
+
+| Type | Recommended tool | Output |
+|------|------------------|--------|
+| TypeScript SDK | TypeDoc | `docs/api/` |
+| Python SDK | Sphinx + autodoc | `docs/api/` |
+
+API documentation is generated in CI and published alongside the package. Manually written API documentation that diverges from the code is an announced bug.
+
+*Further D2 content (semantic-versioning discipline for public contracts, deprecation policy,
+backwards-compatibility windows, release notes) to be fleshed out post-MVP in Phase 8.7.*
 
 ## D3 CLI Tool
 
 **Activation trigger.** The project's primary interface is a command-line executable invoked
 by humans or by scripts.
 
-**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover argument/subcommand
-design, exit-code contracts, machine-readable output modes, shell completion, and
-installation channels.*
+**In addition to Core.** Core §6 required documents, code docs, and CHANGELOG apply. This
+appendix adds the patterns specific to command-line interfaces.
+
+### D3.1 API documentation
+
+The CLI's contract surface (flags, subcommands, exit codes, output modes) MUST be documented and kept in sync with the code:
+
+| Type | Recommended tool | Output |
+|------|------------------|--------|
+| CLI | `--help` + generated man page | `docs/cli/` |
+
+Documentation is generated from the code (help strings, argument metadata) in CI. Manually written documentation that diverges from `--help` is an announced bug.
+
+*Further D3 content (argument/subcommand design, exit-code contracts, machine-readable output
+modes, shell completion, installation channels) to be fleshed out post-MVP in Phase 8.7.*
 
 ## D4 Embedded / Firmware
 
@@ -1414,12 +1442,12 @@ illustrative of adoption shape only.*
 ### A.4 Checklist for release
 
 - [ ] All tests pass across all tiers (§5.5)
-- [ ] CHANGELOG.md updated (§6.4)
+- [ ] CHANGELOG.md updated (§6.3)
 - [ ] Version tag created (§3.8)
 - [ ] Staging deploy succeeded with green smoke test (§7.2.3)
 - [ ] Rollback tested (§7.3)
 - [ ] Database migration tested (up AND down) (§7.4)
-- [ ] API documentation updated (§6.3)
+- [ ] API documentation updated (D1.1 / D2.1 / D3.1, where applicable)
 - [ ] Compat database updated with current state (M1.3)
 
 ### A.5 Surveillance checklist

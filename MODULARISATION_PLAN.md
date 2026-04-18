@@ -256,12 +256,13 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] No external (§5.9) cross-references to sweep; only the D5 placeholder meta-text
 - [x] Commit: `refactor(playbook): move domain-specific testing to modules`
 
-### Phase 5 — Documentation split (Core §6 ↔ D1/D2)
+### Phase 5 — Documentation split (Core §6 ↔ D1/D2/D3) — ✅ CLOSED 2026-04-18
 
-- [ ] Core §6 keeps §6.1 required docs (universal subset), §6.2 code docs, §6.4 CHANGELOG
-- [ ] Move §6.3 API documentation into `D1 Web Service` and `D2 Library / SDK` appendices
-- [ ] Renumber Core §6 sub-sections contiguously; sweep (§6.x) cross-references
-- [ ] Commit: `refactor(playbook): split documentation into Core + domain appendices`
+- [x] Core §6 keeps §6.1 required docs (universal subset), §6.2 code docs, §6.3 CHANGELOG (renumbered from §6.4)
+- [x] Split §6.3 API documentation across three appendices: REST row → D1.1, SDK rows → D2.1, CLI row → D3.1
+      (extends the original plan's D1/D2 scope by also extracting the CLI row into D3 — see Progress log)
+- [x] Renumbered Core §6 sub-sections contiguously; swept (§6.x) cross-references
+- [x] Commit: `refactor(playbook): split documentation into Core + domain appendices`
 
 ### Phase 6 — CI/CD split (Core §7 ↔ D1/D5)
 
@@ -445,3 +446,24 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   migrations, reproducibility, versioning, drift, evaluation). No cross-reference sweep was
   needed — grepping §5.x after the edit confirms only references to §§5.3–5.7 remain, all
   of which are unchanged. Ready for Phase 5 (documentation split Core §6 ↔ D1/D2).
+- 2026-04-18 — Phase 5 intent: remove §6.3 from Core and split its 4-row table across three
+  appendices — REST row → D1.1, SDK rows (TS + Python) → D2.1, CLI row → D3.1. The CLI
+  destination extends the plan text ("D1 and D2") because leaving the CLI row in Core would
+  reintroduce a web/SDK-agnostic gap, and the CLI contract surface is the archetypal D3
+  concern. Renumber Core §6.4 → §6.3 so Core §6 becomes contiguous §§6.1–6.3. Replace D1,
+  D2, D3 placeholders with populated preambles + the appropriate Dx.1 subsection; D1's
+  Phase 8.1 backlog marker retained for deploy/environments/request-path patterns; D2 and
+  D3 retain Phase 8.7 stub markers for their remaining scope. Cross-references: drop the
+  "(see §6.3)" citation at §5.7 line 650 (the enum-single-declaration rule stands on its
+  own); §6.4 → §6.3 (line 1417); §6.3 → D1.1 / D2.1 / D3.1 (line 1422, PR release
+  checklist — reword as conditional). Single commit.
+- 2026-04-18 — Phase 5 executed as a single commit. Core §6.3 removed and replaced by a
+  one-sentence pointer naming the three destination appendices. Core §6.4 renumbered to
+  §6.3 (CHANGELOG). D1, D2, D3 placeholders replaced with populated preambles + D1.1, D2.1,
+  D3.1 verbatim extractions (one table row each, per domain). Phase 8.1 backlog marker
+  preserved for D1 (deploy/env/request-path); Phase 8.7 stub markers preserved for D2 and
+  D3 (their non-doc scope). Cross-references updated: "(see §6.3)" dropped at §5.7 line 650
+  because the enum-single-declaration rule is universal and does not need a pointer to API
+  docs; §6.4 → §6.3 in Appendix A release checklist; §6.3 → "D1.1 / D2.1 / D3.1, where
+  applicable" in the same checklist to make the conditional nature explicit. Ready for
+  Phase 6 (CI/CD split Core §7 ↔ D1/D5).
