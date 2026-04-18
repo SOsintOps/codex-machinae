@@ -272,12 +272,12 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] Renumbered Core §7 sub-sections contiguously; swept (§7.x) cross-references
 - [x] Commit: `refactor(playbook): split CI/CD into Core + D1 Web Service + D5 Data`
 
-### Phase 7 — Lifecycle generalisation (Core §15)
+### Phase 7 — Lifecycle generalisation (Core §11) — ✅ CLOSED 2026-04-18
 
-- [ ] Rewrite §15 phases 0–4 so they do not mention surveillance, contract map, or Docker deploy
-      by default
-- [ ] Add activation notes: "if M1 Surveillance is active, also do X"
-- [ ] Commit: `refactor(playbook): generalise lifecycle phases`
+- [x] Rewrote §11 Phases 0–4 using the "Core steps + activation blocks" pattern so nothing module-specific is mandatory until a trigger fires
+- [x] Added activation blocks: M1 Surveillance (Phases 1, 2, 3), M2 Security-sensitive (Phase 3), D1/D2/D3 (Phase 2), and "persistent structured data" (Phase 1)
+- [x] Fixed four reference bugs along the way: §1.7 → §1.8 (DoD) in Phases 0 and 2; §2.3 → §2.4 (agent configuration) in Phase 1; §2.2 → §2.3 (PROJECT_STATUS.md) in Phase 2
+- [x] Commit: `refactor(playbook): generalise lifecycle phases`
 
 ### Phase 8 — Module and domain content (MVP set)
 
@@ -495,3 +495,28 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   checklist line 1458 reworded to "Pre-production smoke tests green on promotion" so the
   universal §7.2.3 reference still applies; line 1460 → "D5.2, where applicable". §7
   whole-chapter references unchanged. Ready for Phase 7 (lifecycle generalisation).
+- 2026-04-18 — Phase 7 intent: rewrite §11 phases 0–4 using the "Core steps + activation
+  blocks" pattern (aligned with §2.2 Emergent Expansion). §11.5 Phase 4 is already
+  universal and stays verbatim. §11.1 Phase 0 is almost universal — only a ref fix
+  (§1.7 → §1.8 for DoD). §11.2 Phase 1: Core steps become 1–6 (directory, lint, CI, CLAUDE
+  writeup, contract map, .env.example); M1 block holds surveillance agents + first
+  compatibility record; persistent-data block holds the seed script. §11.3 Phase 2: Core
+  keeps user-story flow, PROJECT_STATUS updates, tests, coverage ratchet, CHANGELOG,
+  contract-map upkeep; M1 block holds agent-produced compatibility records + fix/adoption
+  PRs; D1/D2/D3 block holds API-doc updates. §11.4 Phase 3: Core keeps L0/L1 fix posture,
+  quarterly baseline/threshold review, never-auto-merge list; M1 block holds continuing
+  surveillance + monthly classifier retrospective; M2 block holds the annual OWASP review.
+  Along the way, fix four reference bugs: line 959 §1.7 → §1.8 (DoD), line 967 §2.3 → §2.4
+  (CLAUDE.md is Agent configuration), line 976 §1.7 → §1.8, line 977 §2.2 → §2.3
+  (PROJECT_STATUS.md). Single commit.
+- 2026-04-18 — Phase 7 executed as a single commit. §11 introduction rewritten to name the
+  "Core steps + activation blocks" pattern and to tie it to §2.2 Emergent Expansion.
+  §11.1 Phase 0 kept as a single Core list with the §1.7 → §1.8 ref fix. §11.2 Phase 1
+  split into Core (6 items) + M1 block (surveillance agents, first compat record) +
+  persistent-data block (seed script). §11.3 Phase 2 split into Core (6 items) + M1 block
+  (background compat records + fix/adoption PRs) + D1/D2/D3 block (API-doc updates).
+  §11.4 Phase 3 split into Core (3 items) + M1 block (continuing surveillance + monthly
+  classifier retrospective at M1.4.2) + M2 block (annual OWASP review at M2.3). §11.5
+  Phase 4 left verbatim (already universal), with the phase-label "phase 3" capitalised to
+  "Phase 3" for consistency. All four ref bugs fixed in the same pass. Ready for Phase 8
+  (module and domain content, MVP set).
