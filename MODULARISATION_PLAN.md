@@ -240,13 +240,13 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] **Renumber Core** to close the gaps left by the extraction; sweep all (§...) cross-references
 - [x] Commit: `refactor(playbook): extract Surveillance Module (M1) from Part II`
 
-### Phase 3 — Security split (Core §4 ↔ M2)
+### Phase 3 — Security split (Core §4 ↔ M2) — ✅ CLOSED 2026-04-18
 
-- [ ] Core §4 slimmed to: §4.1 principles, §4.2 input-validation concept, §4.4 secrets
-- [ ] Move §4.3 auth, §4.5 PR checklist, §4.6 OWASP into `M2 Security-sensitive`
-- [ ] M2 activation trigger: "project handles authentication, authorisation, or PII"
-- [ ] Renumber Core §4 sub-sections contiguously; sweep (§4.x) cross-references
-- [ ] Commit: `refactor(playbook): split security into Core + M2 Security-sensitive`
+- [x] Core §4 slimmed to: §4.1 principles, §4.2 input-validation concept, §4.3 secrets (renumbered from §4.4)
+- [x] Move §4.3 auth → M2.1, §4.5 PR checklist → M2.2, §4.6 OWASP → M2.3
+- [x] M2 activation trigger retained: "project handles authentication, authorisation, or PII"
+- [x] Renumbered Core §4 sub-sections contiguously; swept (§4.x) cross-references
+- [x] Commit: `refactor(playbook): split security into Core + M2 Security-sensitive`
 
 ### Phase 4 — Testing split (Core §5 ↔ D5)
 
@@ -416,3 +416,19 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   testing to M1; §10.3 replaces "agentic loop" with "L1 automation"; §10.4 replaces "the
   classifier detects" with "a change is classified as". TOC updated; Part I header note on
   "candidates for extraction" removed. Ready for Phase 3 (security split).
+- 2026-04-18 — Out-of-phase housekeeping: added `LICENSE` (CC BY 4.0) at repo root and
+  refreshed `README.md` header (H1 first, banner below, three badges, TL;DR, Licence
+  section). Commit `abc8a45`. Pushed to `origin/main`. Not a phase step — pure repo hygiene
+  before continuing the modularisation.
+- 2026-04-18 — Phase 3 intent: move Core §4.3 (auth) → M2.1, §4.5 (PR checklist) → M2.2,
+  §4.6 (OWASP Top 10) → M2.3; renumber Core §4.4 (secrets) → §4.3 so Core §4 becomes
+  contiguous §§4.1–4.3; replace the M2 placeholder with a proper activation-trigger intro
+  plus M2.1–M2.3 subsections. Cross-reference sweep: §4.4 → §4.3 (lines ≈1029, 1388),
+  §4.5 → M2.2 (lines ≈1389, 1399). §4.2 reference unchanged (line ≈1400). Single commit.
+- 2026-04-18 — Phase 3 executed as a single commit. Core §4 is now §4.1 principles, §4.2
+  input validation, §4.3 secrets management (renumbered from §4.4). M2 placeholder replaced
+  with populated M2.1 auth, M2.2 PR checklist, M2.3 OWASP (verbatim extraction; polish
+  deferred to Phase 8.5). Core §4.3 ends with a one-sentence pointer to M2 so readers see
+  the composition. Cross-references updated: §4.4 → §4.3 (lines 1008, 1390); §4.5 → M2.2
+  (lines 1391, 1401); §4.2 unchanged (line 1402). TOC unchanged (no sub-section numbering
+  there). Ready for Phase 4 (testing split Core §5 ↔ D5).
