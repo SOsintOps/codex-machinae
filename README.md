@@ -1,3 +1,5 @@
+# Codex Machinae
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                                                              │
@@ -14,12 +16,14 @@
 └──────────────────────────────────────────────────────────────┘
 ```
 
+[![Licence: CC BY 4.0](https://img.shields.io/badge/licence-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Status: work in progress](https://img.shields.io/badge/status-work%20in%20progress-orange.svg)](#)
+[![Language: en-GB](https://img.shields.io/badge/language-en--GB-blue.svg)](#)
+
 > [!CAUTION]
 > **WORK IN PROGRESS — THIS PLAYBOOK IS UNDER ACTIVE DESIGN. CONTENT, STRUCTURE, AND CROSS-REFERENCES MAY CHANGE WITHOUT NOTICE.**
 
-# Codex Machinae
-
-Universal software development framework for LLM-assisted projects.
+**TL;DR** — Universal, modular playbook for shipping software with LLM collaborators: a sober Core plus domain appendices and cross-cutting modules, activated by trigger.
 
 **Working Language:** All documentation, commits, and agent outputs are in **British English**.
 
@@ -52,3 +56,7 @@ New agents are added by creating an agent-specific file that aligns with `AI-AGE
 4. Commit with Conventional Commits.
 
 Tooling (templates, bootstrap scripts, CI) will be produced **after** the playbook design stabilises, not before.
+
+## Licence
+
+This work is licensed under the [Creative Commons Attribution 4.0 International Licence](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0). See [`LICENSE`](LICENSE) for the full text.
