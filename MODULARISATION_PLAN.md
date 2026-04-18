@@ -248,12 +248,13 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] Renumbered Core §4 sub-sections contiguously; swept (§4.x) cross-references
 - [x] Commit: `refactor(playbook): split security into Core + M2 Security-sensitive`
 
-### Phase 4 — Testing split (Core §5 ↔ D5)
+### Phase 4 — Testing split (Core §5 ↔ D5) — ✅ CLOSED 2026-04-18
 
-- [ ] Core §5 keeps pyramid, coverage, test data, CI, assertion, schema-primary, two-layer regression
-- [ ] Move §5.9 golden queries into `D5 ML / Data Pipeline`
-- [ ] Renumber Core §5 sub-sections contiguously; sweep (§5.x) cross-references
-- [ ] Commit: `refactor(playbook): move domain-specific testing to modules`
+- [x] Core §5 keeps pyramid, coverage, test data, CI, assertion, schema-primary, two-layer regression
+- [x] Moved §5.9 golden queries into `D5 ML / Data Pipeline` as D5.1
+- [x] Core §§5.1–5.8 already contiguous (§5.9 was at tail); no Core renumbering required
+- [x] No external (§5.9) cross-references to sweep; only the D5 placeholder meta-text
+- [x] Commit: `refactor(playbook): move domain-specific testing to modules`
 
 ### Phase 5 — Documentation split (Core §6 ↔ D1/D2)
 
@@ -432,3 +433,15 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   the composition. Cross-references updated: §4.4 → §4.3 (lines 1008, 1390); §4.5 → M2.2
   (lines 1391, 1401); §4.2 unchanged (line 1402). TOC unchanged (no sub-section numbering
   there). Ready for Phase 4 (testing split Core §5 ↔ D5).
+- 2026-04-18 — Phase 4 intent: move §5.9 golden queries out of Core §5 into D5 as D5.1;
+  §§5.1–5.8 already contiguous so no Core renumbering required. Replace D5 placeholder with
+  a populated preamble + D5.1 verbatim extraction, leaving remaining D5 scope (§7.4
+  migrations, training-pipeline reproducibility, dataset versioning, drift monitoring,
+  evaluation contracts) marked as Phase 8.3 work. No external §5.9 cross-references to
+  sweep (only the self-reference in the D5 placeholder meta-text). Single commit.
+- 2026-04-18 — Phase 4 executed as a single commit. §5.9 removed from Core §5; replaced by
+  a one-sentence pointer to D5 at the §5.8 tail. D5 placeholder replaced with a populated
+  preamble + D5.1 verbatim extraction; an italic marker retains the Phase 8.3 backlog (§7.4
+  migrations, reproducibility, versioning, drift, evaluation). No cross-reference sweep was
+  needed — grepping §5.x after the edit confirms only references to §§5.3–5.7 remain, all
+  of which are unchanged. Ready for Phase 5 (documentation split Core §6 ↔ D1/D2).
