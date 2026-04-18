@@ -6,19 +6,36 @@ Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted soft
 All documentation and commits are in **British English**.
 
 ## Current Phase
-Design. The repository has been stripped of premature scaffolding (templates, bootstrap scripts, CI). Only the playbook, the reference example, and the multi-agent configuration remain. Tooling will be produced once the playbook design stabilises.
+Design — modularisation in flight. The playbook is being split into Core + Domain Appendices
+(D1–D7) + Cross-cutting Modules (M1–M4), per `MODULARISATION_PLAN.md`. Tooling (templates,
+bootstrap scripts, CI) remains deferred until the design stabilises.
 
-## Modified Files
-- `codex-machinae.md` §2: replaced prescriptive mandatory folder tree with "Minimum Core of Existence" + "Emergent Expansion Protocol"; §2.4 now covers both single- and multi-agent configurations.
-- `codex-machinae.md` §8: generalised from "Dependency Surface Map" to "Boundary Contracts" (Hardware / UI / Data / API axes, inbound/outbound direction); cross-references swept across §1.8, §2.2, §5, §9, §10, §12, §14, §15, Appendix A, Appendix C.
-- `codex-machinae.md` §1.8: split Definition of Done into Core (always applies) and Contextual (applies when precondition holds, recorded as `n/a` otherwise).
-- `codex-machinae.md` §12: reframed Remediation as a risk-modulated pattern applicable to any classified change, not only dependency bumps; L0/L1 are now explicitly optional ladder rungs; §12.6 renamed from "Major version protocol" to "Contract-breaking change protocol".
+## Modified Files (cumulative, current state)
+- `codex-machinae.md`:
+  - §2: Minimum Core of Existence + Emergent Expansion Protocol.
+  - §1.8: Definition of Done split into Core + Contextual.
+  - §8: Boundary Contracts (Hardware/UI/Data/API, inbound/outbound); now explicitly scopes
+    compatibility testing to M1 rather than implying it is universal.
+  - §9 (was §10): Change classification (unchanged content, renumbered).
+  - §10 (was §12): Remediation workflow, risk-modulated; §10.3 replaced "agentic loop" with
+    "L1 automation"; §10.4 replaced "the classifier detects" with "a change is classified as".
+  - §11 (was §15), §12 (was §16): renumbered, content unchanged pending Phase 7 lifecycle
+    generalisation.
+  - Part II — Domain Appendices (D1–D7): scaffolding present (triggers + placeholders).
+  - Part III — Cross-cutting Modules (M1–M4): M1 Surveillance fully populated from former
+    §§9, 11, 13, 14; M2/M3/M4 still scaffolds.
+- `MODULARISATION_PLAN.md`: durable plan; Phases 0, 1, 2 closed.
+- `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`: point agents at the plan on resume.
 
 ## Logical State
-- Playbook: `codex-machinae.md` — §2, §8, §1.8, §12 refactored per the Meta-Framework direction. Remaining prescriptive artefacts: §6 Documentation, §7 CI/CD, §9 Surveillance agents (still framed as mandatory), §13 Compatibility database, §14 Self-testing — all candidates for "optional module" framing.
-- Reference example: `example/00-prd.md` (Cortex) — unchanged; source of patterns.
-- Roadmap: `STRATEGY_TRANSFORMATION.md` — Phase A points 1, 2, 3, 5 executed. Phase A point 4 (abstract remediation) executed. Phase B (Guest Agent), Phase C (Lessons Learned loop), Phase D (independent versioning) pending.
+- Playbook structure: Core §§1–12 contiguous; Part II scaffolding; M1 live; M2–M4 scaffolds.
+- Reference example: `example/00-prd.md` (Cortex) — unchanged; inspiration / quality benchmark.
+- Roadmap: `STRATEGY_TRANSFORMATION.md` — absorbed in Phase 10 of the modularisation plan.
 
 ## Next Action
-1. **Execute `MODULARISATION_PLAN.md`** — split the playbook into Core + Domain Appendices (D1–D7) + Cross-cutting Modules (M1–M3). The plan file is the durable source of truth for the refactor; it supersedes the three items previously listed here (Surveillance module extraction is Phase 2; `STRATEGY_TRANSFORMATION.md` absorption is Phase 10). Currently blocked on Phase 0 human gate: confirm the classification table and answer the four Open Questions.
-2. Begin Phase C (Lessons Learned Report template + Promotion protocol) — deferred until modularisation lands, then slot it in as a new Core section.
+1. **Phase 3 — Security split** (Core §4 ↔ M2): slim §4 to principles + input validation
+   concept + secrets; move §4.3 auth, §4.5 PR checklist, §4.6 OWASP into `M2 Security-sensitive`;
+   renumber §4 sub-sections contiguously; sweep refs.
+2. Subsequent phases per `MODULARISATION_PLAN.md` (4–10).
+3. Phase C (Lessons Learned Report + Promotion protocol) — deferred until modularisation lands,
+   then slot in as a new Core section.
