@@ -18,9 +18,10 @@ Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted soft
 
 ### 1. Dogfooding
 
-Gemini CLI MUST apply the conventions defined in `codex-machinae.md` to manage this very repository — to the extent those conventions are still valid under the current Meta-Framework direction (see `STRATEGY_TRANSFORMATION.md`). Specifically:
+Gemini CLI MUST apply the conventions defined in `codex-machinae.md` to manage this very repository — to the extent those conventions are still valid under the current Meta-Framework direction (see `STRATEGY_TRANSFORMATION.md` and the active refactor plan `MODULARISATION_PLAN.md`). Specifically:
 
 - Keep `PROJECT_STATUS.md` up to date after every session.
+- If `MODULARISATION_PLAN.md` has an open refactor, read it first and update its Progress log when a phase advances.
 - Use Conventional Commits for every change.
 
 ### 2. Scope Discipline

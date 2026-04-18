@@ -1,0 +1,396 @@
+# Codex Machinae — Modularisation Plan
+
+**Status:** Draft v2 — Phase 0 closed, Phase 1 ready to start
+**Created:** 2026-04-18
+**Owner:** human + Claude (multi-session)
+**Goal:** Split the playbook into a universal **Core** + **Domain Appendices** (per project type) +
+**Cross-cutting Modules** (activated by trigger), so the playbook applies to any software project
+— not just web services.
+
+---
+
+## Context for a resuming agent
+
+`codex-machinae.md` (≈1450 lines) mixes universal process rules with concrete guidance that
+implicitly assumes a web service (REST API, Docker, blue-green deploy, JWT auth, SQL migrations).
+The user wants it to become a true meta-framework: a sober Core usable by any project, plus
+activatable appendices per project type (library, CLI, embedded, ML, mobile, static site, web
+service) and cross-cutting modules (surveillance, security-sensitive, release/distribution).
+
+The refactor respects the **Emergent Expansion Protocol** (§2.2): every module has a trigger
+condition; nothing is mandatory until the trigger fires.
+
+**Hard rule for resuming sessions:** read the Decisions log at the bottom — all Phase 0 choices
+are frozen. Never leave numbering gaps: renumber Core incrementally at the end of every
+extraction phase (the final sweep in Phase 10 is a verification, not the renumbering itself).
+
+---
+
+## Resumption protocol (use when tokens run out or a new session starts)
+
+**Ground truth hierarchy — trust in this order:**
+
+1. **Git state** (`git status`, `git log`, `git diff`) — authoritative record of what changed
+2. **This plan's Progress log** — author's claim of where we are
+3. **This plan's Phase checkboxes** — design intent
+
+If they disagree: trust Git, then update the plan to match reality.
+
+**Steps to resume (any Claude, any session):**
+
+1. Read `PROJECT_STATUS.md` for global context
+2. Read this file end-to-end, focusing on Decisions log, current phase, and Progress log
+3. Run `git status` and `git log -5` — understand what is committed vs uncommitted
+4. **Cross-check:**
+   - Clean working tree + last commit matches the most recent Progress-log entry → resume at the
+     first unchecked item in the next phase
+   - Clean working tree + last commit is behind Progress log → the log is wrong; update it to
+     match Git
+   - Dirty working tree → a phase was interrupted mid-way. Read the diff. Three options:
+     a. If the partial work is coherent and safe, finish that sub-step, commit, update Progress log
+     b. If the partial work is broken, `git stash` or ask the human before discarding
+     c. Never `git reset --hard` without explicit human approval
+5. Before making any change, verify current Core numbering by scanning `codex-machinae.md`
+   headings — do not trust the plan's section numbers if Git shows they have been renumbered
+6. Write the next step's intent into the Progress log **before** doing the work, not after. If
+   tokens run out mid-step, the next session sees the intent and can finish it
+7. At phase boundaries, commit + append to Progress log atomically (single session turn)
+
+**Policy on checkpoint commits inside a phase:**
+
+- Each phase is designed as a single logical commit. Prefer that
+- For large phases (Phase 8 sub-phases, Phase 2, Phase 6), safe intermediate commits labelled
+  `refactor(playbook): [phase X] wip — <substep>` are allowed to protect progress
+- At phase end, intermediate commits may be kept (not squashed) — they improve auditability
+
+**Never leave the repo in a broken state:**
+
+- After any commit, cross-references must resolve (or the phase is not complete)
+- If an edit creates a broken (§...) reference, fix it in the same commit, not later
+
+---
+
+## Target architecture
+
+```
+codex-machinae.md
+├── Part I — Core (universal — applies to every software project)
+│   ├── §1  Requirements and planning
+│   ├── §2  Project structure + Emergent Expansion
+│   ├── §3  Code quality (principles, naming, commits, metrics, errors)
+│   ├── §4  Security fundamentals (principles + secrets only)
+│   ├── §5  Testing fundamentals (pyramid, coverage, assertions, schema-primary)
+│   ├── §6  Documentation fundamentals (README, CHANGELOG, code comments)
+│   ├── §7  CI/CD fundamentals (pipeline as concept, rollback principle, adapter pattern)
+│   ├── §8  Boundary Contracts
+│   ├── §10 Change classification  (kept at §10 until Phase 10 renumbering)
+│   ├── §12 Remediation (risk-modulated pattern)
+│   ├── §15 Project lifecycle
+│   └── §16 Conventions for AI agents
+│
+├── Part II — Domain Appendices (activated by project type)
+│   ├── D1 Web Service         (REST/GraphQL, cloud deploy)
+│   ├── D2 Library / SDK       (published package)
+│   ├── D3 CLI Tool
+│   ├── D4 Embedded / Firmware
+│   ├── D5 ML / Data Pipeline
+│   ├── D6 Mobile App
+│   └── D7 Static Site / Frontend-only
+│
+├── Part III — Cross-cutting Modules (activated by trigger)
+│   ├── M1 Surveillance                 (from §§9, 11, 13, 14)
+│   ├── M2 Security-sensitive           (from §§4.3, 4.5, 4.6)
+│   ├── M3 Release & Distribution
+│   └── M4 Classification & Taxonomy    (framework-agnostic: MECE, governance, versioning,
+│                                         and the scouting protocol that directs the AI to
+│                                         find domain-specific frameworks per project)
+│
+└── Appendices
+    ├── A — Checklists (Core + per-module split)
+    ├── B — Templates  (Core + per-module split)
+    └── C — Glossary (merged)
+```
+
+---
+
+## MVP scope (Decisions log item)
+
+Selection is driven by **meta-framework merit**, not by any specific project. The chosen MVP
+maximises coverage breadth of orthogonal runtime/deploy models and uses the cheapest-to-fill
+modules as early validators of the cross-cutting pattern.
+
+| Target | Scope | Merit-based rationale |
+|--------|-------|-----------------------|
+| Core §§1–… (renumbered incrementally) | Full rewrite | Universal foundation |
+| **D1 Web Service**       | Full content | Most common domain; maximum leverage on existing web-biased text; where most of §4, §6, §7 already implicitly live |
+| **D4 Embedded / Firmware** | Full content | Diametrically opposite to D1 (no cloud, no rolling deploy, hardware-in-loop); stress-tests Core sobriety — if any Core section smuggles in a web assumption, D4 surfaces it |
+| **D5 ML / Data Pipeline** | Full content | Adds an orthogonal data-centric axis; validates data-specific threads already latent in the playbook (§5.9 golden queries, §7.4 migrations) |
+| **M1 Surveillance**      | Full content | Already well written in §§9, 11, 13, 14; extract + reframe is cheap and validates the cross-cutting pattern |
+| **M2 Security-sensitive** | Full content | Extract of §§4.3, 4.5, 4.6 is cheap and shows the pattern at a second angle |
+| **M4 Classification & Taxonomy** | Full content | New content but small; validates the scouting-protocol pattern binding a module to §1.7 SOTA Scout |
+| **M3 Release & Distribution** | Stub (heading + trigger + 2–3 bullets) | Deferred; meaningful only once D2/D3/D6 are fleshed out |
+| **D2 Library / SDK**     | Stub | Deferred |
+| **D3 CLI Tool**          | Stub | Deferred |
+| **D6 Mobile App**        | Stub | Deferred |
+| **D7 Static Site**       | Stub | Deferred |
+
+**Two distinct project roles — do not conflate:**
+
+| Role | Direction of flow | Projects |
+|------|-------------------|----------|
+| **Inspiration / quality benchmark** — a well-structured piece of work whose level of rigour, tone, and organisation sets the bar for what the playbook should produce. Read-only by CLAUDE.md; the playbook takes inspiration but does not copy it | observation → playbook design choices | `example/00-prd.md` (Cortex) |
+| **Downstream application target** — the playbook, once ready, will be applied to retrofit started-but-unfinished work | playbook → project | `~/github/zero-to-hero-workshop` branch `the-italian-job` (full-stack Next.js web app); `~/github/safe-heaven` (RPi 5 / Hailo / drone / radar / local LLM) |
+
+The downstream projects are **post-MVP customers**, not inputs to MVP design. It is a useful
+coincidence that the merit-based MVP (D1 + D4 + D5 + M1 + M2 + M4) already covers what they
+will need — it is not the reason for the MVP choice.
+
+Expected retrofit scenarios after Phase 10:
+
+- Italian Job → activate Core + D1 + M2 + M4 (optionally M1) to bring the branch in line with
+  the playbook's structure and Definition of Done
+- SafeHeaven → activate Core + D4 + D5 + M1 + M2 + M4 to organise the research-phase repo into
+  a playbook-conformant project before code is written in earnest
+
+Additional downstream targets can be added over time without changing MVP scope.
+
+---
+
+## Current-section → new-home classification
+
+| Current section | New home | Notes |
+|-----------------|----------|-------|
+| §1 Requirements and planning    | Core §1                     | Universal, minor rewording |
+| §2 Project structure            | Core §2                     | Already universal |
+| §3.1 Architectural principles   | Core §3                     | Universal |
+| §3.2 Naming conventions         | Core §3                     | Universal (multi-language examples) |
+| §3.3 Conventional Commits       | Core §3                     | Universal |
+| §3.4 Linting and formatting     | Core §3                     | Concept universal; tool table as reference |
+| §3.5 Complexity metrics         | Core §3                     | Universal |
+| §3.6 Error handling             | Core §3                     | Universal |
+| §3.7 Dependency management      | Core §3                     | Applies when runtime deps exist |
+| §3.8 Branching strategy         | Core §3                     | Universal |
+| §4.1 Security principles        | Core §4 (slimmed)           | Universal |
+| §4.2 Input validation           | Core §4                     | Concept; examples in modules |
+| §4.3 Auth and authorisation     | M2 Security-sensitive       | Web/service-specific |
+| §4.4 Secrets management         | Core §4                     | Applies whenever secrets exist |
+| §4.5 Security PR checklist      | M2 Security-sensitive       | Currently web-biased |
+| §4.6 OWASP Top 10               | M2 Security-sensitive       | Web-app-specific |
+| §5.1 Testing pyramid            | Core §5                     | Universal |
+| §5.2 Rules per tier             | Core §5 (lighter) + D1/D6 specifics |   |
+| §5.3 Coverage ratchet           | Core §5                     | Universal |
+| §5.4 Test data strategy         | Core §5                     | Universal |
+| §5.5 Tests in CI                | Core §5                     | Universal (timings indicative) |
+| §5.6 Assertion discipline       | Core §5                     | Universal |
+| §5.7 Schema-primary validation  | Core §5                     | Applies when contracts exist |
+| §5.8 Two-layer regression       | Core §5                     | Applies when upstream exists |
+| §5.9 Golden queries             | D5 ML / Data Pipeline       | DB/data-migration-specific |
+| §6.1 Required documents         | Core §6                     | Universal |
+| §6.2 Code documentation         | Core §6                     | Universal |
+| §6.3 API documentation          | D1 Web Service + D2 Library | Domain-specific |
+| §6.4 CHANGELOG                  | Core §6                     | Universal |
+| §7.1 Pipeline overview          | Core §7                     | Concept universal |
+| §7.2 Pipeline stages            | Core §7 (stages) + D1 (Docker/staging specifics) | Split |
+| §7.3 Rollback                   | Core §7                     | Universal principle |
+| §7.4 Database migration         | D5 ML / Data Pipeline       | DB-specific |
+| §7.5 Environments               | D1 Web Service              | Cloud-biased |
+| §7.6 Configuration as code      | Core §7                     | Universal |
+| §7.7 Adapter pattern for CI     | Core §7                     | Universal |
+| §8 Boundary Contracts           | Core §8                     | Already universal |
+| §9 Surveillance agents          | M1 Surveillance             | |
+| §10 Change classification       | Core §10                    | Pattern universal |
+| §11 Compatibility test matrix   | M1 Surveillance             | |
+| §12 Remediation workflow        | Core §12                    | Already universal |
+| §13 Compatibility database      | M1 Surveillance             | |
+| §14 Self-testing/observability  | M1 Surveillance             | |
+| §15 Project lifecycle           | Core §15                    | Strip module-specific steps |
+| §16 Agent conventions           | Core §16                    | Universal |
+| Appendix A                      | A (Core) + per-module split | |
+| Appendix B                      | B (Core) + per-module split | |
+| Appendix C                      | C (merged)                  | |
+
+---
+
+## Phased execution
+
+One commit per phase. Progress is tracked in the **Progress log** at the bottom.
+Every phase is resumable: the plan's state is the filesystem + the progress log.
+
+### Phase 0 — Approve plan (HUMAN GATE) — ✅ CLOSED 2026-04-18
+
+- [x] Human confirmed the classification table
+- [x] Human confirmed the domain list (7) and module list (4, incl. new M4)
+- [x] All four Open Questions answered (see Decisions log)
+- [x] MVP scope frozen (see table above)
+
+### Phase 1 — Skeleton
+
+- [ ] Add `Part II — Domain Appendices` (D1–D7) and `Part III — Cross-cutting Modules` (M1–M4)
+      with empty headings
+- [ ] Under each heading write only: activation trigger + "in addition to Core" placeholder
+- [ ] Update TOC to reflect the new parts
+- [ ] Commit: `refactor(playbook): add module and domain scaffolding`
+
+### Phase 2 — Surveillance Module (M1)
+
+- [ ] Move §§9, 11, 13, 14 into `M1 Surveillance` (Part III)
+- [ ] Rewrite the module intro: activation trigger = "Boundary Contract Map populated with at least
+      one outbound contract worth monitoring"
+- [ ] Scrub surveillance-specific wording from Core §8, §10, §12 (they stay in Core)
+- [ ] **Renumber Core** to close the gaps left by the extraction; sweep all (§...) cross-references
+- [ ] Commit: `refactor(playbook): extract Surveillance Module (M1) from Part II`
+
+### Phase 3 — Security split (Core §4 ↔ M2)
+
+- [ ] Core §4 slimmed to: §4.1 principles, §4.2 input-validation concept, §4.4 secrets
+- [ ] Move §4.3 auth, §4.5 PR checklist, §4.6 OWASP into `M2 Security-sensitive`
+- [ ] M2 activation trigger: "project handles authentication, authorisation, or PII"
+- [ ] Renumber Core §4 sub-sections contiguously; sweep (§4.x) cross-references
+- [ ] Commit: `refactor(playbook): split security into Core + M2 Security-sensitive`
+
+### Phase 4 — Testing split (Core §5 ↔ D5)
+
+- [ ] Core §5 keeps pyramid, coverage, test data, CI, assertion, schema-primary, two-layer regression
+- [ ] Move §5.9 golden queries into `D5 ML / Data Pipeline`
+- [ ] Renumber Core §5 sub-sections contiguously; sweep (§5.x) cross-references
+- [ ] Commit: `refactor(playbook): move domain-specific testing to modules`
+
+### Phase 5 — Documentation split (Core §6 ↔ D1/D2)
+
+- [ ] Core §6 keeps §6.1 required docs (universal subset), §6.2 code docs, §6.4 CHANGELOG
+- [ ] Move §6.3 API documentation into `D1 Web Service` and `D2 Library / SDK` appendices
+- [ ] Renumber Core §6 sub-sections contiguously; sweep (§6.x) cross-references
+- [ ] Commit: `refactor(playbook): split documentation into Core + domain appendices`
+
+### Phase 6 — CI/CD split (Core §7 ↔ D1/D5)
+
+- [ ] Core §7 keeps: §7.1 pipeline concept, §7.2 abstract stages, §7.3 rollback principle,
+      §7.6 configuration-as-code, §7.7 CI adapter pattern
+- [ ] Move §7.2 deploy specifics (Docker, blue-green), §7.5 environments into `D1 Web Service`
+- [ ] Move §7.4 database migration into `D5 ML / Data Pipeline`
+- [ ] Renumber Core §7 sub-sections contiguously; sweep (§7.x) cross-references
+- [ ] Commit: `refactor(playbook): split CI/CD into Core + D1 Web Service + D5 Data`
+
+### Phase 7 — Lifecycle generalisation (Core §15)
+
+- [ ] Rewrite §15 phases 0–4 so they do not mention surveillance, contract map, or Docker deploy
+      by default
+- [ ] Add activation notes: "if M1 Surveillance is active, also do X"
+- [ ] Commit: `refactor(playbook): generalise lifecycle phases`
+
+### Phase 8 — Module and domain content (MVP set)
+
+Full content for the MVP targets (D1, D4, D5, M1, M2, M4); stubs only for D2, D3, D6, D7, M3.
+**Split into sub-phases — one commit each — so token exhaustion never loses more than one module.**
+
+#### Phase 8.1 — D1 Web Service (full)
+- [ ] Trigger, extracted §§6.3, 7.2 specifics, 7.5; domain-specific testing patterns; deploy strategies
+- [ ] Commit: `refactor(playbook): flesh out D1 Web Service`
+
+#### Phase 8.2 — D4 Embedded / Firmware (full)
+- [ ] Trigger (fixed hardware target, memory/energy limits), hardware-in-loop testing, flash/OTA,
+      device-protocol contracts
+- [ ] Commit: `refactor(playbook): flesh out D4 Embedded / Firmware`
+
+#### Phase 8.3 — D5 ML / Data Pipeline (full)
+- [ ] Trigger, extracted §5.9 golden queries, §7.4 migrations, training pipeline, model drift,
+      dataset versioning
+- [ ] Commit: `refactor(playbook): flesh out D5 ML / Data Pipeline`
+
+#### Phase 8.4 — M1 Surveillance (polish)
+- [ ] Most content is already filled in Phase 2; this sub-phase polishes cross-references,
+      adds examples, ensures the activation trigger is sharp
+- [ ] Commit: `refactor(playbook): polish M1 Surveillance`
+
+#### Phase 8.5 — M2 Security-sensitive (polish)
+- [ ] Most content is already filled in Phase 3; polish, examples, sharpen trigger
+- [ ] Commit: `refactor(playbook): polish M2 Security-sensitive`
+
+#### Phase 8.6 — M4 Classification & Taxonomy (full, framework-agnostic)
+- [ ] Design principles (MECE, parsimony, stable IDs, semver of the taxonomy itself)
+- [ ] Governance (ownership, proposal/deprecation protocol, RFC for new terms)
+- [ ] **Scouting protocol** — the AI researches domain-specific frameworks per project; binds to
+      §1.7 SOTA Scout so scouting is a first-class, repeatable activity rather than an ad-hoc step
+- [ ] Adoption patterns — how to integrate a found framework without reinventing it
+- [ ] Audits (coverage, ambiguity, false-pos/neg metrics, drift over time)
+- [ ] Machine-readable formats (JSON Schema / JSON-LD / OWL / STIX-like serialisations)
+- [ ] Upstream contribution protocol — when a project's local extension deserves promotion back
+- [ ] Illustrative examples section (non-prescriptive): threat intel → MITRE ATT&CK/STIX/FT3;
+      vulnerability → CVE/CWE/CAPEC; sharing policy → TLP; intelligence cycle → F3EAD;
+      biomedicine → SNOMED/ICD; geospatial → ISO 19115. Examples exist to show the *shape*
+      of adoption, never as a default catalogue
+- [ ] Commit: `refactor(playbook): flesh out M4 Classification & Taxonomy`
+
+#### Phase 8.7 — Stubs (D2, D3, D6, D7, M3)
+- [ ] Each stub: heading + trigger + 2–3 bullets
+- [ ] Commit: `refactor(playbook): add stubs for D2, D3, D6, D7, M3`
+
+### Phase 9 — Appendices A/B/C reorganisation
+
+- [ ] Split Appendix A checklists into Core + per-module
+- [ ] Split Appendix B templates into Core + per-module
+- [ ] Update Appendix C glossary with new terms (D1–D7, M1–M3, "module", "domain")
+- [ ] Commit: `refactor(playbook): reorganise appendices by module`
+
+### Phase 10 — Final verification
+
+Renumbering happens incrementally in Phases 2–6 (never leave gaps). This phase is a full audit.
+
+- [ ] Verify Core §§ numbering is contiguous with no gaps or duplicates
+- [ ] Run a full (§...) cross-reference sweep: every reference resolves to an existing heading
+- [ ] Verify TOC matches actual headings
+- [ ] Absorb remaining `STRATEGY_TRANSFORMATION.md` content into the playbook; delete the file
+- [ ] Update `PROJECT_STATUS.md` to reflect the new state
+- [ ] Update `MODULARISATION_PLAN.md` status to "complete"
+- [ ] Commit: `refactor(playbook): finalise modularisation — audit, xrefs, status`
+
+---
+
+## Open questions
+
+None. All Phase 0 decisions are recorded in the Decisions log below.
+
+---
+
+## Decisions log (append-only)
+
+- 2026-04-18: Architecture frozen — `Core + Domain Appendices (D1–D7) + Cross-cutting Modules (M1–M4)`.
+- 2026-04-18: **Q1 MVP scope** — full content for D1, D4, D5, M1, M2, M4; stubs for D2, D3, D6, D7, M3.
+  Rationale: merit-based — D1/D4/D5 span three orthogonal runtime/deploy models (cloud, embedded
+  hardware, data pipeline) and jointly stress-test Core sobriety; M1/M2 are cheap extractions of
+  existing text; M4 validates the scouting-protocol binding to §1.7. Real-world projects
+  (Italian Job, SafeHeaven, Cortex) are illustrative references, not drivers.
+- 2026-04-18: **Q2 File layout** — single file `codex-machinae.md`. Split into separate files is
+  deferred until size forces it.
+- 2026-04-18: **Q3 Renumbering** — never leave numbering gaps. Renumber Core incrementally at the
+  end of every extraction phase; final sweep in Phase 10 is an audit, not a renumber.
+- 2026-04-18: **Q4 Surveillance framing** — Option A (cross-cutting module M1), consistent with
+  M2/M3/M4. Rationale: surveillance is a capability, not a project phase; it composes with any
+  domain.
+- 2026-04-18: **Added M4 Classification & Taxonomy** — cross-cutting module for MECE design,
+  governance, versioning, and the **scouting protocol** the AI follows per project to find
+  domain-specific frameworks. M4 is framework-agnostic: it does NOT ship a curated catalogue;
+  it directs the AI to research what exists in each project's domain (threat intel, biomedicine,
+  geospatial, …) and propose adoption. Illustrative examples (MITRE ATT&CK, STIX, FT3, CAPEC,
+  TLP, F3EAD, SNOMED, ICD, ISO 19115) are included only to show the *shape* of adoption, never
+  as defaults. Binds tightly to §1.7 SOTA Scout for repeatability. FT3 reference:
+  github.com/stripe/ft3 — Stripe's ATT&CK-style fraud taxonomy.
+
+---
+
+## Progress log (append-only, one line per session)
+
+- 2026-04-18 — Plan drafted (v1). Phase 0 opened.
+- 2026-04-18 — Phase 0 closed. MVP scope frozen. M4 added.
+- 2026-04-18 — M4 reframed: framework-agnostic scouting protocol (not a fixed catalogue);
+  binds to §1.7 SOTA Scout.
+- 2026-04-18 — Reference projects (Italian Job, SafeHeaven) reclassified as illustrative.
+  MVP rationale rewritten on merit.
+- 2026-04-18 — Further clarification: Italian Job and SafeHeaven are **downstream application
+  targets** (playbook → project). `example/00-prd.md` (Cortex) is **inspiration / quality
+  benchmark** — a well-structured reference whose rigour sets the bar, not a mechanical pattern
+  source. The playbook takes inspiration from Cortex but never copies it; the downstream projects
+  are post-MVP customers; their domain alignment with the MVP is coincidental, not causal.
+- 2026-04-18 — Added Resumption protocol (ground-truth hierarchy, resume steps, checkpoint
+  commit policy). Split Phase 8 into sub-phases 8.1–8.7 so token exhaustion loses at most one
+  module of work. Ready for Phase 1.
