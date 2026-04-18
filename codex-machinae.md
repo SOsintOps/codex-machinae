@@ -10,7 +10,7 @@ This playbook defines the entire lifecycle of a software project: from requireme
 
 ## Table of Contents
 
-### Part I — Development
+### Part I — Core (universal)
 
 1. [Requirements and planning](#1-requirements-and-planning)
 2. [Project structure](#2-project-structure)
@@ -19,21 +19,32 @@ This playbook defines the entire lifecycle of a software project: from requireme
 5. [Testing strategy](#5-testing-strategy)
 6. [Documentation](#6-documentation)
 7. [CI/CD and deployment](#7-cicd-and-deployment)
-
-### Part II — Surveillance and maintenance
-
 8. [Boundary Contracts](#8-boundary-contracts)
-9. [Surveillance agents](#9-surveillance-agents)
+9. [Surveillance agents](#9-surveillance-agents) *(candidate for M1 extraction)*
 10. [Change classification](#10-change-classification)
-11. [Compatibility test matrix](#11-compatibility-test-matrix)
+11. [Compatibility test matrix](#11-compatibility-test-matrix) *(candidate for M1 extraction)*
 12. [Remediation workflow](#12-remediation-workflow)
-13. [Compatibility database](#13-compatibility-database)
-14. [Self-testing and observability](#14-self-testing-and-observability)
-
-### Part III — Management
-
+13. [Compatibility database](#13-compatibility-database) *(candidate for M1 extraction)*
+14. [Self-testing and observability](#14-self-testing-and-observability) *(candidate for M1 extraction)*
 15. [Project lifecycle](#15-project-lifecycle)
 16. [Conventions for AI agents](#16-conventions-for-ai-agents)
+
+### Part II — Domain Appendices (activate per project type)
+
+- [D1 Web Service](#d1-web-service)
+- [D2 Library / SDK](#d2-library--sdk)
+- [D3 CLI Tool](#d3-cli-tool)
+- [D4 Embedded / Firmware](#d4-embedded--firmware)
+- [D5 ML / Data Pipeline](#d5-ml--data-pipeline)
+- [D6 Mobile App](#d6-mobile-app)
+- [D7 Static Site / Frontend-only](#d7-static-site--frontend-only)
+
+### Part III — Cross-cutting Modules (activate by trigger)
+
+- [M1 Surveillance](#m1-surveillance)
+- [M2 Security-sensitive](#m2-security-sensitive)
+- [M3 Release & Distribution](#m3-release--distribution)
+- [M4 Classification & Taxonomy](#m4-classification--taxonomy)
 
 ### Appendices
 
@@ -43,7 +54,13 @@ This playbook defines the entire lifecycle of a software project: from requireme
 
 ---
 
-# PART I — DEVELOPMENT
+# PART I — CORE (universal)
+
+The Core applies to every project regardless of type. Domain Appendices (Part II) and
+Cross-cutting Modules (Part III) add content on top of the Core when their activation trigger
+fires. Some Core sections below are marked as *candidates for module extraction* — they remain
+in Core during the in-flight modularisation and will move to the indicated module when the
+relevant phase of `MODULARISATION_PLAN.md` runs.
 
 ---
 
@@ -851,10 +868,6 @@ All CI logic that is specific to GitHub Actions (or GitLab, or Forgejo) lives un
 
 ---
 
-# PART II — SURVEILLANCE AND MAINTENANCE
-
----
-
 ## 8. Boundary Contracts
 
 A **boundary contract** is any promise the system makes to something outside its own implementation: a device, a human, a data store, another piece of code. The **Boundary Contract Map** is the structured inventory of these promises. It answers the question: **where exactly in the code does each contract live, and who is its counterparty?**
@@ -1138,10 +1151,6 @@ If the contract count drops > 10%, CI fails.
 
 ---
 
-# PART III — MANAGEMENT
-
----
-
 ## 15. Project lifecycle
 
 ### 15.1 Phase 0 — Ideation and requirements
@@ -1228,6 +1237,140 @@ For complex features, the agent MUST propose the approach in written form (docum
 ### 16.6 Structured logging
 
 Every agent action is logged as an event in the compatibility database. Everything is traceable, reproducible, and auditable.
+
+---
+
+# PART II — DOMAIN APPENDICES
+
+---
+
+Domain Appendices add project-type-specific content on top of the Core. Activate an appendix
+when its trigger fires; otherwise ignore it. Multiple appendices may be active for a single
+project (a web service that ships a client SDK activates D1 and D2).
+
+Each appendix adds content to the Core; it never replaces Core rules. If an appendix and the
+Core disagree, the Core wins unless the appendix explicitly marks the override.
+
+## D1 Web Service
+
+**Activation trigger.** The project exposes HTTP, REST, GraphQL, WebSocket, or gRPC endpoints
+to clients outside its own process.
+
+**In addition to Core.** *To be filled in Phase 8.1 — will include API documentation
+conventions (extracted from §6.3), deploy strategy (blue-green, rolling, canary — extracted
+from §7.2 specifics), environment taxonomy (§7.5), and request-path testing patterns.*
+
+## D2 Library / SDK
+
+**Activation trigger.** The project is published as a reusable package to a registry
+(npm, PyPI, Maven Central, crates.io, NuGet, RubyGems, Packagist, Go modules, …) or consumed
+directly via VCS reference as a library.
+
+**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover API surface
+documentation, semantic-versioning discipline for public contracts, deprecation policy,
+backwards-compatibility windows, and release notes.*
+
+## D3 CLI Tool
+
+**Activation trigger.** The project's primary interface is a command-line executable invoked
+by humans or by scripts.
+
+**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover argument/subcommand
+design, exit-code contracts, machine-readable output modes, shell completion, and
+installation channels.*
+
+## D4 Embedded / Firmware
+
+**Activation trigger.** The project runs on fixed hardware with bounded memory, storage,
+or energy; or requires toolchains cross-compiling to a target architecture; or depends on
+peripherals (sensors, radios, actuators) whose contracts are captured in the Boundary Contract
+Map under the Hardware axis.
+
+**In addition to Core.** *To be filled in Phase 8.2 — will include hardware-in-the-loop
+testing, flash/OTA update strategy, device-protocol contracts, power/thermal budgets, and
+bring-up checklists.*
+
+## D5 ML / Data Pipeline
+
+**Activation trigger.** The project trains or fine-tunes models, transforms datasets at scale,
+or persists structured data subject to schema evolution (relational or otherwise).
+
+**In addition to Core.** *To be filled in Phase 8.3 — will include golden queries (extracted
+from §5.9), database migration protocol (extracted from §7.4), training-pipeline reproducibility,
+dataset versioning, drift monitoring, and evaluation contracts.*
+
+## D6 Mobile App
+
+**Activation trigger.** The project ships to iOS App Store, Google Play, or any vendor-gated
+mobile distribution channel.
+
+**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover review/submission
+workflows, staged rollouts, on-device telemetry, crash reporting, and backwards-compatibility
+windows with prior OS versions.*
+
+## D7 Static Site / Frontend-only
+
+**Activation trigger.** The project renders entirely client-side or as a statically-generated
+site, with no backend owned by the project itself.
+
+**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover build/bundle budgets,
+hosting/CDN contracts, client-side error reporting, and accessibility audits.*
+
+---
+
+# PART III — CROSS-CUTTING MODULES
+
+---
+
+Cross-cutting Modules add capabilities that compose with any domain. Activate a module when
+its trigger fires. A module may be active alongside any set of Domain Appendices.
+
+Each module adds content to the Core; it never replaces Core rules.
+
+## M1 Surveillance
+
+**Activation trigger.** The Boundary Contract Map (§8) contains at least one outbound contract
+(dependency, upstream API, device driver, external data source) whose evolution must be
+tracked over time.
+
+**In addition to Core.** *To be filled in Phase 2 (extraction of §§9, 11, 13, 14) and polished
+in Phase 8.4. Will include surveillance agents, compatibility test matrix, compatibility
+database, and self-testing/observability patterns.*
+
+## M2 Security-sensitive
+
+**Activation trigger.** The project handles authentication, authorisation, or personally
+identifiable information; OR serves untrusted clients over a network; OR processes
+attacker-controlled input.
+
+**In addition to Core.** *To be filled in Phase 3 (extraction of §4.3, §4.5, §4.6) and polished
+in Phase 8.5. Will include auth/authorisation patterns, security PR checklist, and OWASP
+Top 10 mitigations.*
+
+## M3 Release & Distribution
+
+**Activation trigger.** The project ships versioned artefacts to external consumers
+(applies whenever D2, D3, D4, or D6 is active; may also apply to D1 when artefacts are
+published to an internal registry).
+
+**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover semver discipline,
+changelog automation, signing and provenance, release notes, and rollback-of-release
+protocols.*
+
+## M4 Classification & Taxonomy
+
+**Activation trigger.** The project owns, extends, or depends on a domain-specific ontological
+framework (threat intelligence, biomedical coding, geospatial metadata, fraud signalling,
+vulnerability cataloguing, …). If the project invents its own terminology, this module
+activates on the first naming decision.
+
+**In addition to Core.** *To be filled in Phase 8.6. Will include MECE design principles,
+taxonomy governance (ownership, RFC, deprecation), stable identifiers and their versioning,
+a scouting protocol binding to §1.7 SOTA Scout that directs the AI to discover domain-specific
+frameworks per project, adoption patterns, coverage/ambiguity audits, machine-readable
+serialisations, and an upstream contribution protocol. Framework-agnostic: ships no curated
+catalogue; examples (MITRE ATT&CK, STIX, FT3, CAPEC, TLP, F3EAD, SNOMED, ICD, ISO 19115) are
+illustrative of adoption shape only.*
 
 ---
 
