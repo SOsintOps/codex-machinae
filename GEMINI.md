@@ -8,7 +8,7 @@
 
 ## Project Objective
 
-Evolve `software-development-playbook.md` into a universal Meta-Framework for LLM-assisted software development, extracting general patterns from `example/00-prd.md` and promoting them into the playbook.
+Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted software development, extracting general patterns from `example/00-prd.md` and promoting them into the playbook.
 
 **Working Language:** British English for all documentation, commits, and agent outputs.
 
@@ -18,14 +18,14 @@ Evolve `software-development-playbook.md` into a universal Meta-Framework for LL
 
 ### 1. Dogfooding
 
-Gemini CLI MUST apply the conventions defined in `software-development-playbook.md` to manage this very repository — to the extent those conventions are still valid under the current Meta-Framework direction (see `STRATEGY_TRANSFORMATION.md`). Specifically:
+Gemini CLI MUST apply the conventions defined in `codex-machinae.md` to manage this very repository — to the extent those conventions are still valid under the current Meta-Framework direction (see `STRATEGY_TRANSFORMATION.md`). Specifically:
 
 - Keep `PROJECT_STATUS.md` up to date after every session.
 - Use Conventional Commits for every change.
 
 ### 2. Scope Discipline
 
-- This repository is in the **design phase**. Only `software-development-playbook.md`, `example/00-prd.md`, and the agent configs are in scope.
+- This repository is in the **design phase**. Only `codex-machinae.md`, `example/00-prd.md`, and the agent configs are in scope.
 - Do **not** reintroduce templates, bootstrap scripts, CI workflows, or release automation. Those are explicitly deferred until the playbook design stabilises.
 - Do **not** create folders like `docs/adr/`, `docs/prd/`, `docs/research/`, `src/`, `tests/`, etc. in this repo. They belong to generated projects, not to the playbook repo itself.
 

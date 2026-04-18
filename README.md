@@ -1,4 +1,4 @@
-# Dev Playbook
+# Codex Machinae
 
 Universal software development framework for LLM-assisted projects.
 
@@ -10,7 +10,7 @@ Universal software development framework for LLM-assisted projects.
 
 This repository holds two artefacts:
 
-1. `software-development-playbook.md` — the playbook under active design.
+1. `codex-machinae.md` — the playbook under active design.
 2. `example/00-prd.md` — the reference project (Cortex PRD) used as the concrete source from which general patterns are extracted and promoted into the playbook.
 
 Everything else in this repo is working configuration for the agents that collaborate on the design.
