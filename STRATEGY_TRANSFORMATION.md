@@ -1,14 +1,14 @@
 # Strategy Analysis & Transformation Roadmap
 
 **Role:** Senior Software Analyst
-**Goal:** Transform the `dev_playbook` repository from a collection of rigid documents into a **Universal Meta-Framework** for AI-assisted software development.
+**Goal:** Transform the `Codex Machinae` repository from a collection of rigid documents into a **Universal Meta-Framework** for AI-assisted software development.
 
 ---
 
 ## 1. Current State
 
 ### Methodological Documentation
-- `software-development-playbook.md`: A comprehensive document but too prescriptive about specific folders and tools (e.g. AST walker for REST API). It is in version `2.0.0 Draft`.
+- `codex-machinae.md`: A comprehensive document but too prescriptive about specific folders and tools (e.g. AST walker for REST API). It is in version `2.0.0 Draft`.
 - `AI-AGENTS.md` & `GEMINI.md`: Operational rules for agents, currently heavily tied to text management and translation.
 - `PROJECT_STATUS.md`: Correctly follows the format, documenting the development of the playbook itself.
 
@@ -56,6 +56,6 @@ To clean the repository and align it with the new vision, we must remove the "no
 ---
 
 ## Suggested Next Steps
-1.  Begin refactoring `software-development-playbook.md` starting with the **"Emergent Architecture"** and **"Abstract Surface Definition"** sections.
+1.  Begin refactoring `codex-machinae.md` starting with the **"Emergent Architecture"** and **"Abstract Surface Definition"** sections.
 2.  Consolidate the `.claude/agents/` folder.
 3.  Update `scripts/new-project.sh` so that it creates only the "Minimum Core of Existence" (Status, Claude, README).

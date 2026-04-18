@@ -1,4 +1,4 @@
-# Software Development Playbook
+# Codex Machinae
 
 **Version:** 2.0.0 — Draft
 **Last updated:** 2026-04-15
@@ -586,7 +586,7 @@ Every web application MUST be protected against the current OWASP Top 10. The te
 - Every contract in the Boundary Contract Map has at least one contract test
 - Validation uses JSON Schema with `additionalProperties: true` (new fields do not break it)
 - Fixtures are generated from real interactions, not written by hand
-- Set-based assertion for responses with non-guaranteed ordering
+- Assertion discipline follows §5.6 (set-based when order is not part of the contract)
 
 **Integration tests:**
 - Every critical flow (login, main CRUD, payment) has at least one integration test
@@ -624,7 +624,7 @@ The escape valve is tracked and reviewed weekly. No escape valve may remain open
 
 - **Inline creation.** Tests create the data they need inline, not from shared fixture files. This makes every test self-documenting and independent.
 - **Factory pattern.** For complex data, use factory functions that produce valid objects with sensible defaults and targeted overrides.
-- **Golden files.** Only for snapshot testing (UI rendering, response schema). Updated explicitly with a flag (`--update-snapshots`), never silently.
+- **Golden files.** Only for true snapshot testing (UI rendering, rendered documents). For API and data contracts prefer schema-primary validation (§5.7); golden files there couple tests to incidental output ordering and drift silently. Updated explicitly with a flag (`--update-snapshots`), never silently.
 - **Seed script.** For development databases, a deterministic script that populates realistic data. Separate from the tests.
 
 ### 5.5 Tests in CI
@@ -636,6 +636,54 @@ The escape valve is tracked and reviewed weekly. No escape valve may remain open
 | Merge to main | Unit + scenario + integration + E2E | 30 min | Per-tier |
 | Scheduled (nightly) | All + full compat matrix | 60 min | Per-slot |
 | Release tag | All + smoke tests on staging | 45 min | Sequential |
+
+### 5.6 Assertion discipline: set-based vs sequence-based
+
+Before writing an assertion, decide which of the two shapes the contract actually guarantees; the wrong choice turns every unrelated reorder into a red build.
+
+| Shape | Use when | Assertion form |
+|-------|----------|----------------|
+| **Set-based** | Order is not part of the contract (listings without `ORDER BY`, parallel fan-in, unordered collections) | Compare as sets or multisets; assert membership and cardinality, not position |
+| **Sequence-based** | Order is part of the contract (sorted endpoints, pagination, event streams, log replays) | Compare as ordered lists; any position change is a real failure |
+
+Flakiness from "wrong shape" assertions must be fixed by changing the assertion, not by pinning the implementation to a coincidental order.
+
+### 5.7 Schema-primary validation for contracts
+
+Every outbound or inbound contract on the Boundary Contract Map (§8) is validated primarily against its schema — shape, types, required fields, value ranges, enum membership — and only secondarily against concrete example payloads.
+
+Rules:
+
+- The schema is the source of truth; fixture payloads exist to exercise the schema, not to pin exact bytes
+- `additionalProperties: true` on inbound contracts (tolerant reader), `additionalProperties: false` on outbound contracts owned by the project (strict producer)
+- Enum values are never duplicated across schema and code — both point to a single declaration (see §6.3)
+- A schema change on a shared contract is a contract-breaking change (§12.6) regardless of whether any current consumer happens to tolerate it
+
+Golden-file equality is reserved for artefacts where the whole byte sequence *is* the contract (rendered UI snapshots, generated documents, wire-format fixtures). Using golden files for structured API responses couples the test to ordering and serialisation choices that the contract does not actually guarantee.
+
+### 5.8 Two-layer regression snapshots
+
+When the project consumes data or behaviour produced by an upstream system (external API, library output, generated schema, LLM-scored output), snapshots are split into two layers that are reviewed differently:
+
+| Layer | What it captures | Review posture |
+|-------|------------------|----------------|
+| **Upstream layer** | Output of the upstream system as seen by the project | A diff here is expected whenever upstream changes; review confirms the change is benign and the project still satisfies its contracts |
+| **Project layer** | Output of the project's own code given a fixed input | A diff here is a regression of the project itself and must be explained before merge |
+
+Conflating the two layers makes every upstream update look like a project regression and trains reviewers to rubber-stamp snapshot updates. Keep the files separate (e.g. `snapshots/upstream/` vs `snapshots/project/`) and require different reviewers or different labels for updates to each.
+
+### 5.9 Golden queries for data migrations
+
+For any migration that alters schema or rewrites data, maintain a small curated set of **golden queries** — canonical read queries whose results must match before and after the migration (modulo an explicit, documented allow-list of intentional differences).
+
+Rules:
+
+- Golden queries live alongside the migration script, version-controlled with it
+- They are executed automatically against a pre-migration snapshot and the post-migration state; any unexplained divergence blocks promotion of the migration
+- Each query has a short rationale explaining which invariant it protects (row counts per tenant, aggregate totals, referential integrity across renamed tables, …)
+- "Intentional difference" entries are not free-form prose: they are a structured list referenced from the migration's remediation record (§12)
+
+Golden queries are complementary to schema migrations' own tests; they catch semantic drift that schema-level checks miss (e.g. a column renamed correctly but backfilled with the wrong default).
 
 ---
 
