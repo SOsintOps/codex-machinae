@@ -342,6 +342,8 @@ Renumbering happens incrementally in Phases 2–6 (never leave gaps). This phase
 - [ ] Absorb remaining `STRATEGY_TRANSFORMATION.md` content into the playbook; delete the file
 - [ ] Update `PROJECT_STATUS.md` to reflect the new state
 - [ ] Update `MODULARISATION_PLAN.md` status to "complete"
+- [ ] **Remove the WORK IN PROGRESS notice from `README.md`** (added under the ASCII art at
+      the start of modularisation; must come off when the playbook design is stable)
 - [ ] Commit: `refactor(playbook): finalise modularisation — audit, xrefs, status`
 
 ---

@@ -1,3 +1,22 @@
+```
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│            ▄████▄   ▒█████  ▓█████▄ ▓█████ ▒██   ██▒         │
+│           ▒██▀ ▀█  ▒██▒  ██▒▒██▀ ██▌▓█   ▀ ▒▒ █ █ ▒░         │
+│           ▒▓█    ▄ ▒██░  ██▒░██   █▌▒███   ░░  █   ░         │
+│           ▒▓▓▄ ▄██▒▒██   ██░░▓█▄   ▌▒▓█  ▄  ░ █ █ ▒          │
+│           ▒ ▓███▀ ░░ ████▓▒░░▒████▓ ░▒████▒▒██▒ ▒██▒         │
+│                                                              │
+│         ▀▀▀▀▀▀▀▀▀▀▀▀  M A C H I N A E  ▀▀▀▀▀▀▀▀▀▀▀▀          │
+│                                                              │
+│            ·  universal llm-assisted playbook  ·             │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+> [!CAUTION]
+> **WORK IN PROGRESS — THIS PLAYBOOK IS UNDER ACTIVE DESIGN. CONTENT, STRUCTURE, AND CROSS-REFERENCES MAY CHANGE WITHOUT NOTICE.**
+
 # Codex Machinae
 
 Universal software development framework for LLM-assisted projects.
