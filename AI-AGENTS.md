@@ -26,6 +26,8 @@ All shared rules live here. Agent-specific files must not contradict this docume
 
 **Current scope:** design only. No templates, scaffolds, scripts, or CI until the playbook design stabilises.
 
+**Active refactor:** `MODULARISATION_PLAN.md` is the durable source of truth for the ongoing split of the playbook into Core + Domain Appendices (D1–D7) + Cross-cutting Modules (M1–M3). Any agent resuming work on the playbook structure MUST read this file first, respect its phased execution, and append to its Progress log at the end of each session. The plan may pause mid-phase across sessions — resume from the first unchecked step in the current phase.
+
 ---
 
 ## Language and Style
@@ -49,10 +51,11 @@ All shared rules live here. Agent-specific files must not contradict this docume
 ## Workflow (all agents)
 
 1. Read `PROJECT_STATUS.md` to understand current context before acting.
-2. Plan before acting on any non-trivial change.
-3. Apply changes surgically; do not refactor beyond the task scope.
-4. Update `PROJECT_STATUS.md` at the end of each session.
-5. Commit with Conventional Commits.
+2. If `MODULARISATION_PLAN.md` exists and its Progress log shows the refactor is open, treat it as the active work plan: read it end-to-end before touching the playbook, and honour Phase 0 gates before moving any content.
+3. Plan before acting on any non-trivial change.
+4. Apply changes surgically; do not refactor beyond the task scope.
+5. Update `PROJECT_STATUS.md` at the end of each session; if a modularisation phase advanced, also append to the Progress log in `MODULARISATION_PLAN.md`.
+6. Commit with Conventional Commits.
 
 ## Editorial Rules
 

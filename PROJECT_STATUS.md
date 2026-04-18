@@ -20,6 +20,5 @@ Design. The repository has been stripped of premature scaffolding (templates, bo
 - Roadmap: `STRATEGY_TRANSFORMATION.md` — Phase A points 1, 2, 3, 5 executed. Phase A point 4 (abstract remediation) executed. Phase B (Guest Agent), Phase C (Lessons Learned loop), Phase D (independent versioning) pending.
 
 ## Next Action
-1. Frame Part II (§§8–14) as the optional "Surveillance module" activated by Emergent Expansion when a project has tracked contracts.
-2. Begin Phase C: draft the Lessons Learned Report template and the Promotion protocol (pattern from project → playbook).
-3. Absorb `STRATEGY_TRANSFORMATION.md` into the playbook where its ideas have landed, then remove it from the repo.
+1. **Execute `MODULARISATION_PLAN.md`** — split the playbook into Core + Domain Appendices (D1–D7) + Cross-cutting Modules (M1–M3). The plan file is the durable source of truth for the refactor; it supersedes the three items previously listed here (Surveillance module extraction is Phase 2; `STRATEGY_TRANSFORMATION.md` absorption is Phase 10). Currently blocked on Phase 0 human gate: confirm the classification table and answer the four Open Questions.
+2. Begin Phase C (Lessons Learned Report template + Promotion protocol) — deferred until modularisation lands, then slot it in as a new Core section.

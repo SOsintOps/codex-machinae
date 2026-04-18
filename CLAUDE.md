@@ -19,6 +19,7 @@
 
 ## Scope Discipline
 - Design phase only. Do not reintroduce templates, scripts, CI, or folder scaffolds (`docs/adr/`, `src/`, `tests/`, etc.). Tooling is deferred until the playbook design stabilises.
+- Active refactor: if `MODULARISATION_PLAN.md` has an open phase, follow it — read the plan before touching the playbook, respect the Phase 0 human gate, and append to the Progress log when a phase advances.
 
 ## Editorial Rules
 - Maximum line length: 120 characters.
