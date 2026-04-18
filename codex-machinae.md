@@ -663,18 +663,7 @@ When the project consumes data or behaviour produced by an upstream system (exte
 
 Conflating the two layers makes every upstream update look like a project regression and trains reviewers to rubber-stamp snapshot updates. Keep the files separate (e.g. `snapshots/upstream/` vs `snapshots/project/`) and require different reviewers or different labels for updates to each.
 
-### 5.9 Golden queries for data migrations
-
-For any migration that alters schema or rewrites data, maintain a small curated set of **golden queries** — canonical read queries whose results must match before and after the migration (modulo an explicit, documented allow-list of intentional differences).
-
-Rules:
-
-- Golden queries live alongside the migration script, version-controlled with it
-- They are executed automatically against a pre-migration snapshot and the post-migration state; any unexplained divergence blocks promotion of the migration
-- Each query has a short rationale explaining which invariant it protects (row counts per tenant, aggregate totals, referential integrity across renamed tables, …)
-- "Intentional difference" entries are not free-form prose: they are a structured list referenced from the migration's remediation record (§10)
-
-Golden queries are complementary to schema migrations' own tests; they catch semantic drift that schema-level checks miss (e.g. a column renamed correctly but backfilled with the wrong default).
+Data-migration-specific testing patterns (golden queries that compare pre- and post-migration read results) live in D5 ML / Data Pipeline, which activates whenever the project persists structured data subject to schema evolution.
 
 ---
 
@@ -1129,9 +1118,25 @@ bring-up checklists.*
 **Activation trigger.** The project trains or fine-tunes models, transforms datasets at scale,
 or persists structured data subject to schema evolution (relational or otherwise).
 
-**In addition to Core.** *To be filled in Phase 8.3 — will include golden queries (extracted
-from §5.9), database migration protocol (extracted from §7.4), training-pipeline reproducibility,
-dataset versioning, drift monitoring, and evaluation contracts.*
+**In addition to Core.** Core §5 testing fundamentals apply. This appendix adds the testing
+patterns that only arise when data is being reshaped, and will grow to cover pipeline-
+reproducibility, dataset versioning, drift monitoring, and evaluation contracts.
+
+### D5.1 Golden queries for data migrations
+
+For any migration that alters schema or rewrites data, maintain a small curated set of **golden queries** — canonical read queries whose results must match before and after the migration (modulo an explicit, documented allow-list of intentional differences).
+
+Rules:
+
+- Golden queries live alongside the migration script, version-controlled with it
+- They are executed automatically against a pre-migration snapshot and the post-migration state; any unexplained divergence blocks promotion of the migration
+- Each query has a short rationale explaining which invariant it protects (row counts per tenant, aggregate totals, referential integrity across renamed tables, …)
+- "Intentional difference" entries are not free-form prose: they are a structured list referenced from the migration's remediation record (§10)
+
+Golden queries are complementary to schema migrations' own tests; they catch semantic drift that schema-level checks miss (e.g. a column renamed correctly but backfilled with the wrong default).
+
+*Further D5 content (database migration protocol from §7.4, training-pipeline reproducibility,
+dataset versioning, drift monitoring, evaluation contracts) to be filled in Phase 8.3.*
 
 ## D6 Mobile App
 
