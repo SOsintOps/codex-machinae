@@ -1163,6 +1163,90 @@ For complex features, the agent MUST propose the approach in written form (docum
 
 Every agent action is logged as an event in the compatibility database. Everything is traceable, reproducible, and auditable.
 
+### 12.7 Multi-agent coordination (optional)
+
+This subsection activates only when the analyst chooses to employ more than one agent on
+the same project. It is not a requirement — single-agent operation remains the default.
+The protocol is LLM-agnostic: an "agent" may be any model (Claude, Gemini, Copilot, or
+any other provider). Multi-agent covers both multiple instances of the same LLM and
+mixed-LLM teams. Every participating agent must individually comply with §§12.1–12.6
+regardless of the coordination protocol.
+
+#### 12.7.1 Lead agent designation
+
+The analyst nominates one agent as the **lead**. The lead is the single writer for
+coordination artefacts (`PROJECT_STATUS.md`, the Boundary Contract Map, `CHANGELOG.md`).
+All other agents read those files but do not modify them. If an agent needs a
+coordination artefact updated, it requests the change from the lead or from the analyst.
+
+The lead designation is recorded in the project's agent-configuration file (§2.4) so
+that every agent can identify it at session start.
+
+#### 12.7.2 Scope partitioning
+
+Each agent receives an explicit perimeter before starting work. Partitioning may be by:
+
+| Strategy | When to use | Example |
+|----------|-------------|---------|
+| **By module/domain** | Large projects with independent subsystems | Agent A owns D1, Agent B owns D5 |
+| **By directory** | When module boundaries map cleanly to folders | Agent A owns `src/api/`, Agent B owns `src/ml/` |
+| **By user story** | Sprint-based work with non-overlapping stories | Agent A works on US-007, Agent B on US-012 |
+
+The analyst documents the partition in the agent-configuration file or in
+`PROJECT_STATUS.md`. An agent must not operate outside its assigned perimeter without
+explicit analyst approval.
+
+#### 12.7.3 Conflict prevention
+
+1. **File-level exclusivity** — a file being modified by one agent is off-limits to
+   others until the change is committed. Agents declare intent before editing by noting
+   the target file in their session log.
+2. **Lead coordination** — when two agents must touch the same file, the lead (or the
+   analyst) determines the sequence. The second agent waits until the first agent's
+   commit is merged.
+3. **Merge conflicts** — if a conflict arises despite the protocol, resolution always
+   requires human intervention. No agent auto-resolves merge conflicts in a multi-agent
+   context.
+
+#### 12.7.4 Shared artefacts protocol
+
+Files are classified by write access:
+
+| Category | Write access | Examples |
+|----------|-------------|----------|
+| **Single-writer** | Lead agent only | `PROJECT_STATUS.md`, contract map (§8), `CHANGELOG.md` |
+| **Partitioned** | Owning agent per scope partition | Source code, tests, domain-specific docs |
+| **Human-only** | No agent writes without explicit approval | Never-auto-merge list (§9.3), agent-configuration file (§2.4) |
+
+An agent encountering a file outside its write-access category must request the change
+through the lead or the analyst rather than editing directly.
+
+#### 12.7.5 Inter-agent handover
+
+When work passes from one agent to another (shift change, scope transfer, or escalation),
+the outgoing agent produces a structured handover note:
+
+| Field | Content |
+|-------|---------|
+| **Scope completed** | List of files changed, stories closed, tests added |
+| **Decisions taken** | Architectural or design choices made during the session |
+| **Open blockers** | Issues that prevented completion, with root-cause hypotheses |
+| **Context for the next agent** | Key findings, relevant file locations, state of any in-progress work |
+
+The handover note is appended to the session log or committed as a standalone file in
+the project's documentation directory. The receiving agent reads it before starting work.
+
+#### 12.7.6 Mixed-LLM considerations
+
+When agents from different LLM providers collaborate:
+
+- Each agent's configuration file (§2.4) is provider-specific (`CLAUDE.md`, `GEMINI.md`,
+  etc.) but all share the common rules in `AI-AGENTS.md`.
+- Agents must not assume shared context or memory between providers. All coordination
+  happens through committed artefacts, not through implicit state.
+- The analyst is responsible for ensuring that provider-specific instructions do not
+  contradict the shared rules or the scope partition.
+
 ---
 
 # PART II — DOMAIN APPENDICES
@@ -2305,6 +2389,27 @@ This checklist applies when adopting Codex Machinae on an existing project (§11
 - [ ] Target phase determined (Phase 2 or Phase 3)
 - [ ] `PROJECT_STATUS.md` created or updated to reflect current phase
 
+### A.9 Multi-agent setup checklist (§12.7 — when activated)
+
+This checklist applies only when the analyst has chosen to employ multiple agents.
+
+**Designation and partitioning**
+
+- [ ] Lead agent nominated and recorded in agent-configuration file (§12.7.1)
+- [ ] Scope partition defined and documented (§12.7.2)
+- [ ] Each agent's perimeter confirmed as non-overlapping
+- [ ] Write-access categories assigned to shared artefacts (§12.7.4)
+
+**Mixed-LLM (if applicable)**
+
+- [ ] Provider-specific config files consistent with shared `AI-AGENTS.md` (§12.7.6)
+- [ ] No contradictions between provider-specific instructions and scope partition
+
+**Operational**
+
+- [ ] Handover note format agreed (§12.7.5)
+- [ ] Conflict-prevention protocol understood by all participating agents (§12.7.3)
+
 ---
 
 ## Appendix B — Templates
@@ -2736,3 +2841,6 @@ source: "upstream:[framework-name] | local"
 | **Retrofit audit** | Structured gap assessment between a project's current state and the playbook's expectations (§11.6.1) |
 | **Debt-scoping** | The process of measuring the distance between an existing project and playbook conformance (§11.6.1) |
 | **Adoption tier** | Priority grouping (T1 safety net, T2 structure, T3 process) for ordering retrofit work (§11.6.3) |
+| **Lead agent** | The agent designated as single writer for coordination artefacts in a multi-agent setup (§12.7.1) |
+| **Scope partition** | Explicit assignment of non-overlapping work perimeters to agents in a multi-agent setup (§12.7.2) |
+| **Inter-agent handover** | Structured note transferring context from one agent to another during shift change or scope transfer (§12.7.5) |
