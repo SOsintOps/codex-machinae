@@ -1969,7 +1969,13 @@ exist.
 
 ## Appendix A — Phase checklists
 
+Each checklist is split into **Core** items (always apply) and **conditional** blocks that
+activate only when the named module or domain appendix is active. Skip a conditional block
+entirely when its trigger has not fired.
+
 ### A.1 Phase 0 checklist (Requirements)
+
+**Core**
 
 - [ ] PRD written with all mandatory sections (§1.2)
 - [ ] State-of-the-art research conducted for the project domain (§1.7)
@@ -1980,27 +1986,50 @@ exist.
 - [ ] Definition of Done defined and shared
 - [ ] Critical dependencies identified in `DEPENDENCIES.md` (with alternatives comparison §1.7.1)
 
+**When M4 Classification & Taxonomy is active**
+
+- [ ] Scouting protocol (M4.3) executed for every domain the project touches
+- [ ] Taxonomy decisions recorded in `docs/taxonomy/registry.md`
+
 ### A.2 Phase 1 checklist (Bootstrap)
+
+**Core**
 
 - [ ] Directory structure created (§2.1)
 - [ ] Linter + formatter configured and integrated into CI (§3.4)
 - [ ] Base CI pipeline working (build + lint + unit) (§7)
-- [ ] `CLAUDE.md` written (§2.3)
+- [ ] Agent configuration written (§2.4)
 - [ ] Contract map generated (even manually) (§8)
+- [ ] `.env.example` with all variables documented (§4.3)
+- [ ] Initial coverage baseline committed (§5.3)
+
+**When M1 Surveillance is active**
+
 - [ ] Surveillance agents configured (M1.1)
 - [ ] First compatibility record created (`untested`)
-- [ ] `.env.example` with all variables documented (§4.3)
-- [ ] Secret scan configured in CI (M2.2)
-- [ ] Seed script for development database (§5.4)
-- [ ] Initial coverage baseline committed (§5.3)
 - [ ] Heartbeat alert configured (threshold: 6 hours) (M1.4.1)
 
+**When M2 Security-sensitive is active**
+
+- [ ] Secret scan configured in CI (M2.2)
+
+**When the project has persistent structured data**
+
+- [ ] Seed script for development database (§5.4)
+
+**When D4 Embedded / Firmware is active**
+
+- [ ] Toolchain version locked (D4.2)
+- [ ] Binary-size baseline committed (D4.2)
+- [ ] Power budget document created (D4.5)
+
 ### A.3 Checklist for every PR
+
+**Core**
 
 - [ ] Code follows naming conventions (§3.2)
 - [ ] Commit message in Conventional Commits format (§3.3)
 - [ ] No lint warnings (§3.4)
-- [ ] No secrets committed (M2.2)
 - [ ] Input validated with schema at every boundary (§4.2)
 - [ ] Tests written for new/modified code (§5)
 - [ ] Coverage has not dropped below baseline (§5.3)
@@ -2008,18 +2037,71 @@ exist.
 - [ ] Contract map updated if dependencies added/removed (§8)
 - [ ] Errors handled explicitly, no empty catch blocks (§3.6)
 
+**When M2 Security-sensitive is active**
+
+- [ ] No secrets committed (verified by tools: `trufflehog`, `gitleaks`) (M2.2)
+- [ ] Parameterised queries — no SQL concatenation (M2.2)
+- [ ] Errors do not expose stack traces or internal details to the user (M2.2)
+- [ ] Security headers present (CSP, X-Frame-Options, X-Content-Type-Options) (M2.2)
+- [ ] Dependencies free of known vulnerabilities (M2.4)
+- [ ] Logs do not contain PII or secrets (M2.2)
+
+**When D1 Web Service is active**
+
+- [ ] Rate limiting configured for public endpoints (D1.5)
+- [ ] Negative-path tests cover the endpoint (D1.4)
+
+**When D4 Embedded / Firmware is active**
+
+- [ ] Binary size has not regressed beyond threshold (D4.2)
+- [ ] Power budget updated if a component or duty cycle changed (D4.5)
+
+**When M4 Classification & Taxonomy is active**
+
+- [ ] Taxonomy terms follow MECE and parsimony principles (M4.1)
+- [ ] Machine-readable serialisation updated if taxonomy changed (M4.6)
+
 ### A.4 Checklist for release
+
+**Core**
 
 - [ ] All tests pass across all tiers (§5.5)
 - [ ] CHANGELOG.md updated (§6.3)
 - [ ] Version tag created (§3.8)
-- [ ] Pre-production smoke tests green on promotion (§7.2.3)
+- [ ] Pre-production smoke tests green on promotion (§7.2)
 - [ ] Rollback tested (§7.3)
-- [ ] Database migration tested (up AND down) (D5.2, where applicable)
-- [ ] API documentation updated (D1.1 / D2.1 / D3.1, where applicable)
+
+**When D1 Web Service is active**
+
+- [ ] API documentation regenerated (D1.1)
+- [ ] Health and readiness endpoints verified (D1.6)
+
+**When D2 Library / SDK is active**
+
+- [ ] API documentation regenerated (D2.1)
+
+**When D3 CLI Tool is active**
+
+- [ ] CLI documentation regenerated (D3.1)
+
+**When D4 Embedded / Firmware is active**
+
+- [ ] Firmware image signed (D4.4)
+- [ ] A/B partition rollback verified (D4.4)
+- [ ] Bring-up checklist completed for new board revisions (D4.6)
+
+**When D5 ML / Data Pipeline is active**
+
+- [ ] Database migration tested (up AND down) (D5.2)
+- [ ] Evaluation contract passed for any updated model (D5.6)
+
+**When M1 Surveillance is active**
+
 - [ ] Compat database updated with current state (M1.3)
 
-### A.5 Surveillance checklist
+### A.5 Surveillance checklist (M1 — periodic)
+
+This checklist applies only when M1 Surveillance is active.
 
 - [ ] Agents active with recent heartbeat (< 6 hours) (M1.4.1)
 - [ ] Weekly canary passed (M1.4.3)
@@ -2030,6 +2112,26 @@ exist.
 - [ ] Thresholds reviewed quarterly (M1.4)
 - [ ] State-of-the-Art Scout run in the current quarter (§1.7.5, M1.1.2.6)
 - [ ] SOTA reports reviewed and actions planned for `evaluate` or `migrate` signals
+
+### A.6 Security review checklist (M2 — periodic)
+
+This checklist applies only when M2 Security-sensitive is active.
+
+- [ ] OWASP Top 10 review table updated within the past 12 months (M2.3)
+- [ ] Dependency-vulnerability backlog triaged — no critical/high advisories past SLA (M2.4)
+- [ ] Secret-scanning tool coverage verified (no new file patterns excluded) (M2.2)
+
+### A.7 Taxonomy audit checklist (M4 — quarterly)
+
+This checklist applies only when M4 Classification & Taxonomy is active.
+
+- [ ] Coverage audit completed (M4.5)
+- [ ] Ambiguity audit completed (M4.5)
+- [ ] False-positive audit completed (M4.5)
+- [ ] Drift audit completed (M4.5)
+- [ ] Staleness audit completed — stale terms sent to deprecation review (M4.5)
+- [ ] Machine-readable serialisation in sync with human-readable docs (M4.6)
+- [ ] Upstream contributions tracked and statuses updated (M4.7)
 
 ---
 
@@ -2153,6 +2255,69 @@ So that [benefit]
 - **Pinned:** yes | no (range)
 ```
 
+### B.5 Compatibility record template (M1)
+
+```json
+{
+  "dependency": "[name]",
+  "version": "[version that triggered the cycle]",
+  "detected_at": "YYYY-MM-DDTHH:MM:SSZ",
+  "source": "[agent id: pkg-watch | api-probe | docs-watch | security-watch | container-watch]",
+  "slots": {
+    "latest": { "version": "[resolved]", "result": "pass | fail | error" },
+    "recent": { "version": "[resolved]", "result": "pass | fail | error" },
+    "baseline": { "version": "[resolved]", "result": "pass | fail | error" }
+  },
+  "rollup": "pass | fail | partial",
+  "severity": "L0 | L1 | L2",
+  "events": [
+    { "type": "detected", "at": "...", "by": "..." },
+    { "type": "classified", "at": "...", "severity": "..." },
+    { "type": "remediated | adopted", "at": "...", "pr": "..." }
+  ]
+}
+```
+
+### B.6 OWASP review template (M2)
+
+```markdown
+# OWASP Top 10 Review — [Year]
+
+**Reviewed by:** [name]
+**Date:** YYYY-MM-DD
+**OWASP version:** [e.g. 2021]
+
+| # | Item | Covered by | Verified how | Status |
+|---|------|-----------|-------------|--------|
+| A01 | Broken Access Control | | | ✅ / ⚠️ / ❌ |
+| A02 | Cryptographic Failures | | | |
+| A03 | Injection | | | |
+| A04 | Insecure Design | | | |
+| A05 | Security Misconfiguration | | | |
+| A06 | Vulnerable and Outdated Components | | | |
+| A07 | Identification and Authentication Failures | | | |
+| A08 | Software and Data Integrity Failures | | | |
+| A09 | Security Logging and Monitoring Failures | | | |
+| A10 | Server-Side Request Forgery (SSRF) | | | |
+
+## Actions
+[List any items that are not fully covered, with remediation plan]
+```
+
+### B.7 Taxonomy term template (M4)
+
+```yaml
+id: "[NAMESPACE]-[NUMBER]"
+label: "[Human-readable name]"
+description: "[One-sentence definition]"
+parent: "[parent term ID, or null if top-level]"
+status: "active | deprecated"
+deprecated_successor: "[successor term ID, if deprecated]"
+deprecated_sunset: "YYYY-MM-DD"
+introduced_in: "[taxonomy version, e.g. 1.2.0]"
+source: "upstream:[framework-name] | local"
+```
+
 ---
 
 ## Appendix C — Glossary
@@ -2164,6 +2329,8 @@ So that [benefit]
 | **User Story** | Functional requirement from the user's perspective |
 | **Acceptance Criteria** | Binary conditions that define "done" |
 | **Definition of Done** | Universal checklist applied to every work item |
+| **Domain appendix** | A section of the playbook (D1–D7) that adds project-type-specific content on top of Core when its activation trigger fires |
+| **Cross-cutting module** | A section of the playbook (M1–M4) that adds capability-specific content composable with any domain when its activation trigger fires |
 | **Boundary contract** | A promise the system makes to something outside its own implementation (hardware, UI, data, API); can be inbound (exposed) or outbound (consumed) |
 | **Boundary Contract Map** | Structured inventory of all boundary contracts, tagged by axis and direction (§8) |
 | **Bucket** | Change category (api-endpoint, data-model, etc.) |
@@ -2182,7 +2349,18 @@ So that [benefit]
 | **Blue-green deploy** | Deployment strategy using two alternating environments |
 | **Rolling update** | Gradual deployment that replaces instances one at a time |
 | **Feature flag** | Toggle that enables/disables a feature without deployment |
+| **HAL** | Hardware Abstraction Layer — thin interface isolating application code from peripheral access (D4.1) |
+| **HIL** | Hardware-in-the-loop — test tier that exercises code on real hardware or a cycle-accurate simulator (D4.3) |
+| **Data drift** | Divergence of incoming feature distributions from the training distribution (D5.5) |
+| **Concept drift** | Change in the relationship between features and the target, degrading model quality (D5.5) |
+| **Evaluation contract** | Versioned specification of how a model's quality is measured before promotion (D5.6) |
+| **Taxonomy** | A structured classification of terms in a domain, following MECE and parsimony principles (M4.1) |
+| **Scouting protocol** | The process by which the AI discovers domain-specific frameworks for adoption (M4.3) |
+| **MECE** | Mutually Exclusive, Collectively Exhaustive — design constraint for taxonomies (M4.1) |
 | **SOTA Scout** | Agent that researches the state of the art for project technologies and patterns |
 | **Technology health check** | Periodic health verification of a technology (releases, community, trends) |
 | **Alternative scanning** | Search for libraries or services alternative to those in use |
 | **Pattern evolution** | Monitoring of the evolution of architectural best practices in the industry |
+| **Back-pressure** | Load-shedding mechanism (circuit breaker, timeout, bulkhead) preventing cascading failure (D1.5) |
+| **OTA** | Over-the-air — firmware update delivered via network (D4.4) |
+| **A/B partitioning** | Firmware update strategy maintaining two slots for automatic rollback (D4.4) |

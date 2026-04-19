@@ -565,3 +565,10 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
 - 2026-04-19 — Phase 8.7 executed as a single commit. All Phase 8 sub-phases (8.1–8.7)
   closed. Phase 8 marked CLOSED. PROJECT_STATUS.md updated. Ready for Phase 9
   (Appendices A/B/C reorganisation).
+- 2026-04-19 — Phase 9 intent: reorganise Appendices A, B, C. Appendix A: split each
+  checklist into Core items (always apply) + conditional blocks gated by module/domain
+  activation (M1, M2, D1, D4, D5, M4). Add new checklists for D4 Embedded and M4
+  Taxonomy. Appendix B: add B.5 Compatibility record template (M1), B.6 OWASP review
+  template (M2), B.7 Taxonomy term template (M4). Appendix C: add glossary entries for
+  new terms (domain appendix, cross-cutting module, HAL, HIL, drift monitoring, evaluation
+  contract, taxonomy, scouting protocol, MECE). Single commit.
