@@ -11,6 +11,9 @@ CLAUDE.md
 GEMINI.md
 AI-AGENTS.md
 
+# Session state (local only)
+PROJECT_STATUS.md
+
 # Review artifacts (local only)
 gemini_revision_*.md
 

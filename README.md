@@ -122,7 +122,6 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | File | Description |
 |------|-------------|
 | [`codex-machinae.md`](codex-machinae.md) | The playbook — Core + Domain Appendices + Modules + Appendices (~3 100 lines) |
-| [`PROJECT_STATUS.md`](PROJECT_STATUS.md) | Current project state, updated every session |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |
 | **`docs/`** | |
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |
@@ -134,6 +133,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — not tracked |
 | `CLAUDE.md` | Claude-specific agent configuration — not tracked |
 | `GEMINI.md` | Gemini-specific agent configuration — not tracked |
+| `PROJECT_STATUS.md` | Current session state — not tracked |
 
 ---
 
