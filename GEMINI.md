@@ -22,6 +22,7 @@ Gemini CLI MUST apply the conventions defined in `codex-machinae.md` to manage t
 
 - Keep `PROJECT_STATUS.md` up to date after every session.
 - If `MODULARISATION_PLAN.md` has an open refactor, read it first and update its Progress log when a phase advances.
+- End-of-phase alignment: when a phase closes, follow AI-AGENTS.md §Workflow step 6 — update `PROJECT_STATUS.md`, the plan's status header and checkboxes, and verify all tracking files agree on the current phase number before committing.
 - Use Conventional Commits for every change.
 
 ### 2. Scope Discipline
