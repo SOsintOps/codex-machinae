@@ -6,9 +6,8 @@ Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted soft
 All documentation and commits are in **British English**.
 
 ## Current Phase
-D7 Static Site / Frontend-only fully populated. Six of seven domain appendices
-(D1–D5, D7) and all four cross-cutting modules (M1–M4) now have full content.
-Only D6 (Mobile App) remains a stub.
+All domain appendices (D1–D7) and all cross-cutting modules (M1–M4) fully populated.
+No stubs remain. The playbook design is complete.
 
 ## Modified Files (cumulative, current state)
 - `codex-machinae.md`: Core + Modules + Domains + Phase C hardening + Phase R (§11.6) +
@@ -26,17 +25,16 @@ Only D6 (Mobile App) remains a stub.
   incomplete domains (planned D2/D3 priority), checklist density (§2.5 profiles).
 
 ## Recent Changelog
-- **D7 Static Site / Frontend-only** — five subsections: D7.1 Build and bundle budgets,
-  D7.2 Hosting and CDN contracts, D7.3 Client-side error reporting, D7.4 Accessibility,
-  D7.5 Core Web Vitals.
-- **Appendix A** — PR and release checklists extended with D7 items.
-- **Known Limitations** — incomplete domain coverage narrowed to D6 only.
+- **D6 Mobile App** — six subsections: D6.1 App-store submission and review, D6.2
+  Staged rollouts, D6.3 Device and OS compatibility, D6.4 Crash reporting and on-device
+  telemetry, D6.5 Offline-first and data synchronisation, D6.6 OTA vs store updates.
+- **Appendix A** — PR and release checklists extended with D6 items.
+- **Known Limitations** — "Incomplete domain coverage" marked as resolved.
 - **Glossary** — three new entries.
-- *(Previous: M3 full content; D2/D3 full content; §2.5 profiles; Appendix D tooling
-  specs; §12.7 multi-agent; §11.6 Phase R.)*
+- *(Previous: D7 full content; M3 full content; D2/D3 full content; §2.5 profiles;
+  Appendix D tooling specs; §12.7 multi-agent; §11.6 Phase R.)*
 
 ## Next Action
 1. **First downstream retrofit** — apply the playbook to an existing project to validate
    Phase R and the tooling specs in practice.
 2. **Build reference implementations** against Appendix D specifications.
-3. **Fill D6 (Mobile App)** — when demand arises from a downstream project.
