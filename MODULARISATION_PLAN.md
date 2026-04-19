@@ -520,3 +520,6 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   Phase 4 left verbatim (already universal), with the phase-label "phase 3" capitalised to
   "Phase 3" for consistency. All four ref bugs fixed in the same pass. Ready for Phase 8
   (module and domain content, MVP set).
+- 2026-04-19 — Phase 8.1 intent: flesh out D1 Web Service. D1.1–D1.3 already populated
+  (Phases 5–6). Add D1.4 Request-path testing, D1.5 Rate-limiting and back-pressure,
+  D1.6 Observability hooks. Remove the Phase 8.1 backlog marker. Single commit.

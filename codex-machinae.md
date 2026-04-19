@@ -1116,7 +1116,105 @@ API documentation is generated in CI and published automatically. Manually writt
 
 Staging is a replica of production: same infrastructure topology, same secrets (rotated), same database schema. A divergence between staging and production is a bug in the environment definition, not a feature.
 
-*Further D1 content (request-path testing patterns, rate-limiting and back-pressure, observability hooks) to be filled in Phase 8.1.*
+### D1.4 Request-path testing
+
+In addition to Core §5 (testing pyramid, coverage ratchet, schema-primary validation), web
+services require tests that exercise the request path end-to-end through the network stack.
+
+**Contract tests.** Every inbound API contract (§8, axis `api`, direction `inbound`) has at
+least one contract test that sends a real HTTP request to a running instance of the service
+and asserts on status code, response schema, and key semantic invariants. Contract tests run
+in CI against a throwaway environment (Docker Compose, Testcontainers, or equivalent).
+
+**Negative-path coverage.** For every endpoint, test at least:
+
+| Scenario | Expected behaviour |
+|----------|--------------------|
+| Missing required field | 400 with a machine-readable error body |
+| Invalid type / out-of-range value | 400 |
+| Unauthenticated request (when auth required) | 401 |
+| Insufficient permissions | 403 |
+| Non-existent resource | 404 |
+| Malformed `Content-Type` | 415 |
+| Rate-limit exceeded | 429 with `Retry-After` header |
+
+**Latency assertions.** Critical endpoints (login, health check, primary read path) carry a
+latency ceiling in the test suite. The ceiling is a p95 measured over at least 50 sequential
+requests against a local instance. Exceeding it does not break CI by default — it emits a
+warning — but the team may promote any ceiling to a hard gate via §5.3 ratchet.
+
+**Idempotency.** Every `PUT` and `DELETE` endpoint is tested for idempotency: sending the
+same request twice produces the same observable state as sending it once.
+
+### D1.5 Rate-limiting and back-pressure
+
+**Rate-limiting.** Every public-facing endpoint MUST enforce a rate limit. The limit is
+declared per-endpoint (or per-group) and is surfaced to the caller via standard headers:
+
+| Header | Meaning |
+|--------|---------|
+| `X-RateLimit-Limit` | Maximum requests allowed in the window |
+| `X-RateLimit-Remaining` | Requests remaining in the current window |
+| `X-RateLimit-Reset` | UTC epoch seconds when the window resets |
+| `Retry-After` | Seconds to wait (returned with 429) |
+
+Internal endpoints behind a trusted network boundary may omit rate-limiting if and only if
+the Boundary Contract Map (§8) records the trust assumption explicitly.
+
+**Back-pressure.** When a downstream dependency is slow or unavailable, the service MUST shed
+load rather than queue unboundedly:
+
+- Circuit breaker on every outbound contract marked `risk_weight: high` in the contract map.
+  States: closed → open (after N consecutive failures or error-rate threshold) → half-open
+  (probe with a single request) → closed.
+- Timeout on every outbound call. The timeout is explicit in the code, never implicit from a
+  library default. Suggested starting point: 2× the p99 latency observed in production.
+- Bulkhead isolation: failure in one outbound dependency does not exhaust the thread/connection
+  pool used by other dependencies. Implementation: per-dependency connection pools, or
+  async concurrency limiters.
+
+### D1.6 Observability
+
+**Structured logging.** Every log entry is a structured object (JSON or key-value), never a
+free-form string. Mandatory fields:
+
+| Field | Content |
+|-------|---------|
+| `timestamp` | ISO 8601 with timezone |
+| `level` | `debug`, `info`, `warn`, `error` |
+| `service` | Service name (from configuration) |
+| `trace_id` | Distributed trace identifier (propagated from inbound request) |
+| `message` | Human-readable summary |
+
+Log entries MUST NOT contain secrets, tokens, passwords, or PII. When M2 is active, this
+rule is enforced by the M2.2 PR checklist.
+
+**Metrics.** At a minimum, every web service exposes:
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `http_requests_total` | Counter | Total requests, labelled by method, path, status |
+| `http_request_duration_seconds` | Histogram | Latency distribution, labelled by method, path |
+| `http_active_connections` | Gauge | Current open connections |
+| Dependency health | Gauge | One gauge per outbound contract (0 = down, 1 = up) |
+
+Metrics are exposed via a `/metrics` endpoint (Prometheus-compatible) or pushed to the
+telemetry backend. The choice is recorded in the contract map (axis `api`, direction
+`inbound`, counterparty `telemetry-backend`).
+
+**Distributed tracing.** Every inbound request receives (or propagates) a trace ID using
+W3C Trace Context (`traceparent` header). The trace ID is attached to all log entries and
+outbound calls for the duration of the request. Tracing is sampled in production (suggested
+starting point: 1% of traffic, 100% of errors).
+
+**Health and readiness.** Two endpoints, always present:
+
+| Endpoint | Purpose | Response |
+|----------|---------|----------|
+| `GET /healthz` | Liveness — is the process alive? | 200 if the process can serve; no dependency checks |
+| `GET /readyz` | Readiness — can the process accept traffic? | 200 only when all critical dependencies are reachable |
+
+Both endpoints are excluded from rate-limiting and authentication.
 
 ## D2 Library / SDK
 
