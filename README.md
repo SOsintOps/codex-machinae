@@ -77,7 +77,7 @@ codex-machinae.md
 │   ├── D4  Embedded / Firmware  ████████████  full
 │   ├── D5  ML / Data Pipeline   ████████████  full
 │   ├── D6  Mobile App           ░░░░░░░░░░░░  stub
-│   └── D7  Static Site          ░░░░░░░░░░░░  stub
+│   └── D7  Static Site          ████████████  full
 │
 ├── Part III — Cross-cutting Modules (activate by trigger)
 │   ├── M1  Surveillance         ████████████  full
