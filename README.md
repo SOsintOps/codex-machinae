@@ -76,7 +76,7 @@ codex-machinae.md
 │   ├── D3  CLI Tool             ████████████  full
 │   ├── D4  Embedded / Firmware  ████████████  full
 │   ├── D5  ML / Data Pipeline   ████████████  full
-│   ├── D6  Mobile App           ░░░░░░░░░░░░  stub
+│   ├── D6  Mobile App           ████████████  full
 │   └── D7  Static Site          ████████████  full
 │
 ├── Part III — Cross-cutting Modules (activate by trigger)
