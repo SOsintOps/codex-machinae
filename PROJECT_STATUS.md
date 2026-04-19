@@ -37,7 +37,7 @@ improvements applied: Contract Map example (Appendix B.8), Human-Agent Handover 
   updated (§10.6 → §10.7 in two locations).
 
 ## Next Action
-1. Tooling phase — develop reference implementations (AST Walker, coverage-ratchet CI step,
-   surveillance-agent scaffold) to lower the compliance barrier.
-2. Fill remaining stubs — prioritise D2 (Library/SDK) and D3 (CLI Tool).
-3. Project-size profiles — introduce solo/small/large gates on Appendix A checklists.
+1. **Phase R (Retrofit) —** Codify the lifecycle for existing projects (debt-scoping, retroactive mapping).
+2. **Multi-Agent Protocol (§12.3) —** Define rules for collaborative AI environments.
+3. **Tooling phase —** Develop reference implementations (AST Walker, coverage-ratchet CI step).
+4. **Project-size profiles —** Introduce solo/small/large gates on Appendix A checklists.
