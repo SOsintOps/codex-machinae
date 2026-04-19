@@ -551,3 +551,10 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   concrete examples, add domain-composition note, expand M2.3 with annual-review table,
   add M2.4 Dependency-vulnerability management (response SLA, transitive deps). Single
   commit.
+- 2026-04-19 — Phase 8.5 executed as a single commit. M2 polished with M2.4 added. Ready
+  for Phase 8.6 (M4 Classification & Taxonomy).
+- 2026-04-19 — Phase 8.6 intent: flesh out M4 Classification & Taxonomy. Replace the
+  placeholder with M4.1 Design principles (MECE, parsimony, stable IDs), M4.2 Governance
+  (ownership, RFC, deprecation), M4.3 Scouting protocol (binding to §1.7), M4.4 Adoption
+  patterns, M4.5 Audits (coverage, ambiguity, drift), M4.6 Machine-readable formats, M4.7
+  Upstream contribution protocol, M4.8 Illustrative examples. Single commit.
