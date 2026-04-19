@@ -6,13 +6,13 @@ Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted soft
 All documentation and commits are in **British English**.
 
 ## Current Phase
-Tooling specifications added. Appendix D defines contracts for three reference tools
-(AST Walker, Coverage Ratchet, Surveillance Agent Scaffold) — spec-only, no
-implementations. Known Limitations updated to point to Appendix D.
+Project-size profiles added. §2.5 defines Solo/Small/Large profiles that modulate
+checklist obligation levels in Appendix A. All three Known Limitations now have
+concrete mitigations in place.
 
 ## Modified Files (cumulative, current state)
 - `codex-machinae.md`: Core + Modules + Domains + Phase C hardening + Phase R (§11.6) +
-  Multi-agent (§12.7) + Tooling specs (Appendix D).
+  Multi-agent (§12.7) + Tooling specs (Appendix D) + Project-size profiles (§2.5).
 - `gemini_revision_260419.md`: Comprehensive senior analyst review + strategic synthesis.
 - `MODULARISATION_PLAN.md`: All phases (0–10) closed.
 - `README.md`: Minimal redesign (stable design badge).
@@ -20,22 +20,30 @@ implementations. Known Limitations updated to point to Appendix D.
 - `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`: Agent configuration sync.
 
 ## Logical State
-- Playbook structure: Stable, modular, retrofit-capable, multi-agent-ready, tooling-specified.
-- Tooling: Appendix D defines input/output/behaviour contracts for D.1 AST Walker,
-  D.2 Coverage Ratchet, D.3 Surveillance Agent Scaffold. Implementations live in
-  dedicated repositories, validated against these specs.
+- Playbook structure: Stable, modular, retrofit-capable, multi-agent-ready,
+  tooling-specified, profile-aware.
+- All three Known Limitations now mitigated: mechanical barrier (Appendix D),
+  incomplete domains (planned D2/D3 priority), checklist density (§2.5 profiles).
 - Reference example: `example/00-prd.md` (Cortex) — unchanged; quality benchmark.
 
 ## Recent Changelog
-- **Appendix D — Tooling Specifications** — three tool contracts: D.1 AST Walker
-  (contract-map generator with detection rules, language support, delta mode), D.2
-  Coverage Ratchet (CI step with baseline file, escape valves, regression reporting),
-  D.3 Surveillance Agent Scaffold (cron-based contract tester with manifest, heartbeat,
-  issue-tracker integration).
-- **Known Limitations updated** — mechanical barrier mitigation now points to Appendix D.
-- **Glossary** — three new entries: AST Walker, Coverage ratchet (tool), Surveillance
-  agent scaffold.
-- *(Previous: §12.7 Multi-agent, A.9; §11.6 Phase R, A.8, B.9.)*
+- **§2.5 Project-size profile** — Solo/Small/Large declaration that modulates Appendix A
+  items as mandatory/recommended/optional. Conservative tagging: most items stay
+  mandatory; only ceremony-heavy items are downgraded for smaller profiles.
+- **Appendix A tagged** — items in A.1–A.5 carry inline profile tags where applicable.
+- **Known Limitations updated** — checklist density mitigation now points to §2.5.
+- **Glossary** — one new entry: Project-size profile.
+- *(Previous: Appendix D tooling specs; §12.7 multi-agent; §11.6 Phase R.)*
 
 ## Next Action
-1. **Project-size profiles —** Introduce solo/small/large gates on Appendix A checklists.
+All items from the post-modularisation roadmap are now addressed:
+- Phase R (Retrofit) — §11.6 ✓
+- Multi-Agent Protocol — §12.7 ✓
+- Tooling Specifications — Appendix D ✓
+- Project-size Profiles — §2.5 ✓
+
+Remaining work:
+1. **Fill remaining stubs** — prioritise D2 (Library/SDK) and D3 (CLI Tool).
+2. **Build reference implementations** against Appendix D specifications.
+3. **First downstream retrofit** — apply the playbook to an existing project to validate
+   Phase R and the tooling specs in practice.
