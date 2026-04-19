@@ -523,3 +523,12 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
 - 2026-04-19 — Phase 8.1 intent: flesh out D1 Web Service. D1.1–D1.3 already populated
   (Phases 5–6). Add D1.4 Request-path testing, D1.5 Rate-limiting and back-pressure,
   D1.6 Observability hooks. Remove the Phase 8.1 backlog marker. Single commit.
+- 2026-04-19 — Phase 8.1 executed as a single commit. D1 now has D1.1 API documentation,
+  D1.2 Deploy strategy, D1.3 Environments (from Phases 5–6), plus D1.4 Request-path testing
+  (contract tests, negative-path, latency, idempotency), D1.5 Rate-limiting and back-pressure
+  (headers, circuit breaker, timeout, bulkhead), D1.6 Observability (structured logging,
+  metrics, tracing, health/readiness). Ready for Phase 8.2 (D4 Embedded / Firmware).
+- 2026-04-19 — Phase 8.2 intent: flesh out D4 Embedded / Firmware. Replace the placeholder
+  with D4.1 Hardware boundary contracts, D4.2 Cross-compilation and toolchain, D4.3
+  Hardware-in-the-loop testing, D4.4 Flash and OTA update strategy, D4.5 Power and thermal
+  budgets, D4.6 Bring-up checklist. Single commit.
