@@ -588,3 +588,13 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   implemented in Core; Phase C deferred per PROJECT_STATUS.md); file deleted. WIP notice
   and orange badge removed from README.md; badge updated to "stable design". Plan status
   set to "complete". All tracking files aligned. **Modularisation complete.**
+- 2026-04-19 — Post-modularisation strategic review completed by Gemini CLI. Identified 
+  strengths (Emergent Expansion, Boundary Contracts) and critical weaknesses (high mechanical 
+  barrier). Analysis saved to `gemini_revision_260419.md`. Ready for Phase C and Tooling.
+- 2026-04-19 — Phase C (Hardening) executed by Claude. Three changes: (1) B.8 Contract Map
+  example added to Appendix B — full COMPATIBILITY.md for a hypothetical web service with
+  all four axes; (2) §10.4 Human-agent handover protocol added to Remediation — codified
+  dossier format when circuit breaker trips; §10.5–10.8 renumbered, cross-refs updated;
+  (3) "Known Limitations and Roadmap" section added before appendices — acknowledges
+  mechanical barrier, stub gaps, checklist density, each with planned mitigation. TOC
+  updated. PROJECT_STATUS.md aligned.
