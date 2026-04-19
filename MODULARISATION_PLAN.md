@@ -1,6 +1,6 @@
 # Codex Machinae — Modularisation Plan
 
-**Status:** Draft v2 — Phases 0–8 closed, Phase 9 ready to start
+**Status:** Draft v2 — Phases 0–9 closed, Phase 10 ready to start
 **Created:** 2026-04-18
 **Owner:** human + Claude (multi-session)
 **Goal:** Split the playbook into a universal **Core** + **Domain Appendices** (per project type) +
@@ -326,12 +326,12 @@ Full content for the MVP targets (D1, D4, D5, M1, M2, M4); stubs only for D2, D3
 - [x] Each stub: heading + trigger + 2–3 bullets
 - [x] Commit: `refactor(playbook): add stubs for D2, D3, D6, D7, M3`
 
-### Phase 9 — Appendices A/B/C reorganisation
+### Phase 9 — Appendices A/B/C reorganisation — ✅ CLOSED 2026-04-19
 
-- [ ] Split Appendix A checklists into Core + per-module
-- [ ] Split Appendix B templates into Core + per-module
-- [ ] Update Appendix C glossary with new terms (D1–D7, M1–M3, "module", "domain")
-- [ ] Commit: `refactor(playbook): reorganise appendices by module`
+- [x] Split Appendix A checklists into Core + per-module
+- [x] Split Appendix B templates into Core + per-module
+- [x] Update Appendix C glossary with new terms (D1–D7, M1–M4, "module", "domain")
+- [x] Commit: `refactor(playbook): reorganise appendices by module`
 
 ### Phase 10 — Final verification
 
@@ -565,6 +565,11 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
 - 2026-04-19 — Phase 8.7 executed as a single commit. All Phase 8 sub-phases (8.1–8.7)
   closed. Phase 8 marked CLOSED. PROJECT_STATUS.md updated. Ready for Phase 9
   (Appendices A/B/C reorganisation).
+- 2026-04-19 — Phase 9 executed as a single commit. Appendix A split into Core + conditional
+  blocks per module/domain; added A.6 Security review (M2), A.7 Taxonomy audit (M4).
+  Appendix B gained B.5 compat record (M1), B.6 OWASP review (M2), B.7 taxonomy term (M4).
+  Appendix C glossary extended with 12 new terms. Phase 9 marked CLOSED. Ready for Phase 10
+  (final verification).
 - 2026-04-19 — Phase 9 intent: reorganise Appendices A, B, C. Appendix A: split each
   checklist into Core items (always apply) + conditional blocks gated by module/domain
   activation (M1, M2, D1, D4, D5, M4). Add new checklists for D4 Embedded and M4

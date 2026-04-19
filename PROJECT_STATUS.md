@@ -7,9 +7,9 @@ All documentation and commits are in **British English**.
 
 ## Current Phase
 Design — modularisation in flight. The playbook is being split into Core + Domain Appendices
-(D1–D7) + Cross-cutting Modules (M1–M4), per `MODULARISATION_PLAN.md`. Phases 0–8 closed.
-Phase 9 (Appendices A/B/C reorganisation) is next. Tooling (templates, bootstrap scripts, CI)
-remains deferred until the design stabilises.
+(D1–D7) + Cross-cutting Modules (M1–M4), per `MODULARISATION_PLAN.md`. Phases 0–9 closed.
+Phase 10 (final verification) is next. Tooling (templates, bootstrap scripts, CI) remains
+deferred until the design stabilises.
 
 ## Modified Files (cumulative, current state)
 - `codex-machinae.md`:
@@ -44,7 +44,7 @@ remains deferred until the design stabilises.
     - M4 Classification & Taxonomy: M4.1–M4.8 fully populated (MECE principles, governance,
       scouting protocol, adoption patterns, audits, machine-readable formats, upstream
       contribution, illustrative examples).
-- `MODULARISATION_PLAN.md`: durable plan; Phases 0–8 closed (progress log up to date).
+- `MODULARISATION_PLAN.md`: durable plan; Phases 0–9 closed (progress log up to date).
 - `README.md`: minimal redesign (H1 + ASCII banner + 3 badges + CAUTION + TL;DR).
 - `LICENSE`: CC BY 4.0 (official legal text).
 - `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`: point agents at the plan on resume.
@@ -57,9 +57,8 @@ remains deferred until the design stabilises.
 - Roadmap: `STRATEGY_TRANSFORMATION.md` — to be absorbed in Phase 10.
 
 ## Next Action
-1. **Phase 9 — Appendices A/B/C reorganisation** per `MODULARISATION_PLAN.md`: split checklists
-   and templates into Core + per-module; update glossary with new terms.
-2. **Phase 10 — Final verification**: absorb `STRATEGY_TRANSFORMATION.md`, update this file,
-   mark plan complete, remove WIP notice from README.
-3. Phase C (Lessons Learned Report + Promotion protocol) — deferred until modularisation lands,
+1. **Phase 10 — Final verification**: verify Core numbering, cross-reference sweep, TOC audit,
+   absorb `STRATEGY_TRANSFORMATION.md`, update this file, mark plan complete, remove WIP
+   notice from README.
+2. Phase C (Lessons Learned Report + Promotion protocol) — deferred until modularisation lands,
    then slot in as a new Core section.
