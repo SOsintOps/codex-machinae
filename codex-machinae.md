@@ -42,6 +42,10 @@ This playbook defines the entire lifecycle of a software project: from requireme
 - [M3 Release & Distribution](#m3-release--distribution)
 - [M4 Classification & Taxonomy](#m4-classification--taxonomy)
 
+### Meta
+
+- [Known limitations and roadmap](#known-limitations-and-roadmap)
+
 ### Appendices
 
 - [A — Per-phase checklists](#appendix-a--phase-checklists)
@@ -648,7 +652,7 @@ Rules:
 - The schema is the source of truth; fixture payloads exist to exercise the schema, not to pin exact bytes
 - `additionalProperties: true` on inbound contracts (tolerant reader), `additionalProperties: false` on outbound contracts owned by the project (strict producer)
 - Enum values are never duplicated across schema and code — both point to a single declaration
-- A schema change on a shared contract is a contract-breaking change (§10.6) regardless of whether any current consumer happens to tolerate it
+- A schema change on a shared contract is a contract-breaking change (§10.7) regardless of whether any current consumer happens to tolerate it
 
 Golden-file equality is reserved for artefacts where the whole byte sequence *is* the contract (rendered UI snapshots, generated documents, wire-format fixtures). Using golden files for structured API responses couples the test to ordering and serialisation choices that the contract does not actually guarantee.
 
@@ -930,19 +934,34 @@ Green CI is not sufficient to clear L1. The agent MUST: validate against the spe
 
 3 open L1 PRs OR 5 attempts in 14 days → L1 automation paused, everything degrades to L2, human acknowledgement required before re-enabling.
 
-### 10.4 Adoption workflow
+### 10.4 Human-agent handover
+
+When the circuit breaker trips (§10.3), the agent MUST produce a **handover dossier** before degrading to L2. The dossier is attached to the tracking issue and contains:
+
+| Section | Content |
+|---------|---------|
+| **Trigger summary** | Which contract, what classification, what change triggered the sequence |
+| **Attempt log** | For each failed L1 attempt: PR link, fix-claim, test result, reason for failure |
+| **Root-cause hypothesis** | The agent's best assessment of why the fix did not hold (schema mismatch, upstream regression, environmental) |
+| **Blast radius** | Files, endpoints, and downstream consumers affected |
+| **Suggested next steps** | Concrete actions the human can take, ranked by likelihood of success |
+| **Reproduction steps** | Minimal steps or commands to reproduce the failure locally |
+
+The dossier reduces the human's ramp-up time from "read three PRs and guess" to "read one summary and act". The agent does not attempt further automation on the affected contract until the human explicitly re-enables L1.
+
+### 10.5 Adoption workflow
 
 When a change is classified as introducing new capabilities in an existing contract: cross-reference with the Boundary Contract Map, add a wrapper in the client, write a contract test, open an adoption PR + tracking issue for UI changes.
 
-### 10.5 Deprecation tracking
+### 10.6 Deprecation tracking
 
 Record the deprecation, cross-reference with the Boundary Contract Map, open a `deprecation-watch` issue. Migration is always human-led.
 
-### 10.6 Contract-breaking change protocol
+### 10.7 Contract-breaking change protocol
 
 Triggered whenever a tracked contract breaks (major version bump of an outbound dependency, incompatible schema change, endpoint removal, hardware protocol revision, UI-flow breaking change). Actions: L1 disabled for the affected contract, coverage baseline resettable, Boundary Contract Map mandatorily regenerated, test harness verified end-to-end, issue opened as a tracking epic.
 
-### 10.7 Human report
+### 10.8 Human report
 
 For each change, the agent produces a report with: what changed, classification, where it impacts (files and lines), what must be modified to maintain operability, what can be adopted, test results, recommended action, and the autonomy level selected with justification.
 
@@ -1022,7 +1041,7 @@ Each phase lists the **Core steps** that apply to every project, followed by act
 
 ### 11.5 Phase 4 — Major dependency upgrade
 
-1. The major-version protocol activates (§10.6)
+1. The major-version protocol activates (§10.7)
 2. L1 disabled, everything is L2
 3. Contract map regenerated (§8)
 4. Coverage baseline reset (§5.3)
@@ -1967,6 +1986,43 @@ exist.
 
 ---
 
+## Known limitations and roadmap
+
+This section records structural limitations identified during the post-modularisation review
+(April 2026) and the planned mitigations. It is a living section: entries are removed when
+the limitation is resolved, not when work begins.
+
+### Mechanical barrier to adoption
+
+Many Core processes (coverage ratchet, contract-map generation, surveillance agents) assume
+CI/CD tooling and automation infrastructure that a new adopter does not have on day one.
+Without reference implementations, the compliance cost is high.
+
+**Planned mitigation — Tooling phase.** Provide reference scripts (Python and Node.js) for:
+- AST Walker contract-map generator (TypeScript via `ts-morph`, Python via `ast`).
+- Coverage-ratchet CI step (language-agnostic wrapper).
+- Surveillance-agent scaffold (cron + contract-test runner + issue opener).
+
+### Incomplete domain coverage
+
+Five domain appendices (D2 Library/SDK, D3 CLI Tool, D6 Mobile App, D7 Static Site) and one
+cross-cutting module (M3 Release & Distribution) remain stubs. The playbook is fully usable
+for Web (D1), Embedded (D4), and ML/Data (D5) projects; other project types must extend the
+stubs themselves until the stubs are filled.
+
+**Planned mitigation.** Prioritise D2 and D3 (most common after D1); D6, D7, and M3 follow.
+
+### Checklist density
+
+Appendix A is comprehensive but dense. For small projects, unfiltered application of the full
+checklist can slow velocity disproportionately.
+
+**Planned mitigation.** Introduce a "project-size profile" (solo, small team, large team) that
+gates which checklist items are mandatory vs recommended vs optional. The profile is declared
+once in the project's configuration and the checklist adapts.
+
+---
+
 ## Appendix A — Phase checklists
 
 Each checklist is split into **Core** items (always apply) and **conditional** blocks that
@@ -2303,6 +2359,140 @@ So that [benefit]
 ## Actions
 [List any items that are not fully covered, with remediation plan]
 ```
+
+### B.8 Boundary Contract Map example (§8)
+
+> Complete `COMPATIBILITY.md` for a hypothetical web service that exposes a REST API,
+> consumes Stripe and a PostgreSQL database, and renders a React SPA.
+
+```json
+{
+  "contracts": [
+    {
+      "id": "rest.orders.create",
+      "axis": "api",
+      "direction": "inbound",
+      "counterparty": "mobile-app",
+      "shape": "POST /v1/orders",
+      "file": "src/routes/orders.ts",
+      "line": 28,
+      "context": "createOrder()",
+      "risk_weight": "high",
+      "test_coverage": true,
+      "last_verified": "2026-04-18"
+    },
+    {
+      "id": "rest.orders.list",
+      "axis": "api",
+      "direction": "inbound",
+      "counterparty": "mobile-app",
+      "shape": "GET /v1/orders?status={status}",
+      "file": "src/routes/orders.ts",
+      "line": 55,
+      "context": "listOrders()",
+      "risk_weight": "medium",
+      "test_coverage": true,
+      "last_verified": "2026-04-18"
+    },
+    {
+      "id": "stripe.charges.create",
+      "axis": "api",
+      "direction": "outbound",
+      "counterparty": "stripe-api",
+      "shape": "POST /v1/charges",
+      "file": "src/payments/stripe-client.ts",
+      "line": 42,
+      "context": "createCharge()",
+      "risk_weight": "high",
+      "test_coverage": true,
+      "last_verified": "2026-04-15"
+    },
+    {
+      "id": "stripe.webhooks.charge.succeeded",
+      "axis": "api",
+      "direction": "inbound",
+      "counterparty": "stripe-api",
+      "shape": "POST /webhooks/stripe (event: charge.succeeded)",
+      "file": "src/webhooks/stripe-handler.ts",
+      "line": 17,
+      "context": "handleChargeSucceeded()",
+      "risk_weight": "high",
+      "test_coverage": true,
+      "last_verified": "2026-04-15"
+    },
+    {
+      "id": "db.orders",
+      "axis": "data",
+      "direction": "outbound",
+      "counterparty": "postgresql",
+      "shape": "public.orders (id, user_id, status, total, created_at)",
+      "file": "src/db/schema/orders.ts",
+      "line": 8,
+      "context": "OrderModel",
+      "risk_weight": "high",
+      "test_coverage": true,
+      "last_verified": "2026-04-18"
+    },
+    {
+      "id": "db.users",
+      "axis": "data",
+      "direction": "outbound",
+      "counterparty": "postgresql",
+      "shape": "public.users (id, email, hashed_password, role, created_at)",
+      "file": "src/db/schema/users.ts",
+      "line": 5,
+      "context": "UserModel",
+      "risk_weight": "high",
+      "test_coverage": true,
+      "last_verified": "2026-04-18"
+    },
+    {
+      "id": "ui.orders.dashboard",
+      "axis": "ui",
+      "direction": "inbound",
+      "counterparty": "end-user",
+      "shape": "screen:orders-dashboard",
+      "file": "src/ui/pages/OrdersDashboard.tsx",
+      "line": 1,
+      "context": "OrdersDashboard",
+      "risk_weight": "medium",
+      "test_coverage": false,
+      "last_verified": "2026-04-10"
+    },
+    {
+      "id": "env.stripe_secret_key",
+      "axis": "data",
+      "direction": "outbound",
+      "counterparty": "runtime-environment",
+      "shape": "env:STRIPE_SECRET_KEY",
+      "file": "src/config/env.ts",
+      "line": 12,
+      "context": "loadEnv()",
+      "risk_weight": "high",
+      "test_coverage": true,
+      "last_verified": "2026-04-18"
+    }
+  ],
+  "generated_at": "2026-04-18T14:30:00Z",
+  "generator": "ast-walker",
+  "contract_count": 8,
+  "axis_counts": {
+    "api": 4,
+    "data": 3,
+    "ui": 1,
+    "hardware": 0
+  }
+}
+```
+
+> **Reading guide.** The map covers all four axes. Two `api` contracts are inbound
+> (the REST endpoints the mobile app calls), two are outbound (Stripe). The `data`
+> axis includes both database schemas and an environment variable — the latter is a
+> contract because changing the variable name breaks the deployment. The single `ui`
+> entry has `test_coverage: false`, which the Surveillance module (M1) would flag as
+> a gap. The `axis_counts` block feeds the cardinality guard (§8.4).
+
+---
 
 ### B.7 Taxonomy term template (M4)
 
