@@ -56,7 +56,6 @@ The following domain appendices are stubs awaiting full content:
 
 - **D6 Mobile App** — app stores, device fragmentation, offline-first.
 - **D7 Static Site / Frontend-only** — build pipelines, CDN, hydration.
-- **M3 Release & Distribution** — release trains, changelogs, artefact signing.
 
 If you have expertise in any of these domains, your contribution is especially welcome.
 Follow the structure of existing full appendices (D1, D2, D3, D4, D5) as a model.
