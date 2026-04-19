@@ -82,7 +82,7 @@ codex-machinae.md
 ├── Part III — Cross-cutting Modules (activate by trigger)
 │   ├── M1  Surveillance         ████████████  full
 │   ├── M2  Security-sensitive   ████████████  full
-│   ├── M3  Release & Distrib.   ░░░░░░░░░░░░  stub
+│   ├── M3  Release & Distrib.   ████████████  full
 │   └── M4  Classification       ████████████  full
 │
 └── Appendices
