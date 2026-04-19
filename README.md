@@ -125,9 +125,9 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`PROJECT_STATUS.md`](PROJECT_STATUS.md) | Current project state, updated every session |
 | [`MODULARISATION_PLAN.md`](MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
 | [`gemini_revision_260419.md`](gemini_revision_260419.md) | Cross-evaluation: Gemini senior review + Claude counter-evaluation + strategic synthesis |
-| [`AI-AGENTS.md`](AI-AGENTS.md) | Shared agent rules (source of truth for all LLMs) |
-| [`CLAUDE.md`](CLAUDE.md) | Claude-specific agent configuration |
-| [`GEMINI.md`](GEMINI.md) | Gemini-specific agent configuration |
+| `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — local only, not tracked |
+| `CLAUDE.md` | Claude-specific agent configuration — local only, not tracked |
+| `GEMINI.md` | Gemini-specific agent configuration — local only, not tracked |
 | [`CHANGELOG.md`](CHANGELOG.md) | Version history |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution guidelines |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |

@@ -6,5 +6,10 @@ ruvector.db
 # Claude Code local settings
 .claude/settings.local.json
 
+# Agent configuration (local only)
+CLAUDE.md
+GEMINI.md
+AI-AGENTS.md
+
 # OS
 .DS_Store
