@@ -26,7 +26,7 @@ All shared rules live here. Agent-specific files must not contradict this docume
 
 **Current scope:** design only. No templates, scaffolds, scripts, or CI until the playbook design stabilises.
 
-**Active refactor:** `MODULARISATION_PLAN.md` is the durable source of truth for the ongoing split of the playbook into Core + Domain Appendices (D1–D7) + Cross-cutting Modules (M1–M3). Any agent resuming work on the playbook structure MUST read this file first, respect its phased execution, and append to its Progress log at the end of each session. The plan may pause mid-phase across sessions — resume from the first unchecked step in the current phase.
+**Active refactor:** `MODULARISATION_PLAN.md` is the durable source of truth for the ongoing split of the playbook into Core + Domain Appendices (D1–D7) + Cross-cutting Modules (M1–M4). Any agent resuming work on the playbook structure MUST read this file first, respect its phased execution, and append to its Progress log at the end of each session. The plan may pause mid-phase across sessions — resume from the first unchecked step in the current phase.
 
 ---
 
@@ -55,7 +55,13 @@ All shared rules live here. Agent-specific files must not contradict this docume
 3. Plan before acting on any non-trivial change.
 4. Apply changes surgically; do not refactor beyond the task scope.
 5. Update `PROJECT_STATUS.md` at the end of each session; if a modularisation phase advanced, also append to the Progress log in `MODULARISATION_PLAN.md`.
-6. Commit with Conventional Commits.
+6. **End-of-phase alignment (mandatory when a phase closes).** Before committing the phase-close:
+   (a) update `PROJECT_STATUS.md` — current phase, modified-files list, next action;
+   (b) update the `MODULARISATION_PLAN.md` status header and tick the phase's checkboxes;
+   (c) verify that all tracking files (`PROJECT_STATUS.md`, `MODULARISATION_PLAN.md` header,
+       `MODULARISATION_PLAN.md` Progress log) agree on the current phase number;
+   (d) commit all tracking-file updates in the same commit as the phase-close or immediately after.
+7. Commit with Conventional Commits.
 
 ## Editorial Rules
 
