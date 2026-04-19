@@ -17,11 +17,8 @@
 ```
 
 [![Licence: CC BY 4.0](https://img.shields.io/badge/licence-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Status: work in progress](https://img.shields.io/badge/status-work%20in%20progress-orange.svg)](#)
+[![Status: stable design](https://img.shields.io/badge/status-stable%20design-brightgreen.svg)](#)
 [![Language: en-GB](https://img.shields.io/badge/language-en--GB-blue.svg)](#)
-
-> [!CAUTION]
-> **WORK IN PROGRESS — THIS PLAYBOOK IS UNDER ACTIVE DESIGN. CONTENT, STRUCTURE, AND CROSS-REFERENCES MAY CHANGE WITHOUT NOTICE.**
 
 **TL;DR** — Universal, modular playbook for shipping software with LLM collaborators: a sober Core plus domain appendices and cross-cutting modules, activated by trigger.
 

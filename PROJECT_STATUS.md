@@ -7,9 +7,9 @@ All documentation and commits are in **British English**.
 
 ## Current Phase
 Design — modularisation in flight. The playbook is being split into Core + Domain Appendices
-(D1–D7) + Cross-cutting Modules (M1–M4), per `MODULARISATION_PLAN.md`. Phases 0–9 closed.
-Phase 10 (final verification) is next. Tooling (templates, bootstrap scripts, CI) remains
-deferred until the design stabilises.
+Modularisation complete. The playbook is split into Core (§§1–12) + Domain Appendices
+(D1–D7) + Cross-cutting Modules (M1–M4), per `MODULARISATION_PLAN.md`. All phases (0–10)
+closed. The design is stable; tooling (templates, bootstrap scripts, CI) can now be produced.
 
 ## Modified Files (cumulative, current state)
 - `codex-machinae.md`:
@@ -44,7 +44,7 @@ deferred until the design stabilises.
     - M4 Classification & Taxonomy: M4.1–M4.8 fully populated (MECE principles, governance,
       scouting protocol, adoption patterns, audits, machine-readable formats, upstream
       contribution, illustrative examples).
-- `MODULARISATION_PLAN.md`: durable plan; Phases 0–9 closed (progress log up to date).
+- `MODULARISATION_PLAN.md`: durable plan; all phases (0–10) closed, status "complete".
 - `README.md`: minimal redesign (H1 + ASCII banner + 3 badges + CAUTION + TL;DR).
 - `LICENSE`: CC BY 4.0 (official legal text).
 - `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`: point agents at the plan on resume.
@@ -54,11 +54,12 @@ deferred until the design stabilises.
   D2/D3/D6/D7 stubs with post-MVP scope); Part III complete for MVP (M1/M2/M4 fully populated,
   M3 stub with post-MVP scope).
 - Reference example: `example/00-prd.md` (Cortex) — unchanged; inspiration / quality benchmark.
-- Roadmap: `STRATEGY_TRANSFORMATION.md` — to be absorbed in Phase 10.
+- `STRATEGY_TRANSFORMATION.md` — fully absorbed and deleted in Phase 10.
 
 ## Next Action
-1. **Phase 10 — Final verification**: verify Core numbering, cross-reference sweep, TOC audit,
-   absorb `STRATEGY_TRANSFORMATION.md`, update this file, mark plan complete, remove WIP
-   notice from README.
-2. Phase C (Lessons Learned Report + Promotion protocol) — deferred until modularisation lands,
-   then slot in as a new Core section.
+1. Phase C (Lessons Learned Report + Promotion protocol) — slot in as a new Core section now
+   that modularisation is complete.
+2. Tooling phase — produce templates, bootstrap scripts, and CI workflows from the stable
+   playbook design.
+3. Downstream application — apply the playbook to target projects (Italian Job → Core + D1 +
+   M2 + M4; SafeHeaven → Core + D4 + D5 + M1 + M2 + M4).

@@ -1,6 +1,6 @@
 # Codex Machinae — Modularisation Plan
 
-**Status:** Draft v2 — Phases 0–9 closed, Phase 10 ready to start
+**Status:** Complete — all phases (0–10) closed, 2026-04-19
 **Created:** 2026-04-18
 **Owner:** human + Claude (multi-session)
 **Goal:** Split the playbook into a universal **Core** + **Domain Appendices** (per project type) +
@@ -333,19 +333,19 @@ Full content for the MVP targets (D1, D4, D5, M1, M2, M4); stubs only for D2, D3
 - [x] Update Appendix C glossary with new terms (D1–D7, M1–M4, "module", "domain")
 - [x] Commit: `refactor(playbook): reorganise appendices by module`
 
-### Phase 10 — Final verification
+### Phase 10 — Final verification — ✅ CLOSED 2026-04-19
 
 Renumbering happens incrementally in Phases 2–6 (never leave gaps). This phase is a full audit.
 
-- [ ] Verify Core §§ numbering is contiguous with no gaps or duplicates
-- [ ] Run a full (§...) cross-reference sweep: every reference resolves to an existing heading
-- [ ] Verify TOC matches actual headings
-- [ ] Absorb remaining `STRATEGY_TRANSFORMATION.md` content into the playbook; delete the file
-- [ ] Update `PROJECT_STATUS.md` to reflect the new state
-- [ ] Update `MODULARISATION_PLAN.md` status to "complete"
-- [ ] **Remove the WORK IN PROGRESS notice from `README.md`** (added under the ASCII art at
+- [x] Verify Core §§ numbering is contiguous with no gaps or duplicates
+- [x] Run a full (§...) cross-reference sweep: every reference resolves to an existing heading
+- [x] Verify TOC matches actual headings
+- [x] Absorb remaining `STRATEGY_TRANSFORMATION.md` content into the playbook; delete the file
+- [x] Update `PROJECT_STATUS.md` to reflect the new state
+- [x] Update `MODULARISATION_PLAN.md` status to "complete"
+- [x] **Remove the WORK IN PROGRESS notice from `README.md`** (added under the ASCII art at
       the start of modularisation; must come off when the playbook design is stable)
-- [ ] Commit: `refactor(playbook): finalise modularisation — audit, xrefs, status`
+- [x] Commit: `refactor(playbook): finalise modularisation — audit, xrefs, status`
 
 ---
 
@@ -577,3 +577,14 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   template (M2), B.7 Taxonomy term template (M4). Appendix C: add glossary entries for
   new terms (domain appendix, cross-cutting module, HAL, HIL, drift monitoring, evaluation
   contract, taxonomy, scouting protocol, MECE). Single commit.
+- 2026-04-19 — Phase 10 intent: final verification. (a) Verify Core §§ numbering contiguous
+  with no gaps. (b) Full cross-reference sweep — every (§X.Y), (MX.Y), (DX.Y) resolves.
+  (c) TOC matches actual headings. (d) Absorb STRATEGY_TRANSFORMATION.md into the playbook
+  or confirm it is fully absorbed, then delete. (e) Remove WIP notice from README.md.
+  (f) End-of-phase alignment. Single commit.
+- 2026-04-19 — Phase 10 executed as a single commit. Core §§1–12 verified contiguous. Full
+  cross-reference sweep: all §X.Y, MX.Y, DX.Y references resolve. TOC matches actual
+  headings. STRATEGY_TRANSFORMATION.md confirmed fully absorbed (Phase A items all
+  implemented in Core; Phase C deferred per PROJECT_STATUS.md); file deleted. WIP notice
+  and orange badge removed from README.md; badge updated to "stable design". Plan status
+  set to "complete". All tracking files aligned. **Modularisation complete.**
