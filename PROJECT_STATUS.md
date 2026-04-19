@@ -7,9 +7,9 @@ All documentation and commits are in **British English**.
 
 ## Current Phase
 Design — modularisation in flight. The playbook is being split into Core + Domain Appendices
-(D1–D7) + Cross-cutting Modules (M1–M4), per `MODULARISATION_PLAN.md`. Phases 0–7 closed.
-Phase 8 (module and domain content, MVP set) pending scope clarification. Tooling (templates,
-bootstrap scripts, CI) remains deferred until the design stabilises.
+(D1–D7) + Cross-cutting Modules (M1–M4), per `MODULARISATION_PLAN.md`. Phases 0–8 closed.
+Phase 9 (Appendices A/B/C reorganisation) is next. Tooling (templates, bootstrap scripts, CI)
+remains deferred until the design stabilises.
 
 ## Modified Files (cumulative, current state)
 - `codex-machinae.md`:
@@ -25,33 +25,41 @@ bootstrap scripts, CI) remains deferred until the design stabilises.
   - §11: Lifecycle rewritten as "Core steps + activation blocks" pattern (M1/D1/D2/D3/M2).
   - §12: Autonomy rules.
   - Part II — Domain Appendices:
-    - D1 Web Service: D1.1 API doc, D1.2 deploy strategy, D1.3 environments populated.
-    - D2 SDK: D2.1 API doc row populated.
-    - D3 CLI: D3.1 API doc row populated.
-    - D5 ML / Data Pipeline: D5.1 golden queries, D5.2 irreversible-migration rule populated.
-    - D4, D6, D7: scaffolds (trigger + placeholders).
+    - D1 Web Service: D1.1–D1.6 fully populated (API doc, deploy, environments, request-path
+      testing, rate-limiting/back-pressure, observability).
+    - D2 SDK: D2.1 API doc + post-MVP stub.
+    - D3 CLI: D3.1 API doc + post-MVP stub.
+    - D4 Embedded / Firmware: D4.1–D4.6 fully populated (HAL, cross-compilation, HIL testing,
+      flash/OTA, power/thermal budgets, bring-up checklist).
+    - D5 ML / Data Pipeline: D5.1–D5.6 fully populated (golden queries, DB migration,
+      training reproducibility, dataset versioning, drift monitoring, evaluation contracts).
+    - D6 Mobile App: stub with post-MVP scope bullets.
+    - D7 Static Site: stub with post-MVP scope bullets.
   - Part III — Cross-cutting Modules:
-    - M1 Surveillance: fully populated from former §§9, 11, 13, 14.
-    - M2 Security-sensitive: M2.1 auth, M2.2 PR checklist, M2.3 OWASP Top 10 populated.
-    - M3, M4: scaffolds.
+    - M1 Surveillance: fully populated + polished (domain-composition table, compat-db
+      directory example, strengthened cardinality guard).
+    - M2 Security-sensitive: M2.1–M2.4 populated (auth, PR checklist, OWASP with review
+      table, dependency-vulnerability management with SLA).
+    - M3 Release & Distribution: stub with post-MVP scope bullets.
+    - M4 Classification & Taxonomy: M4.1–M4.8 fully populated (MECE principles, governance,
+      scouting protocol, adoption patterns, audits, machine-readable formats, upstream
+      contribution, illustrative examples).
 - `MODULARISATION_PLAN.md`: durable plan; Phases 0–7 closed (progress log up to date).
 - `README.md`: minimal redesign (H1 + ASCII banner + 3 badges + CAUTION + TL;DR).
 - `LICENSE`: CC BY 4.0 (official legal text).
 - `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`: point agents at the plan on resume.
 
 ## Logical State
-- Playbook structure: Core §§1–12 contiguous; Part II partial (D1/D2/D3/D5 populated, rest scaffolds);
-  Part III partial (M1 live, M2 populated, M3/M4 scaffolds).
+- Playbook structure: Core §§1–12 contiguous; Part II complete for MVP (D1/D4/D5 fully populated,
+  D2/D3/D6/D7 stubs with post-MVP scope); Part III complete for MVP (M1/M2/M4 fully populated,
+  M3 stub with post-MVP scope).
 - Reference example: `example/00-prd.md` (Cortex) — unchanged; inspiration / quality benchmark.
 - Roadmap: `STRATEGY_TRANSFORMATION.md` — to be absorbed in Phase 10.
 
 ## Next Action
-1. **Phase 8 — Module and domain content (MVP set)**: populate D1 Web Service, D4 Embedded,
-   D5 ML / Data Pipeline; polish M1 Surveillance; polish M2 Security-sensitive; populate M4
-   Classification & Taxonomy; add stubs for D2, D3, D6, D7, M3. Scope and Cortex-driven
-   benchmark approach pending user confirmation.
-2. **Phase 9 — Appendices A/B/C reorganisation** per `MODULARISATION_PLAN.md`.
-3. **Phase 10 — Final verification**: absorb `STRATEGY_TRANSFORMATION.md`, update this file,
+1. **Phase 9 — Appendices A/B/C reorganisation** per `MODULARISATION_PLAN.md`: split checklists
+   and templates into Core + per-module; update glossary with new terms.
+2. **Phase 10 — Final verification**: absorb `STRATEGY_TRANSFORMATION.md`, update this file,
    mark plan complete, remove WIP notice from README.
-4. Phase C (Lessons Learned Report + Promotion protocol) — deferred until modularisation lands,
+3. Phase C (Lessons Learned Report + Promotion protocol) — deferred until modularisation lands,
    then slot in as a new Core section.
