@@ -6,38 +6,38 @@ Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted soft
 All documentation and commits are in **British English**.
 
 ## Current Phase
-Phase C — Hardening. Gemini review findings promoted into the playbook. Three structural
-improvements applied: Contract Map example (Appendix B.8), Human-Agent Handover protocol
-(§10.4), and Known Limitations and Roadmap section.
+Phase R — Retrofit protocol codified. §11.6 added to the lifecycle with five subsections
+(debt-scoping audit, retroactive contract mapping, prioritised adoption tiers, module
+activation, lifecycle entry). Supporting artefacts: A.8 Phase R checklist, B.9 Retrofit
+Audit template, four glossary entries.
 
 ## Modified Files (cumulative, current state)
-- `codex-machinae.md`: Core + Modules + Domains + Phase C hardening (B.8 example, §10.4
-  handover, Known Limitations section, TOC updated).
-- `gemini_revision_260419.md`: Comprehensive senior analyst review (input to Phase C).
+- `codex-machinae.md`: Core + Modules + Domains + Phase C hardening + Phase R (§11.6,
+  A.8, B.9, glossary entries).
+- `gemini_revision_260419.md`: Comprehensive senior analyst review + strategic synthesis.
 - `MODULARISATION_PLAN.md`: All phases (0–10) closed.
 - `README.md`: Minimal redesign (stable design badge).
 - `LICENSE`: CC BY 4.0.
 - `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`: Agent configuration sync.
 
 ## Logical State
-- Playbook structure: Stable and modular.
-- Gemini review: Findings formalised — strengths validated, weaknesses acknowledged in
-  "Known limitations and roadmap", two actionable suggestions implemented (Contract Map
-  example, Human-Agent Handover).
+- Playbook structure: Stable, modular, and retrofit-capable.
+- Retrofit path: §11.6 provides a complete convergence protocol for existing projects,
+  addressing the critical gap identified in the Claude-Gemini review.
 - Reference example: `example/00-prd.md` (Cortex) — unchanged; quality benchmark.
 
-## Phase C Changelog
-- **B.8 Contract Map example** — complete `COMPATIBILITY.md` for a hypothetical web service
-  covering all four axes (api, data, ui, hardware=0). Lowers comprehension barrier.
-- **§10.4 Human-agent handover** — codified dossier format when circuit breaker trips.
-  Reduces human ramp-up time on failed L1 sequences.
-- **Known Limitations and Roadmap** — new section before appendices. Acknowledges mechanical
-  barrier, stub gaps, checklist density. Each with planned mitigation.
-- **§10.5–10.8 renumbered** — subsections after the new §10.4 shifted by one; cross-refs
-  updated (§10.6 → §10.7 in two locations).
+## Phase R Changelog
+- **§11.6 Phase R — Retrofit** — five subsections: debt-scoping audit (§11.6.1),
+  retroactive contract mapping (§11.6.2), prioritised adoption plan with T1/T2/T3 tiers
+  (§11.6.3), module activation (§11.6.4), lifecycle entry (§11.6.5).
+- **A.8 Phase R checklist** — structured checklist covering all five retrofit stages.
+- **B.9 Retrofit Audit template** — ready-to-use `RETROFIT_AUDIT.md` with gap assessment
+  table, contract map summary, module activation register, and adoption plan scaffold.
+- **Glossary** — four new entries: Phase R (Retrofit), Retrofit audit, Debt-scoping,
+  Adoption tier.
 
 ## Next Action
-1. **Phase R (Retrofit) —** Codify the lifecycle for existing projects (debt-scoping, retroactive mapping).
-2. **Multi-Agent Protocol (§12.3) —** Define rules for collaborative AI environments.
-3. **Tooling phase —** Develop reference implementations (AST Walker, coverage-ratchet CI step).
-4. **Project-size profiles —** Introduce solo/small/large gates on Appendix A checklists.
+1. **Multi-Agent Protocol (§12.3) —** Define optional rules for collaborative AI
+   environments (analyst's prerogative whether to activate).
+2. **Tooling phase —** Develop reference implementations (AST Walker, coverage-ratchet CI step).
+3. **Project-size profiles —** Introduce solo/small/large gates on Appendix A checklists.

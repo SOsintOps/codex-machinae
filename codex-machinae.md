@@ -1048,6 +1048,86 @@ Each phase lists the **Core steps** that apply to every project, followed by act
 5. Test harness verified
 6. Return to Phase 3 after migration
 
+### 11.6 Phase R — Retrofit (existing projects)
+
+Phase R applies when the Codex Machinae is adopted on a project that already has code,
+history, and technical debt. Unlike Phases 0–4, Phase R is not sequential — it is a
+one-time convergence protocol that brings the project into a state from which it can
+enter the normal lifecycle at Phase 2 or Phase 3 depending on its maturity.
+
+**Trigger:** the project has existing source code, a repository with history, and at
+least one deployed or distributable artefact. If the project is greenfield, start at
+Phase 0 instead.
+
+#### 11.6.1 Debt-scoping audit
+
+Before any change, produce a structured assessment of the gap between the project's
+current state and the playbook's expectations. The audit covers:
+
+| Area | What to check | Output |
+|------|---------------|--------|
+| Requirements artefacts | PRD, user stories, ADRs, backlog | List of missing or incomplete artefacts |
+| Project structure | Directory layout (§2.1), configuration files, agent config (§2.4) | Conformance delta |
+| Code quality | Linting, formatting, commit conventions (§3) | Gap list with estimated effort |
+| Security posture | Secrets management (§4.3), input validation (§4.2) | Risk register |
+| Test coverage | Current coverage vs playbook baseline (§5.3), tier distribution | Coverage report + ratchet starting point |
+| Documentation | README, CHANGELOG, code comments (§6) | Missing-doc list |
+| CI/CD | Pipeline maturity vs §7 expectations | Pipeline gap analysis |
+| Boundary contracts | Existing integration points vs contract map (§8) | Draft contract map |
+
+The audit result is a document (`RETROFIT_AUDIT.md`) committed to the repository root.
+It is the single source of truth for retrofit planning.
+
+#### 11.6.2 Retroactive contract mapping
+
+Generate the Boundary Contract Map (§8) from the existing codebase. For each integration
+point discovered:
+
+1. Classify by axis (api, data, ui, hardware) and direction (inbound, outbound, bidirectional)
+2. Record the current compatibility status (`untested`, `compatible`, `incompatible`)
+3. Note any undocumented or implicit contracts — these are the highest-risk items
+
+The contract map is the foundation for activating M1 Surveillance and for understanding
+the project's blast radius on dependency changes.
+
+#### 11.6.3 Prioritised adoption plan
+
+Using the audit and the contract map, produce an ordered adoption plan. The plan groups
+work into three tiers:
+
+| Tier | Criteria | Examples |
+|------|----------|----------|
+| **T1 — Safety net** | Items that prevent silent regression or data loss | Coverage ratchet (§5.3), secrets audit (§4.3), CI pipeline baseline (§7) |
+| **T2 — Structure** | Items that bring the project into conformance with Core conventions | Directory layout (§2.1), agent config (§2.4), CHANGELOG (§6.3), contract map (§8) |
+| **T3 — Process** | Items that enable ongoing lifecycle operations | Surveillance activation (M1), checklist adoption (Appendix A), Definition of Done (§1.8) |
+
+Each tier is a commit boundary. T1 is non-negotiable and must be completed before T2
+begins. T2 and T3 may be interleaved if the project's context demands it, but T1 always
+comes first.
+
+#### 11.6.4 Module activation
+
+During retrofit, modules and domain appendices are activated exactly as in a greenfield
+project: when the trigger fires (§2.2). The difference is that triggers may already be
+satisfied by the existing codebase. The agent or analyst walks the trigger list and
+activates every module whose condition is met.
+
+Modules activated during retrofit follow the same rules as in the normal lifecycle, but
+the initial state of their artefacts (compatibility records, security reviews, taxonomy
+registries) is populated retroactively rather than incrementally.
+
+#### 11.6.5 Entry into the normal lifecycle
+
+Once T1 and T2 are complete, the project enters the normal lifecycle:
+
+- If the project is actively developed and receives regular feature work → enter at
+  **Phase 2** (§11.3).
+- If the project is stable and receives only maintenance and dependency updates → enter
+  at **Phase 3** (§11.4).
+
+The `RETROFIT_AUDIT.md` remains in the repository as a historical record. It is not
+updated after entry into the normal lifecycle — `PROJECT_STATUS.md` takes over.
+
 ---
 
 ## 12. Conventions for AI agents
@@ -2189,6 +2269,42 @@ This checklist applies only when M4 Classification & Taxonomy is active.
 - [ ] Machine-readable serialisation in sync with human-readable docs (M4.6)
 - [ ] Upstream contributions tracked and statuses updated (M4.7)
 
+### A.8 Phase R checklist (Retrofit)
+
+This checklist applies when adopting Codex Machinae on an existing project (§11.6).
+
+**Debt-scoping audit (§11.6.1)**
+
+- [ ] `RETROFIT_AUDIT.md` produced and committed
+- [ ] Requirements artefacts gap assessed (PRD, stories, ADRs)
+- [ ] Code quality gap assessed (linting, formatting, commits)
+- [ ] Security posture reviewed (secrets, input validation)
+- [ ] Test coverage measured and ratchet starting point set (§5.3)
+- [ ] Documentation gaps identified (README, CHANGELOG, code comments)
+- [ ] CI/CD pipeline gap analysed against §7
+
+**Contract mapping (§11.6.2)**
+
+- [ ] Boundary Contract Map generated from existing codebase (§8)
+- [ ] All integration points classified by axis and direction
+- [ ] Undocumented or implicit contracts flagged as high-risk
+
+**Adoption tiers (§11.6.3)**
+
+- [ ] T1 (Safety net) completed — coverage ratchet, secrets audit, CI baseline
+- [ ] T2 (Structure) completed — directory layout, agent config, CHANGELOG, contract map
+- [ ] T3 (Process) completed — module activation, checklist adoption, Definition of Done
+
+**Module activation (§11.6.4)**
+
+- [ ] All module triggers evaluated against existing codebase
+- [ ] Active modules' artefacts populated retroactively
+
+**Lifecycle entry (§11.6.5)**
+
+- [ ] Target phase determined (Phase 2 or Phase 3)
+- [ ] `PROJECT_STATUS.md` created or updated to reflect current phase
+
 ---
 
 ## Appendix B — Templates
@@ -2508,6 +2624,68 @@ introduced_in: "[taxonomy version, e.g. 1.2.0]"
 source: "upstream:[framework-name] | local"
 ```
 
+### B.9 Retrofit Audit template (§11.6)
+
+```markdown
+# Retrofit Audit — [Project Name]
+
+**Date:** [YYYY-MM-DD]
+**Analyst:** [name or agent ID]
+**Repository:** [URL or path]
+**Current state:** [brief description — e.g. "active development, no CI, partial tests"]
+
+## Gap assessment
+
+| Area | Playbook expectation | Current state | Gap severity | Effort estimate |
+|------|---------------------|---------------|--------------|-----------------|
+| Requirements artefacts (§1) | PRD, stories, ADRs, backlog | | | |
+| Project structure (§2) | Standard layout, agent config | | | |
+| Code quality (§3) | Linting, formatting, commits | | | |
+| Security (§4) | Secrets management, input validation | | | |
+| Testing (§5) | Coverage ratchet, tier distribution | | | |
+| Documentation (§6) | README, CHANGELOG, code comments | | | |
+| CI/CD (§7) | Pipeline with build/lint/test/deploy | | | |
+| Boundary contracts (§8) | Contract map generated | | | |
+
+## Contract map summary
+
+| Axis | Direction | Count | Documented | Undocumented |
+|------|-----------|-------|------------|--------------|
+| api | inbound | | | |
+| api | outbound | | | |
+| data | inbound | | | |
+| data | outbound | | | |
+| ui | outbound | | | |
+| hardware | inbound | | | |
+
+## Activated modules and domains
+
+| Module/Domain | Trigger met? | Rationale |
+|---------------|-------------|-----------|
+| D1 Web Service | | |
+| D4 Embedded | | |
+| D5 ML / Data | | |
+| M1 Surveillance | | |
+| M2 Security-sensitive | | |
+| M4 Classification | | |
+
+## Adoption plan
+
+### T1 — Safety net (mandatory first)
+1. [item]
+
+### T2 — Structure
+1. [item]
+
+### T3 — Process
+1. [item]
+
+## Target lifecycle phase
+
+**Recommended entry point:** Phase [2|3]
+**Rationale:** [why this phase]
+```
+
 ---
 
 ## Appendix C — Glossary
@@ -2554,3 +2732,7 @@ source: "upstream:[framework-name] | local"
 | **Back-pressure** | Load-shedding mechanism (circuit breaker, timeout, bulkhead) preventing cascading failure (D1.5) |
 | **OTA** | Over-the-air — firmware update delivered via network (D4.4) |
 | **A/B partitioning** | Firmware update strategy maintaining two slots for automatic rollback (D4.4) |
+| **Phase R (Retrofit)** | One-time convergence protocol for adopting the playbook on an existing project (§11.6) |
+| **Retrofit audit** | Structured gap assessment between a project's current state and the playbook's expectations (§11.6.1) |
+| **Debt-scoping** | The process of measuring the distance between an existing project and playbook conformance (§11.6.1) |
+| **Adoption tier** | Priority grouping (T1 safety net, T2 structure, T3 process) for ordering retrofit work (§11.6.3) |
