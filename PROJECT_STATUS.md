@@ -12,7 +12,6 @@ No stubs remain. The playbook design is complete.
 ## Modified Files (cumulative, current state)
 - `codex-machinae.md`: Core + Modules + Domains + Phase C hardening + Phase R (§11.6) +
   Multi-agent (§12.7) + Tooling specs (Appendix D) + Project-size profiles (§2.5).
-- `gemini_revision_260419.md`: Comprehensive senior analyst review + strategic synthesis.
 - `MODULARISATION_PLAN.md`: All phases (0–10) closed.
 - `README.md`: Minimal redesign (stable design badge).
 - `LICENSE`: CC BY 4.0.

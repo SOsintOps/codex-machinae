@@ -11,5 +11,8 @@ CLAUDE.md
 GEMINI.md
 AI-AGENTS.md
 
+# Review artifacts (local only)
+gemini_revision_*.md
+
 # OS
 .DS_Store
