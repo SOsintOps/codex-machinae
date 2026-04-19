@@ -381,6 +381,45 @@ Whichever layout is used, the configuration MUST cover:
 - Protected paths (files the agent cannot modify without human confirmation)
 - Editorial rules (max line length, punctuation constraints, etc.)
 
+### 2.5 Project-size profile
+
+The project declares a **size profile** that modulates which checklist items (Appendix A)
+are mandatory, recommended, or optional. The profile is declared once in the agent
+configuration file (§2.4) and applies for the project's lifetime unless explicitly changed.
+
+| Profile | Typical team | Typical codebase | When to choose |
+|---------|-------------|------------------|----------------|
+| **Solo** | 1 person | < 5 000 lines | Side projects, prototypes, personal tools, early-stage exploration |
+| **Small** | 2–5 people | 5 000–50 000 lines | Startup MVPs, internal tools, focused microservices |
+| **Large** | 6+ people | > 50 000 lines | Production systems, multi-team projects, regulated environments |
+
+**How profiles interact with checklists:**
+
+Each checklist item in Appendix A carries an implicit default of **mandatory for all
+profiles**. Items that are downgraded for smaller profiles are tagged inline:
+
+- ⬇ `[Small: recommended]` — mandatory for Large, recommended for Small and Solo.
+- ⬇ `[Solo: optional]` — mandatory for Large and Small, optional for Solo.
+- ⬇ `[Small: optional]` — mandatory for Large, optional for Small and Solo.
+
+Items without a tag are mandatory regardless of profile. The tagging is deliberately
+conservative: most items remain mandatory because the playbook's value comes from
+discipline, not from cutting corners. The profile exists to acknowledge that a solo
+developer maintaining a personal tool does not need the same ceremony as a regulated
+production system.
+
+**Rules:**
+
+1. The profile does not affect Core sections (§§1–12) — those rules apply universally.
+   Only checklist *items* in Appendix A are modulated.
+2. "Recommended" means the item should be done unless there is a concrete reason not to.
+   "Optional" means the item adds value but can be skipped without risk.
+3. A project may upgrade its profile at any time (Solo → Small, Small → Large). Downgrading
+   requires a conscious review: items that were mandatory under the old profile and are now
+   optional must be explicitly evaluated, not silently dropped.
+4. When in doubt, choose the higher profile. Over-engineering process is cheaper than
+   under-engineering quality.
+
 ---
 
 ## 3. Code quality
@@ -2185,9 +2224,10 @@ stubs themselves until the stubs are filled.
 Appendix A is comprehensive but dense. For small projects, unfiltered application of the full
 checklist can slow velocity disproportionately.
 
-**Planned mitigation.** Introduce a "project-size profile" (solo, small team, large team) that
-gates which checklist items are mandatory vs recommended vs optional. The profile is declared
-once in the project's configuration and the checklist adapts.
+**Mitigation — Project-size profiles (§2.5).** The project declares a size profile (Solo,
+Small, Large) that modulates checklist items as mandatory, recommended, or optional.
+Checklist items in Appendix A are tagged inline where the profile changes their obligation
+level. Untagged items remain mandatory for all profiles.
 
 ---
 
@@ -2197,16 +2237,19 @@ Each checklist is split into **Core** items (always apply) and **conditional** b
 activate only when the named module or domain appendix is active. Skip a conditional block
 entirely when its trigger has not fired.
 
+Items tagged with a profile downgrade (e.g. `[Solo: optional]`) follow the rules in §2.5.
+Untagged items are mandatory for all profiles.
+
 ### A.1 Phase 0 checklist (Requirements)
 
 **Core**
 
-- [ ] PRD written with all mandatory sections (§1.2)
+- [ ] PRD written with all mandatory sections (§1.2) `[Solo: recommended]`
 - [ ] State-of-the-art research conducted for the project domain (§1.7)
-- [ ] Pre-implementation checklist in the PRD completed and verified
-- [ ] User stories with acceptance criteria for the first sprint
-- [ ] ADRs for fundamental architectural decisions (with "Alternatives rejected" from real research)
-- [ ] Backlog created and ordered by priority
+- [ ] Pre-implementation checklist in the PRD completed and verified `[Solo: recommended]`
+- [ ] User stories with acceptance criteria for the first sprint `[Solo: optional]`
+- [ ] ADRs for fundamental architectural decisions (with "Alternatives rejected" from real research) `[Solo: recommended]`
+- [ ] Backlog created and ordered by priority `[Solo: optional]`
 - [ ] Definition of Done defined and shared
 - [ ] Critical dependencies identified in `DEPENDENCIES.md` (with alternatives comparison §1.7.1)
 
@@ -2221,17 +2264,17 @@ entirely when its trigger has not fired.
 
 - [ ] Directory structure created (§2.1)
 - [ ] Linter + formatter configured and integrated into CI (§3.4)
-- [ ] Base CI pipeline working (build + lint + unit) (§7)
+- [ ] Base CI pipeline working (build + lint + unit) (§7) `[Solo: recommended]`
 - [ ] Agent configuration written (§2.4)
-- [ ] Contract map generated (even manually) (§8)
+- [ ] Contract map generated (even manually) (§8) `[Solo: recommended]`
 - [ ] `.env.example` with all variables documented (§4.3)
-- [ ] Initial coverage baseline committed (§5.3)
+- [ ] Initial coverage baseline committed (§5.3) `[Solo: recommended]`
 
 **When M1 Surveillance is active**
 
 - [ ] Surveillance agents configured (M1.1)
 - [ ] First compatibility record created (`untested`)
-- [ ] Heartbeat alert configured (threshold: 6 hours) (M1.4.1)
+- [ ] Heartbeat alert configured (threshold: 6 hours) (M1.4.1) `[Small: recommended]`
 
 **When M2 Security-sensitive is active**
 
@@ -2256,9 +2299,9 @@ entirely when its trigger has not fired.
 - [ ] No lint warnings (§3.4)
 - [ ] Input validated with schema at every boundary (§4.2)
 - [ ] Tests written for new/modified code (§5)
-- [ ] Coverage has not dropped below baseline (§5.3)
+- [ ] Coverage has not dropped below baseline (§5.3) `[Solo: recommended]`
 - [ ] Documentation updated where necessary (§6)
-- [ ] Contract map updated if dependencies added/removed (§8)
+- [ ] Contract map updated if dependencies added/removed (§8) `[Solo: recommended]`
 - [ ] Errors handled explicitly, no empty catch blocks (§3.6)
 
 **When M2 Security-sensitive is active**
@@ -2292,8 +2335,8 @@ entirely when its trigger has not fired.
 - [ ] All tests pass across all tiers (§5.5)
 - [ ] CHANGELOG.md updated (§6.3)
 - [ ] Version tag created (§3.8)
-- [ ] Pre-production smoke tests green on promotion (§7.2)
-- [ ] Rollback tested (§7.3)
+- [ ] Pre-production smoke tests green on promotion (§7.2) `[Solo: optional]`
+- [ ] Rollback tested (§7.3) `[Solo: recommended]`
 
 **When D1 Web Service is active**
 
@@ -2327,13 +2370,13 @@ entirely when its trigger has not fired.
 
 This checklist applies only when M1 Surveillance is active.
 
-- [ ] Agents active with recent heartbeat (< 6 hours) (M1.4.1)
-- [ ] Weekly canary passed (M1.4.3)
-- [ ] Monthly retrospective executed (M1.4.2)
+- [ ] Agents active with recent heartbeat (< 6 hours) (M1.4.1) `[Small: recommended]`
+- [ ] Weekly canary passed (M1.4.3) `[Small: recommended]`
+- [ ] Monthly retrospective executed (M1.4.2) `[Small: recommended]`
 - [ ] Never-auto-merge list reviewed (§9.3)
 - [ ] Coverage baseline updated (§5.3)
 - [ ] Contract map regenerated after refactor (§8)
-- [ ] Thresholds reviewed quarterly (M1.4)
+- [ ] Thresholds reviewed quarterly (M1.4) `[Small: recommended]`
 - [ ] State-of-the-Art Scout run in the current quarter (§1.7.5, M1.1.2.6)
 - [ ] SOTA reports reviewed and actions planned for `evaluate` or `migrate` signals
 
@@ -2848,6 +2891,7 @@ source: "upstream:[framework-name] | local"
 | **Lead agent** | The agent designated as single writer for coordination artefacts in a multi-agent setup (§12.7.1) |
 | **Scope partition** | Explicit assignment of non-overlapping work perimeters to agents in a multi-agent setup (§12.7.2) |
 | **Inter-agent handover** | Structured note transferring context from one agent to another during shift change or scope transfer (§12.7.5) |
+| **Project-size profile** | Declaration (Solo, Small, Large) that modulates checklist obligation levels in Appendix A (§2.5) |
 | **AST Walker** | Static-analysis tool that generates the Boundary Contract Map by scanning source code (Appendix D.1) |
 | **Coverage ratchet (tool)** | CI step that enforces the coverage-ratchet mechanism by comparing coverage reports against a committed baseline (Appendix D.2) |
 | **Surveillance agent scaffold** | Minimal agent that runs contract tests on a schedule and produces compatibility records (Appendix D.3) |
