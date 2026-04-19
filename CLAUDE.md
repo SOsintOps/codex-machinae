@@ -15,7 +15,6 @@
 ## Protected Paths
 - Do not modify core playbook sections (§1, §8, §9) without prior human confirmation or an Issue/PR.
 - Do not alter severity and autonomy parameters (§10, §12) unless explicitly requested to evolve the system.
-- `example/00-prd.md` is read-only. Extract patterns from it and promote them into the playbook; do not edit the example itself.
 
 ## Scope Discipline
 - Design phase only. Do not reintroduce templates, scripts, CI, or folder scaffolds (`docs/adr/`, `src/`, `tests/`, etc.). Tooling is deferred until the playbook design stabilises.

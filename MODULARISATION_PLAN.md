@@ -138,7 +138,7 @@ modules as early validators of the cross-cutting pattern.
 
 | Role | Direction of flow | Projects |
 |------|-------------------|----------|
-| **Inspiration / quality benchmark** — a well-structured piece of work whose level of rigour, tone, and organisation sets the bar for what the playbook should produce. Read-only by CLAUDE.md; the playbook takes inspiration but does not copy it | observation → playbook design choices | `example/00-prd.md` (Cortex) |
+| **Inspiration / quality benchmark** — a well-structured piece of work whose level of rigour, tone, and organisation sets the bar for what the playbook should produce. The playbook takes inspiration but does not copy it | observation → playbook design choices | Cortex PRD (external reference, not in this repository) |
 | **Downstream application target** — the playbook, once ready, will be applied to retrofit started-but-unfinished work | playbook → project | `~/github/zero-to-hero-workshop` branch `the-italian-job` (full-stack Next.js web app); `~/github/safe-heaven` (RPi 5 / Hailo / drone / radar / local LLM) |
 
 The downstream projects are **post-MVP customers**, not inputs to MVP design. It is a useful
@@ -390,9 +390,9 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
 - 2026-04-18 — Reference projects (Italian Job, SafeHeaven) reclassified as illustrative.
   MVP rationale rewritten on merit.
 - 2026-04-18 — Further clarification: Italian Job and SafeHeaven are **downstream application
-  targets** (playbook → project). `example/00-prd.md` (Cortex) is **inspiration / quality
-  benchmark** — a well-structured reference whose rigour sets the bar, not a mechanical pattern
-  source. The playbook takes inspiration from Cortex but never copies it; the downstream projects
+  targets** (playbook → project). The Cortex PRD is **inspiration / quality benchmark** — a
+  well-structured reference whose rigour sets the bar, not a mechanical pattern source.
+  The playbook takes inspiration from Cortex but never copies it; the downstream projects
   are post-MVP customers; their domain alignment with the MVP is coincidental, not causal.
 - 2026-04-18 — Added Resumption protocol (ground-truth hierarchy, resume steps, checkpoint
   commit policy). Split Phase 8 into sub-phases 8.1–8.7 so token exhaustion loses at most one

@@ -49,7 +49,6 @@ describe the problem or suggestion clearly.
   unless the playbook design explicitly calls for them.
 - **Emergent Expansion:** new content must have a clear activation trigger (§2.2).
   Nothing is mandatory until the trigger fires.
-- **Read-only example:** `example/00-prd.md` is a quality benchmark. Do not modify it.
 
 ### Filling domain stubs
 
