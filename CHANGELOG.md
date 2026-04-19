@@ -88,7 +88,6 @@ as it is a design document, not a software release.
 
 ### Added
 - `codex-machinae.md` — initial playbook (monolithic, web-service-centric).
-- `example/00-prd.md` — Cortex PRD as reference/quality benchmark.
 - Multi-agent configuration: `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`.
 - `PROJECT_STATUS.md` — session-state tracking.
 - CC BY 4.0 licence.

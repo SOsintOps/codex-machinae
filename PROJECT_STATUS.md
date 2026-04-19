@@ -1,7 +1,7 @@
 # Project Status — Codex Machinae
 
 ## Objective
-Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted software development, extracting general patterns from `example/00-prd.md` (Cortex project) and promoting them into the playbook.
+Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted software development.
 
 All documentation and commits are in **British English**.
 
@@ -24,7 +24,6 @@ concrete mitigations in place.
   tooling-specified, profile-aware.
 - All three Known Limitations now mitigated: mechanical barrier (Appendix D),
   incomplete domains (planned D2/D3 priority), checklist density (§2.5 profiles).
-- Reference example: `example/00-prd.md` (Cortex) — unchanged; quality benchmark.
 
 ## Recent Changelog
 - **§2.5 Project-size profile** — Solo/Small/Large declaration that modulates Appendix A

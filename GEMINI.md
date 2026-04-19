@@ -8,7 +8,7 @@
 
 ## Project Objective
 
-Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted software development, extracting general patterns from `example/00-prd.md` and promoting them into the playbook.
+Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted software development.
 
 **Working Language:** British English for all documentation, commits, and agent outputs.
 
@@ -27,7 +27,7 @@ Gemini CLI MUST apply the conventions defined in `codex-machinae.md` to manage t
 
 ### 2. Scope Discipline
 
-- This repository is in the **design phase**. Only `codex-machinae.md`, `example/00-prd.md`, and the agent configs are in scope.
+- This repository is in the **design phase**. Only `codex-machinae.md` and the agent configs are in scope.
 - Do **not** reintroduce templates, bootstrap scripts, CI workflows, or release automation. Those are explicitly deferred until the playbook design stabilises.
 - Do **not** create folders like `docs/adr/`, `docs/prd/`, `docs/research/`, `src/`, `tests/`, etc. in this repo. They belong to generated projects, not to the playbook repo itself.
 
@@ -35,7 +35,6 @@ Gemini CLI MUST apply the conventions defined in `codex-machinae.md` to manage t
 
 - **Consistency:** Ensure cross-references between sections (e.g. §9 citing §1.7.5) remain correct as the playbook is refactored.
 - **Style:** Maintain the professional, technical, and concise tone of the document.
-- **Promotion rule:** When a pattern in `example/00-prd.md` is general enough, abstract it and promote it into the playbook; do not modify the example itself.
 
 ---
 

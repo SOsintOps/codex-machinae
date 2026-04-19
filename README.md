@@ -122,7 +122,6 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | File | Description |
 |------|-------------|
 | [`codex-machinae.md`](codex-machinae.md) | The playbook — Core + Domain Appendices + Modules + Appendices (~3 100 lines) |
-| [`example/00-prd.md`](example/00-prd.md) | Reference PRD (Cortex project) — quality benchmark, read-only |
 | [`PROJECT_STATUS.md`](PROJECT_STATUS.md) | Current project state, updated every session |
 | [`MODULARISATION_PLAN.md`](MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
 | [`gemini_revision_260419.md`](gemini_revision_260419.md) | Cross-evaluation: Gemini senior review + Claude counter-evaluation + strategic synthesis |

@@ -22,7 +22,7 @@ All shared rules live here. Agent-specific files must not contradict this docume
 ## Project Overview
 
 **Name:** Codex Machinae
-**Description:** Universal software development playbook under active design. The repo contains the playbook itself and a reference example (`example/00-prd.md`) used to derive general patterns.
+**Description:** Universal software development playbook under active design.
 
 **Current scope:** design only. No templates, scaffolds, scripts, or CI until the playbook design stabilises.
 
@@ -46,7 +46,6 @@ All shared rules live here. Agent-specific files must not contradict this docume
 
 - `codex-machinae.md` core sections §1, §8, §9 — no changes without prior human confirmation or an Issue/PR.
 - Severity and autonomy parameters §10, §12 — no changes unless explicitly requested to evolve the system.
-- `example/00-prd.md` — read-only reference. Do not modify; patterns are extracted from it and promoted into the playbook.
 
 ## Workflow (all agents)
 
