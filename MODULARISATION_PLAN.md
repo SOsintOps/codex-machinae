@@ -279,52 +279,52 @@ Every phase is resumable: the plan's state is the filesystem + the progress log.
 - [x] Fixed four reference bugs along the way: §1.7 → §1.8 (DoD) in Phases 0 and 2; §2.3 → §2.4 (agent configuration) in Phase 1; §2.2 → §2.3 (PROJECT_STATUS.md) in Phase 2
 - [x] Commit: `refactor(playbook): generalise lifecycle phases`
 
-### Phase 8 — Module and domain content (MVP set)
+### Phase 8 — Module and domain content (MVP set) — ✅ CLOSED 2026-04-19
 
 Full content for the MVP targets (D1, D4, D5, M1, M2, M4); stubs only for D2, D3, D6, D7, M3.
 **Split into sub-phases — one commit each — so token exhaustion never loses more than one module.**
 
 #### Phase 8.1 — D1 Web Service (full)
-- [ ] Trigger, extracted §§6.3, 7.2 specifics, 7.5; domain-specific testing patterns; deploy strategies
-- [ ] Commit: `refactor(playbook): flesh out D1 Web Service`
+- [x] Trigger, extracted §§6.3, 7.2 specifics, 7.5; domain-specific testing patterns; deploy strategies
+- [x] Commit: `refactor(playbook): flesh out D1 Web Service`
 
 #### Phase 8.2 — D4 Embedded / Firmware (full)
-- [ ] Trigger (fixed hardware target, memory/energy limits), hardware-in-loop testing, flash/OTA,
+- [x] Trigger (fixed hardware target, memory/energy limits), hardware-in-loop testing, flash/OTA,
       device-protocol contracts
-- [ ] Commit: `refactor(playbook): flesh out D4 Embedded / Firmware`
+- [x] Commit: `refactor(playbook): flesh out D4 Embedded / Firmware`
 
 #### Phase 8.3 — D5 ML / Data Pipeline (full)
-- [ ] Trigger, extracted §5.9 golden queries, §7.4 migrations, training pipeline, model drift,
+- [x] Trigger, extracted §5.9 golden queries, §7.4 migrations, training pipeline, model drift,
       dataset versioning
-- [ ] Commit: `refactor(playbook): flesh out D5 ML / Data Pipeline`
+- [x] Commit: `refactor(playbook): flesh out D5 ML / Data Pipeline`
 
 #### Phase 8.4 — M1 Surveillance (polish)
-- [ ] Most content is already filled in Phase 2; this sub-phase polishes cross-references,
+- [x] Most content is already filled in Phase 2; this sub-phase polishes cross-references,
       adds examples, ensures the activation trigger is sharp
-- [ ] Commit: `refactor(playbook): polish M1 Surveillance`
+- [x] Commit: `refactor(playbook): polish M1 Surveillance`
 
 #### Phase 8.5 — M2 Security-sensitive (polish)
-- [ ] Most content is already filled in Phase 3; polish, examples, sharpen trigger
-- [ ] Commit: `refactor(playbook): polish M2 Security-sensitive`
+- [x] Most content is already filled in Phase 3; polish, examples, sharpen trigger
+- [x] Commit: `refactor(playbook): polish M2 Security-sensitive`
 
 #### Phase 8.6 — M4 Classification & Taxonomy (full, framework-agnostic)
-- [ ] Design principles (MECE, parsimony, stable IDs, semver of the taxonomy itself)
-- [ ] Governance (ownership, proposal/deprecation protocol, RFC for new terms)
-- [ ] **Scouting protocol** — the AI researches domain-specific frameworks per project; binds to
+- [x] Design principles (MECE, parsimony, stable IDs, semver of the taxonomy itself)
+- [x] Governance (ownership, proposal/deprecation protocol, RFC for new terms)
+- [x] **Scouting protocol** — the AI researches domain-specific frameworks per project; binds to
       §1.7 SOTA Scout so scouting is a first-class, repeatable activity rather than an ad-hoc step
-- [ ] Adoption patterns — how to integrate a found framework without reinventing it
-- [ ] Audits (coverage, ambiguity, false-pos/neg metrics, drift over time)
-- [ ] Machine-readable formats (JSON Schema / JSON-LD / OWL / STIX-like serialisations)
-- [ ] Upstream contribution protocol — when a project's local extension deserves promotion back
-- [ ] Illustrative examples section (non-prescriptive): threat intel → MITRE ATT&CK/STIX/FT3;
+- [x] Adoption patterns — how to integrate a found framework without reinventing it
+- [x] Audits (coverage, ambiguity, false-pos/neg metrics, drift over time)
+- [x] Machine-readable formats (JSON Schema / JSON-LD / OWL / STIX-like serialisations)
+- [x] Upstream contribution protocol — when a project's local extension deserves promotion back
+- [x] Illustrative examples section (non-prescriptive): threat intel → MITRE ATT&CK/STIX/FT3;
       vulnerability → CVE/CWE/CAPEC; sharing policy → TLP; intelligence cycle → F3EAD;
       biomedicine → SNOMED/ICD; geospatial → ISO 19115. Examples exist to show the *shape*
       of adoption, never as a default catalogue
-- [ ] Commit: `refactor(playbook): flesh out M4 Classification & Taxonomy`
+- [x] Commit: `refactor(playbook): flesh out M4 Classification & Taxonomy`
 
 #### Phase 8.7 — Stubs (D2, D3, D6, D7, M3)
-- [ ] Each stub: heading + trigger + 2–3 bullets
-- [ ] Commit: `refactor(playbook): add stubs for D2, D3, D6, D7, M3`
+- [x] Each stub: heading + trigger + 2–3 bullets
+- [x] Commit: `refactor(playbook): add stubs for D2, D3, D6, D7, M3`
 
 ### Phase 9 — Appendices A/B/C reorganisation
 
@@ -562,3 +562,6 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   Ready for Phase 8.7 (stubs D2, D3, D6, D7, M3).
 - 2026-04-19 — Phase 8.7 intent: replace generic placeholders in D2, D3, D6, D7, M3 with
   concrete bullet-point stubs listing post-MVP scope. Single commit.
+- 2026-04-19 — Phase 8.7 executed as a single commit. All Phase 8 sub-phases (8.1–8.7)
+  closed. Phase 8 marked CLOSED. PROJECT_STATUS.md updated. Ready for Phase 9
+  (Appendices A/B/C reorganisation).
