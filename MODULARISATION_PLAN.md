@@ -558,3 +558,7 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   (ownership, RFC, deprecation), M4.3 Scouting protocol (binding to §1.7), M4.4 Adoption
   patterns, M4.5 Audits (coverage, ambiguity, drift), M4.6 Machine-readable formats, M4.7
   Upstream contribution protocol, M4.8 Illustrative examples. Single commit.
+- 2026-04-19 — Phase 8.6 executed as a single commit. M4 fully populated with M4.1–M4.8.
+  Ready for Phase 8.7 (stubs D2, D3, D6, D7, M3).
+- 2026-04-19 — Phase 8.7 intent: replace generic placeholders in D2, D3, D6, D7, M3 with
+  concrete bullet-point stubs listing post-MVP scope. Single commit.

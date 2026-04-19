@@ -1236,8 +1236,9 @@ Every public SDK surface (exported modules, classes, functions, types) MUST have
 
 API documentation is generated in CI and published alongside the package. Manually written API documentation that diverges from the code is an announced bug.
 
-*Further D2 content (semantic-versioning discipline for public contracts, deprecation policy,
-backwards-compatibility windows, release notes) to be fleshed out post-MVP in Phase 8.7.*
+*Post-MVP scope for D2:* semantic-versioning discipline for public contracts, deprecation
+policy with minimum backwards-compatibility windows, breaking-change detection in CI,
+multi-language release coordination (when the SDK ships in more than one language).
 
 ## D3 CLI Tool
 
@@ -1257,8 +1258,9 @@ The CLI's contract surface (flags, subcommands, exit codes, output modes) MUST b
 
 Documentation is generated from the code (help strings, argument metadata) in CI. Manually written documentation that diverges from `--help` is an announced bug.
 
-*Further D3 content (argument/subcommand design, exit-code contracts, machine-readable output
-modes, shell completion, installation channels) to be fleshed out post-MVP in Phase 8.7.*
+*Post-MVP scope for D3:* argument and subcommand design conventions, exit-code contracts
+(success, user error, internal error), machine-readable output modes (`--json`, `--csv`),
+shell-completion generation, installation channels (Homebrew, apt, Scoop, standalone binary).
 
 ## D4 Embedded / Firmware
 
@@ -1502,17 +1504,26 @@ not promoted — it is sent back for investigation, not manually overridden.
 **Activation trigger.** The project ships to iOS App Store, Google Play, or any vendor-gated
 mobile distribution channel.
 
-**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover review/submission
-workflows, staged rollouts, on-device telemetry, crash reporting, and backwards-compatibility
-windows with prior OS versions.*
+**In addition to Core.** *Stub — to be fleshed out post-MVP.*
+
+- App-store review and submission workflows (iOS App Review, Google Play review)
+- Staged rollouts (percentage-based, phased by region or user segment)
+- On-device telemetry and crash reporting (consent-aware, GDPR/CCPA-compliant)
+- Backwards-compatibility windows with prior OS versions (minimum supported version policy)
+- Over-the-air (OTA) update vs. store-update trade-offs
 
 ## D7 Static Site / Frontend-only
 
 **Activation trigger.** The project renders entirely client-side or as a statically-generated
 site, with no backend owned by the project itself.
 
-**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover build/bundle budgets,
-hosting/CDN contracts, client-side error reporting, and accessibility audits.*
+**In addition to Core.** *Stub — to be fleshed out post-MVP.*
+
+- Build and bundle size budgets (JS/CSS/image weight ratchets, tree-shaking verification)
+- Hosting and CDN contracts (cache-invalidation strategy, edge-function limits)
+- Client-side error reporting (source-map upload, session replay, consent)
+- Accessibility audits (WCAG 2.2 AA baseline, automated + manual testing)
+- Core Web Vitals monitoring (LCP, INP, CLS thresholds)
 
 ---
 
@@ -1773,9 +1784,13 @@ issue. The override is recorded in the contract map (§8) so it is not forgotten
 (applies whenever D2, D3, D4, or D6 is active; may also apply to D1 when artefacts are
 published to an internal registry).
 
-**In addition to Core.** *Stub — to be fleshed out post-MVP. Will cover semver discipline,
-changelog automation, signing and provenance, release notes, and rollback-of-release
-protocols.*
+**In addition to Core.** *Stub — to be fleshed out post-MVP.*
+
+- Semver discipline (when to bump major/minor/patch, pre-release tags)
+- Changelog automation (conventional-commits-based generation, human-edited summaries)
+- Artefact signing and provenance (Sigstore, GPG, SLSA levels)
+- Release-notes template (audience-facing vs. developer-facing)
+- Rollback-of-release protocols (yanking a published version, advisory issuance)
 
 ## M4 Classification & Taxonomy
 
