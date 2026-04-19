@@ -532,3 +532,10 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   with D4.1 Hardware boundary contracts, D4.2 Cross-compilation and toolchain, D4.3
   Hardware-in-the-loop testing, D4.4 Flash and OTA update strategy, D4.5 Power and thermal
   budgets, D4.6 Bring-up checklist. Single commit.
+- 2026-04-19 — Phase 8.2 executed as a single commit. D4 now has D4.1–D4.6 covering HAL,
+  cross-compilation, HIL testing, flash/OTA, power/thermal budgets, bring-up checklist.
+  Ready for Phase 8.3 (D5 ML / Data Pipeline).
+- 2026-04-19 — Phase 8.3 intent: flesh out D5 ML / Data Pipeline. D5.1 (golden queries)
+  and D5.2 (database migration) already populated. Add D5.3 Training-pipeline
+  reproducibility, D5.4 Dataset versioning, D5.5 Drift monitoring, D5.6 Evaluation
+  contracts. Remove the Phase 8.3 backlog marker. Single commit.
