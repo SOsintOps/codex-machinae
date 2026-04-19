@@ -72,8 +72,8 @@ codex-machinae.md
 │
 ├── Part II — Domain Appendices (activate per project type)
 │   ├── D1  Web Service          ████████████  full
-│   ├── D2  Library / SDK        ░░░░░░░░░░░░  stub
-│   ├── D3  CLI Tool             ░░░░░░░░░░░░  stub
+│   ├── D2  Library / SDK        ████████████  full
+│   ├── D3  CLI Tool             ████████████  full
 │   ├── D4  Embedded / Firmware  ████████████  full
 │   ├── D5  ML / Data Pipeline   ████████████  full
 │   ├── D6  Mobile App           ░░░░░░░░░░░░  stub
@@ -153,7 +153,7 @@ Every agent reads `PROJECT_STATUS.md` at session start and updates it at session
 | Priority | Item | Status |
 |----------|------|--------|
 | 1 | First downstream retrofit on a real project | Planned |
-| 2 | Fill D2 (Library/SDK) and D3 (CLI Tool) stubs | Planned |
+| 2 | ~~Fill D2 (Library/SDK) and D3 (CLI Tool) stubs~~ | Done |
 | 3 | Build reference implementations against Appendix D specs | Planned |
 | 4 | Fill D6 (Mobile), D7 (Static Site), M3 (Release) stubs | Backlog |
 
