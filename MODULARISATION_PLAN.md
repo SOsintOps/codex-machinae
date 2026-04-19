@@ -1,6 +1,6 @@
 # Codex Machinae — Modularisation Plan
 
-**Status:** Draft v2 — Phase 0 closed, Phase 1 ready to start
+**Status:** Draft v2 — Phases 0–8 closed, Phase 9 ready to start
 **Created:** 2026-04-18
 **Owner:** human + Claude (multi-session)
 **Goal:** Split the playbook into a universal **Core** + **Domain Appendices** (per project type) +
