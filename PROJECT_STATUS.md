@@ -44,7 +44,7 @@ remains deferred until the design stabilises.
     - M4 Classification & Taxonomy: M4.1–M4.8 fully populated (MECE principles, governance,
       scouting protocol, adoption patterns, audits, machine-readable formats, upstream
       contribution, illustrative examples).
-- `MODULARISATION_PLAN.md`: durable plan; Phases 0–7 closed (progress log up to date).
+- `MODULARISATION_PLAN.md`: durable plan; Phases 0–8 closed (progress log up to date).
 - `README.md`: minimal redesign (H1 + ASCII banner + 3 badges + CAUTION + TL;DR).
 - `LICENSE`: CC BY 4.0 (official legal text).
 - `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md`: point agents at the plan on resume.
