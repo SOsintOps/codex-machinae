@@ -128,6 +128,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |
 | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | Contribution guidelines |
 | [`docs/SECURITY.md`](docs/SECURITY.md) | Vulnerability reporting policy |
+| [`docs/FAQ.md`](docs/FAQ.md) | Common questions, inspirations, and framework references |
 | [`docs/MODULARISATION_PLAN.md`](docs/MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
 | **Local only** | |
 | `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — not tracked |
