@@ -24,14 +24,13 @@ No stubs remain. The playbook design is complete.
   incomplete domains (planned D2/D3 priority), checklist density (§2.5 profiles).
 
 ## Recent Changelog
-- **D6 Mobile App** — six subsections: D6.1 App-store submission and review, D6.2
-  Staged rollouts, D6.3 Device and OS compatibility, D6.4 Crash reporting and on-device
-  telemetry, D6.5 Offline-first and data synchronisation, D6.6 OTA vs store updates.
-- **Appendix A** — PR and release checklists extended with D6 items.
-- **Known Limitations** — "Incomplete domain coverage" marked as resolved.
-- **Glossary** — three new entries.
-- *(Previous: D7 full content; M3 full content; D2/D3 full content; §2.5 profiles;
-  Appendix D tooling specs; §12.7 multi-agent; §11.6 Phase R.)*
+- **Repository restructure** — service documents moved to `docs/` per §2.1:
+  `CHANGELOG.md`, `CONTRIBUTING.md`, `MODULARISATION_PLAN.md`. New `docs/SECURITY.md`.
+- **Gemini revision** — removed from tracking, kept locally via `.gitignore`.
+- **Agent configs** — `AI-AGENTS.md`, `CLAUDE.md`, `GEMINI.md` excluded from version
+  control (local only).
+- *(Previous: D6 full content; D7 full content; M3 full content; D2/D3 full content;
+  §2.5 profiles; Appendix D tooling specs; §12.7 multi-agent; §11.6 Phase R.)*
 
 ## Next Action
 1. **First downstream retrofit** — apply the playbook to an existing project to validate

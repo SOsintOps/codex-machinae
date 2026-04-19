@@ -21,7 +21,7 @@ commit messages, comments, and PR descriptions.
 
 ### Reporting issues
 
-Open a [GitHub Issue](../../issues) for:
+Open a [GitHub Issue](../../../issues) for:
 
 - **Errors** — incorrect cross-references, broken numbering, factual mistakes.
 - **Gaps** — missing coverage for a scenario the playbook should address.
