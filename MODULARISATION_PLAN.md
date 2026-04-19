@@ -545,3 +545,9 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   concrete "when in doubt" guidance, add domain-composition table, add directory-tree
   example to M1.3.1, strengthen M1.4.4 with §8.4 cross-reference and scheduled
   re-generation. Single commit.
+- 2026-04-19 — Phase 8.4 executed as a single commit. M1 polished. Ready for Phase 8.5
+  (M2 polish).
+- 2026-04-19 — Phase 8.5 intent: polish M2 Security-sensitive. Sharpen trigger with
+  concrete examples, add domain-composition note, expand M2.3 with annual-review table,
+  add M2.4 Dependency-vulnerability management (response SLA, transitive deps). Single
+  commit.
