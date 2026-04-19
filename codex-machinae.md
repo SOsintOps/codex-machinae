@@ -1530,12 +1530,24 @@ Each module adds content to the Core; it never replaces Core rules.
 **Activation trigger.** The Boundary Contract Map (§8) contains at least one outbound contract
 (dependency, upstream API, device driver, external data source) whose evolution must be
 tracked over time. A project with no outbound contracts — a pure offline utility, a one-shot
-script — does not need this module.
+script — does not need this module. When in doubt: if the project has a lock file
+(`package-lock.json`, `poetry.lock`, `Cargo.lock`, …) or calls any external API, the trigger
+has fired.
 
 **In addition to Core.** Surveillance runs autonomous agents against outbound contracts at
 regular intervals; detected changes flow through Core classification (§9) and remediation
 (§10), and the detection path itself is self-tested so the loop stays honest. Every action
-produced by the module is an event in the compatibility database, which is the audit trail.
+produced by the module is an event in the compatibility database (M1.3), which is the audit
+trail.
+
+**Relationship to other modules and appendices.** M1 composes with any domain:
+
+| Domain active | M1 watches |
+|---------------|------------|
+| D1 Web Service | Upstream APIs, cloud-provider SDKs, container base images |
+| D4 Embedded | Device-driver versions, toolchain releases, RTOS updates |
+| D5 ML / Data | Framework versions (PyTorch, TensorFlow), dataset registry changes, model-serving API drift |
+| Any | Language runtime, linter/formatter, CI runner images |
 
 ### M1.1 Surveillance agents
 
@@ -1639,6 +1651,18 @@ At the start of each cycle, before any test, the system freezes versions in a JS
 
 Flat JSON in the repo, one file per version per dependency. No external database.
 
+```
+compat-db/
+├── stripe-api/
+│   ├── 2026-04-01_v2024-12-18.json
+│   └── 2026-04-15_v2025-01-15.json
+├── express/
+│   ├── 2026-04-10_4.21.0.json
+│   └── 2026-04-18_4.21.1.json
+└── _aggregated/
+    └── 2026-04-18.json
+```
+
 #### M1.3.2 Events (append-only)
 
 The `events` array is the complete audit trail. Never modify or remove events.
@@ -1667,7 +1691,9 @@ Weekly job: injects a synthetic record to verify the entire detection → classi
 
 #### M1.4.4 Boundary Contract Map cardinality guard
 
-If the contract count drops > 10%, CI fails.
+Delegates to Core §8.4. If the total contract count — or any single-axis count — drops by
+more than 10% between generations, CI fails. M1 adds a scheduled re-generation (weekly or on
+dependency change) so the guard runs even when no human remembers to regenerate the map.
 
 ## M2 Security-sensitive
 

@@ -539,3 +539,9 @@ None. All Phase 0 decisions are recorded in the Decisions log below.
   and D5.2 (database migration) already populated. Add D5.3 Training-pipeline
   reproducibility, D5.4 Dataset versioning, D5.5 Drift monitoring, D5.6 Evaluation
   contracts. Remove the Phase 8.3 backlog marker. Single commit.
+- 2026-04-19 — Phase 8.3 executed as a single commit. D5 now has D5.1–D5.6. Ready for
+  Phase 8.4 (M1 polish).
+- 2026-04-19 — Phase 8.4 intent: polish M1 Surveillance. Sharpen activation trigger with
+  concrete "when in doubt" guidance, add domain-composition table, add directory-tree
+  example to M1.3.1, strengthen M1.4.4 with §8.4 cross-reference and scheduled
+  re-generation. Single commit.
