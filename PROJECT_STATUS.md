@@ -6,9 +6,9 @@ Evolve `codex-machinae.md` into a universal Meta-Framework for LLM-assisted soft
 All documentation and commits are in **British English**.
 
 ## Current Phase
-M3 Release & Distribution fully populated. All four cross-cutting modules (M1–M4)
-and five of seven domain appendices (D1–D5) now have full content. Only D6 (Mobile)
-and D7 (Static Site) remain stubs.
+D7 Static Site / Frontend-only fully populated. Six of seven domain appendices
+(D1–D5, D7) and all four cross-cutting modules (M1–M4) now have full content.
+Only D6 (Mobile App) remains a stub.
 
 ## Modified Files (cumulative, current state)
 - `codex-machinae.md`: Core + Modules + Domains + Phase C hardening + Phase R (§11.6) +
@@ -26,17 +26,17 @@ and D7 (Static Site) remain stubs.
   incomplete domains (planned D2/D3 priority), checklist density (§2.5 profiles).
 
 ## Recent Changelog
-- **M3 Release & Distribution** — five subsections: M3.1 Release cadence, M3.2
-  Changelog automation, M3.3 Artefact signing and provenance, M3.4 Release-notes
-  protocol, M3.5 Rollback of a published release.
-- **Appendix A** — release checklist extended with M3 items.
-- **Known Limitations** — incomplete domain coverage narrowed to D6, D7 only.
-- **Glossary** — four new entries.
-- *(Previous: D2/D3 full content; §2.5 profiles; Appendix D tooling specs; §12.7
-  multi-agent; §11.6 Phase R.)*
+- **D7 Static Site / Frontend-only** — five subsections: D7.1 Build and bundle budgets,
+  D7.2 Hosting and CDN contracts, D7.3 Client-side error reporting, D7.4 Accessibility,
+  D7.5 Core Web Vitals.
+- **Appendix A** — PR and release checklists extended with D7 items.
+- **Known Limitations** — incomplete domain coverage narrowed to D6 only.
+- **Glossary** — three new entries.
+- *(Previous: M3 full content; D2/D3 full content; §2.5 profiles; Appendix D tooling
+  specs; §12.7 multi-agent; §11.6 Phase R.)*
 
 ## Next Action
 1. **First downstream retrofit** — apply the playbook to an existing project to validate
    Phase R and the tooling specs in practice.
 2. **Build reference implementations** against Appendix D specifications.
-3. **Fill remaining stubs** — D6 (Mobile App), D7 (Static Site) when demand arises.
+3. **Fill D6 (Mobile App)** — when demand arises from a downstream project.
