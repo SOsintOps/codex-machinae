@@ -123,13 +123,16 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 |------|-------------|
 | [`codex-machinae.md`](codex-machinae.md) | The playbook — Core + Domain Appendices + Modules + Appendices (~3 100 lines) |
 | [`PROJECT_STATUS.md`](PROJECT_STATUS.md) | Current project state, updated every session |
-| [`MODULARISATION_PLAN.md`](MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
-| `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — local only, not tracked |
-| `CLAUDE.md` | Claude-specific agent configuration — local only, not tracked |
-| `GEMINI.md` | Gemini-specific agent configuration — local only, not tracked |
-| [`CHANGELOG.md`](CHANGELOG.md) | Version history |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution guidelines |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |
+| **`docs/`** | |
+| [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |
+| [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | Contribution guidelines |
+| [`docs/SECURITY.md`](docs/SECURITY.md) | Vulnerability reporting policy |
+| [`docs/MODULARISATION_PLAN.md`](docs/MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
+| **Local only** | |
+| `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — not tracked |
+| `CLAUDE.md` | Claude-specific agent configuration — not tracked |
+| `GEMINI.md` | Gemini-specific agent configuration — not tracked |
 
 ---
 
@@ -154,7 +157,7 @@ Every agent reads `PROJECT_STATUS.md` at session start and updates it at session
 | 1 | First downstream retrofit on a real project | Planned |
 | 2 | ~~Fill D2 (Library/SDK) and D3 (CLI Tool) stubs~~ | Done |
 | 3 | Build reference implementations against Appendix D specs | Planned |
-| 4 | Fill D6 (Mobile), D7 (Static Site), M3 (Release) stubs | Backlog |
+| 4 | ~~Fill D6 (Mobile), D7 (Static Site), M3 (Release) stubs~~ | Done |
 
 ---
 
