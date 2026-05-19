@@ -1,7 +1,5 @@
-# Ruflo / Claude Flow orchestration artifacts
+# Orchestration artifacts (legacy)
 .swarm/
-.claude-flow/
-ruvector.db
 
 # Claude Code local settings
 .claude/settings.local.json

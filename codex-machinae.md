@@ -4,7 +4,9 @@
 **Last updated:** 2026-04-15
 **Scope:** Framework for developing, testing, deploying, maintaining, and monitoring software projects.
 
-This playbook defines the entire lifecycle of a software project: from requirements gathering through to deployment and continuous dependency monitoring. It is designed for independent developers and small teams operating with autonomous agents (Claude Code, Ruflo, or equivalents).
+This playbook defines the entire lifecycle of a software project: from requirements gathering through to deployment and continuous dependency monitoring. It is designed for independent developers and small teams operating with autonomous agents (Claude Code, GSD, or equivalents).
+
+> **⚠ SECURITY NOTICE:** Ruflo (formerly used in this project) has been abandoned due to serious security concerns. Do not install or use ruflo or any of its components. Use Claude Code natively or GSD as orchestrator.
 
 ---
 
