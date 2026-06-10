@@ -45,7 +45,7 @@ Key design principles:
 - **Boundary Contracts** (§8) — every integration point (API, data, UI, hardware) is
   catalogued, classified, and monitored.
 - **Risk-modulated remediation** (§10) — fixes are classified by autonomy level
-  (L0 human-only, L1 agent-assisted, L2 fully automated) based on blast radius.
+  (L0 auto-merge, L1 agent-assisted with human review, L2 human-led) based on blast radius.
 - **Profile-aware** (§2.5) — Solo, Small, and Large project profiles modulate checklist
   density so compliance cost scales with project risk.
 
@@ -138,6 +138,8 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) | Contribution guidelines |
 | [`docs/SECURITY.md`](docs/SECURITY.md) | Vulnerability reporting policy |
 | [`docs/FAQ.md`](docs/FAQ.md) | Common questions, inspirations, and framework references |
+| [`docs/GSD-COMPARISON.md`](docs/GSD-COMPARISON.md) | Comparative analysis: Codex Machinae vs the GSD workflow engine |
+| [`docs/GSD-INTEGRATION.md`](docs/GSD-INTEGRATION.md) | Operational guide to running the playbook under GSD |
 | [`docs/MODULARISATION_PLAN.md`](docs/MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
 | **Local only** | |
 | `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — not tracked |

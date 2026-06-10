@@ -36,6 +36,16 @@ No. The playbook is LLM-agnostic. §12 defines conventions that apply to any age
 one LLM simultaneously. Provider-specific rules live in separate config files
 (e.g. `CLAUDE.md`, `GEMINI.md`) that are not part of the playbook itself.
 
+### Can I use Codex Machinae with a workflow engine such as GSD?
+
+Yes — they own disjoint layers. The playbook defines the quality floor (what
+"done" and "good" mean); a workflow engine such as GSD drives the work through
+sessions, subagents, and state. Wire the playbook into the project's agent
+configuration (§2.4) and the engine's gates start enforcing the playbook's
+Definition of Done. See [GSD-COMPARISON.md](GSD-COMPARISON.md) for the
+analysis and [GSD-INTEGRATION.md](GSD-INTEGRATION.md) for the operational
+guide.
+
 ### What language is the playbook written in?
 
 British English (en-GB). All documentation, commits, and contributions must follow
