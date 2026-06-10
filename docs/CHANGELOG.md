@@ -8,6 +8,23 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-06-10] — GSD comparison and integration guide
+
+### Added
+- `docs/GSD-COMPARISON.md` — comparative analysis of Codex Machinae and the
+  GSD workflow engine: nature, lifecycle coverage, risk models, where they
+  overlap, where they diverge, and how they compose.
+- `docs/GSD-INTEGRATION.md` — operational guide to running the playbook under
+  GSD: division of authority, agent-config wiring, lifecycle and artefact
+  mapping, gate wiring, autonomy governance via §9–§10, retrofit and
+  post-milestone handover.
+- `docs/FAQ.md` — new entry on combining the playbook with workflow engines.
+
+### Fixed
+- `README.md` — the autonomy-level summary had L0 and L2 inverted
+  ("L0 human-only … L2 fully automated"); corrected to match §10.1
+  (L0 auto-merge, L1 agent-assisted with human review, L2 human-led).
+
 ## [2026-06-10] — Physical modularisation and repository hygiene
 
 ### Added
