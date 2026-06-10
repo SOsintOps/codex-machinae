@@ -1,7 +1,14 @@
+<!--
+  The monolithic codex-machinae.md at the repository root is assembled from
+  the sources under playbook/ by tools/build.py. Edit the playbook/ sources,
+  then run `python tools/build.py` to regenerate — never edit the monolith
+  directly.
+-->
+
 # Codex Machinae
 
 **Version:** 2.0.0 — Draft
-**Last updated:** 2026-04-15
+**Last updated:** 2026-06-10
 **Scope:** Framework for developing, testing, deploying, maintaining, and monitoring software projects.
 
 This playbook defines the entire lifecycle of a software project: from requirements gathering through to deployment and continuous dependency monitoring. It is designed for independent developers and small teams operating with autonomous agents (Claude Code, GSD, or equivalents).

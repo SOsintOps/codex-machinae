@@ -92,13 +92,21 @@ codex-machinae.md
     └── D — Tooling Specifications (AST Walker, Coverage Ratchet, Surveillance Agent)
 ```
 
+The physical layout under [`playbook/`](playbook/) mirrors this logical structure — one file
+per domain, module, and appendix. The root `codex-machinae.md` is **assembled from those
+sources** by [`tools/build.py`](tools/build.py) — edit the sources, not the monolith.
+
 ---
 
 ## Quick start
 
+> **Single file or modular?** Copy `codex-machinae.md` if you want one self-contained
+> file. For token-frugal agent sessions, copy the `playbook/` directory instead and load
+> only `core.md` plus the domain/module files whose triggers fire (§2.2).
+
 ### New project (greenfield)
 
-1. Copy `codex-machinae.md` into your repository.
+1. Copy `codex-machinae.md` (or `playbook/`) into your repository.
 2. Declare a project-size profile in your agent config: `Solo`, `Small`, or `Large` (§2.5).
 3. Follow **Phase 0** (§11.1) — write the PRD, define user stories, set the Definition of Done.
 4. Follow **Phase 1** (§11.2) — bootstrap the directory structure, CI, and contract map.
@@ -106,7 +114,7 @@ codex-machinae.md
 
 ### Existing project (retrofit)
 
-1. Copy `codex-machinae.md` into your repository.
+1. Copy `codex-machinae.md` (or `playbook/`) into your repository.
 2. Follow **Phase R** (§11.6) — the retrofit protocol:
    - **Debt-scoping audit** — assess the gap between your project and the playbook.
    - **Retroactive contract mapping** — generate the Boundary Contract Map from existing code.
@@ -121,7 +129,9 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 
 | File | Description |
 |------|-------------|
-| [`codex-machinae.md`](codex-machinae.md) | The playbook — Core + Domain Appendices + Modules + Appendices (~3 800 lines) |
+| [`codex-machinae.md`](codex-machinae.md) | The playbook assembled as a single file (~3 800 lines) — **generated, do not edit** |
+| [`playbook/`](playbook/) | Source of truth — Core, domain appendices, modules, and appendices as separate files |
+| [`tools/build.py`](tools/build.py) | Assembles `codex-machinae.md` from `playbook/`; `--check` verifies they are in sync |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |
 | **`docs/`** | |
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |
