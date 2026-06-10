@@ -8,6 +8,32 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-06-10] — Repository hygiene
+
+### Changed
+- `README.md` — playbook line-count badge and repository table corrected
+  (~3 100 → ~3 800 lines, actual count 3 769).
+- This changelog backfilled with the 2026-04-19 repository reorganisation entry,
+  which had been omitted at the time.
+
+### Errata
+- Commit `b109771` (2026-04-23) carries the message "add password-protected
+  iban-redactor archive and update .gitignore", but no archive was ever added:
+  the commit only extended `.gitignore` with a review-artifact pattern. The
+  history is not rewritten; this note serves as the correction of record.
+
+## [2026-04-19] — Repository reorganisation (backfilled 2026-06-10)
+
+### Added
+- `docs/FAQ.md` — inspirations, framework references, and common questions.
+- `docs/SECURITY.md` — vulnerability reporting policy.
+
+### Changed
+- Service documents (`CHANGELOG.md`, `CONTRIBUTING.md`, `MODULARISATION_PLAN.md`)
+  moved into `docs/`.
+- `.gitignore` extended: agent configuration files, `PROJECT_STATUS.md`, and
+  cross-AI review artifacts are now excluded from tracking.
+
 ## [2026-04-19] — Post-modularisation evolution
 
 ### Added
