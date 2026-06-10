@@ -8,9 +8,21 @@ as it is a design document, not a software release.
 
 ---
 
-## [2026-06-10] — Repository hygiene
+## [2026-06-10] — Physical modularisation and repository hygiene
+
+### Added
+- **`playbook/` source tree** — the playbook is now maintained as modular sources:
+  frontmatter, Core, the seven domain appendices, the four cross-cutting modules,
+  known limitations, and the four appendices, one file each. Adopters can copy the
+  whole directory and load only the files whose triggers fire (§2.2), instead of
+  carrying the full monolith into every agent session.
+- **`tools/build.py`** — assembles `codex-machinae.md` from the `playbook/` sources
+  by byte-for-byte concatenation; `--check` mode verifies monolith and sources are
+  in sync (intended as a CI gate).
 
 ### Changed
+- `codex-machinae.md` is now a **generated artefact** — edit the `playbook/`
+  sources and rebuild; an assembly notice in the frontmatter says so.
 - `README.md` — playbook line-count badge and repository table corrected
   (~3 100 → ~3 800 lines, actual count 3 769).
 - This changelog backfilled with the 2026-04-19 repository reorganisation entry,
