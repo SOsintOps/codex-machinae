@@ -21,7 +21,7 @@
 [![Licence: CC BY 4.0](https://img.shields.io/badge/licence-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Status: stable design](https://img.shields.io/badge/status-stable%20design-brightgreen.svg)](#)
 [![Language: en-GB](https://img.shields.io/badge/language-en--GB-blue.svg)](#)
-[![Playbook: ~3 100 lines](https://img.shields.io/badge/playbook-~3%20100%20lines-informational.svg)](#)
+[![Playbook: ~3 800 lines](https://img.shields.io/badge/playbook-~3%20800%20lines-informational.svg)](#)
 
 </p>
 
@@ -121,7 +121,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 
 | File | Description |
 |------|-------------|
-| [`codex-machinae.md`](codex-machinae.md) | The playbook — Core + Domain Appendices + Modules + Appendices (~3 100 lines) |
+| [`codex-machinae.md`](codex-machinae.md) | The playbook — Core + Domain Appendices + Modules + Appendices (~3 800 lines) |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |
 | **`docs/`** | |
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |
