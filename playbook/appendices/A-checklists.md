@@ -20,6 +20,13 @@ Untagged items are mandatory for all profiles.
 - [ ] Definition of Done defined and shared
 - [ ] Critical dependencies identified in `DEPENDENCIES.md` (with alternatives comparison §1.7.1)
 
+**When decision mapping was triggered (§1.9)**
+
+- [ ] Destination named on the map before any ticket was created
+- [ ] Map cleared: no open tickets, Not-yet-specified empty
+- [ ] Every decision passing the §1.5 bar landed as an ADR; the PRD references the map
+- [ ] No production code was written while the map was open
+
 **When M4 Classification & Taxonomy is active**
 
 - [ ] Scouting protocol (M4.3) executed for every domain the project touches

@@ -379,3 +379,60 @@ source: "upstream:[framework-name] | local"
 
 ---
 
+
+### B.10 Decision Map template (§1.9)
+
+```markdown
+# Decision Map — [Effort name]
+
+**Tracker:** [issue URL, labelled `decision-map` | docs/decisions/MAP.md]
+**Status:** charting | working | cleared
+
+## Destination
+
+[What reaching the end of this map looks like — the PRD ready to write, the
+decision to lock, the change made. One or two lines; every session orients to
+it before choosing a ticket.]
+
+## Notes
+
+[Domain; playbook sections every session should consult; standing preferences
+for this effort.]
+
+## Decisions so far
+
+<!-- One line per closed ticket: enough to judge relevance, then follow the
+     link for the detail the ticket holds. -->
+
+- [Closed ticket title](link) — [one-line gist of the answer]
+
+## Not yet specified
+
+<!-- The fog of war (§1.9.3): in-scope decisions you cannot yet phrase as a
+     precise question. Graduates into tickets as the frontier advances. -->
+
+## Out of scope
+
+<!-- Work consciously ruled beyond the destination. Never graduates. -->
+
+- [Gist] — [why it is out of scope] ([closed ticket link, if one existed])
+```
+
+### B.11 Decision ticket template (§1.9.2)
+
+```markdown
+# [Ticket title — the decision, phrased as its subject]
+
+**Map:** [parent decision-map issue]
+**Type:** research | prototype | grilling | task
+**Mode:** HITL | AFK
+**Blocked by:** [native tracker links; list ticket names only as fallback]
+
+## Question
+
+[The decision or investigation this ticket resolves — stated precisely,
+sized to one agent session. The answer is not written here: it is posted
+as the resolution comment when the ticket closes.]
+```
+
+---

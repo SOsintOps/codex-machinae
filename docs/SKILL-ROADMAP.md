@@ -1,0 +1,162 @@
+# Skill Roadmap — Packaging Codex Machinae as an Agent Skill
+
+**Status:** proposed — not yet started
+**Depends on:** none (may run in parallel with the downstream-retrofit roadmap item)
+**Informed by:** the skill-authoring practices of `mattpocock/skills`
+(`writing-for-agents`, `SKILL-MECHANICS.md`, ADRs 0001–0002) and published
+field feedback on that skill set.
+
+---
+
+## Why
+
+Today the playbook is adopted by **copying** — the monolith or the `playbook/`
+directory — into a repository. Field experience with distributed skill sets
+shows where that model hurts:
+
+1. **Fork drift.** Adopters who copy default into maintaining a stale fork
+   without ever deciding to — "the worst of both, no customisation and no
+   updates". Fork-vs-subscribe must be a deliberate choice, which requires a
+   subscribable distribution to exist.
+2. **Nothing fires by itself.** The playbook's own activation model (§2.2,
+   triggers) currently depends on the human or the agent having already loaded
+   the document that describes the triggers. A skill's description is exactly
+   the missing piece: an always-loaded context pointer that carries the
+   trigger conditions.
+3. **Token economics.** The monolith is ~3 900 lines. Agent sessions need the
+   Core rules plus only the domain/module files whose triggers fired. The
+   modular `playbook/` tree already is a progressive-disclosure layout — it
+   just isn't wired into any skill harness.
+
+The good news: the hard structural work is done. The `playbook/` sources map
+almost one-to-one onto skill mechanics. What remains is authoring (condensing
+the entry point), configuration (a setup skill), packaging, and validation.
+
+## Target shape
+
+One **model-invoked skill** with disclosed reference, not a flat monolith:
+
+| Playbook artefact today | Skill artefact |
+|---|---|
+| `codex-machinae.md` (monolith) | Retired from the skill path (kept as a readable single-file rendering) |
+| `playbook/core.md` §1–§12 | `SKILL.md` body — condensed to steps + always-needed reference, with context pointers to the rest |
+| `playbook/domains/D1–D7` | Disclosed reference files, one per domain, loaded when the domain trigger fires |
+| `playbook/modules/M1–M4` | Disclosed reference files, one per module, same rule |
+| `playbook/appendices/A–D` | Disclosed reference (checklists and templates fetched on demand) |
+| §2.2 Emergent Expansion triggers | The skill description's trigger branches + in-body pointer conditions |
+| §2.5 profile, §2.4 agent config | Per-repo config seeded by a setup skill |
+| `tools/build.py` | Unchanged — still builds the monolith rendering; gains a manifest check for the skill tree |
+
+Invocation choice: **model-invoked** (keep a `description`), because the whole
+point is that the agent reaches for the playbook when a lifecycle event fires
+(new project, retrofit, dependency break) without the human remembering it
+exists. The description carries the trigger branches; per the two-loads
+trade-off this is permanent context load, so it must be pruned hard.
+
+---
+
+## Phase S0 — Scoping decisions (dogfood §1.9)
+
+Run this phase **as a decision map** — the playbook's own new §1.9 practice,
+which is itself the wayfinder pattern. The destination: *every decision below
+locked, so authoring can start.*
+
+Known tickets (grilling unless noted):
+
+- **Skill name and slug.** `codex-machinae`? `machinae`? The name is the
+  leading word users will type and agents will match — it must not collide
+  with existing skill vocabulary.
+- **One skill or a skill set?** A single skill with disclosed reference vs a
+  set (e.g. `machinae-core`, `machinae-retrofit`) with a router. Fewer skills
+  = less always-loaded description load; more skills = sharper triggers.
+  Recommendation to test first: one skill.
+- **Which Core sections survive into `SKILL.md`?** The body must be steps
+  first (lifecycle phases, remediation workflow) with reference disclosed.
+  Target: entry file under ~500 lines.
+- **Setup skill hard/soft dependency split** (see S2): which behaviours are
+  wrong-without-config vs merely fuzzier-without-config.
+- **Harness targets** (research, AFK): Claude Code plugin now; verify current
+  Codex plugin manifest constraints (single-path `skills` field, symlink
+  handling) before promising a native Codex build.
+- **Licence and attribution surface** (task): CC BY 4.0 requires attribution —
+  decide the attribution line the skill ships with.
+
+## Phase S1 — Authoring
+
+1. **Write the frontmatter.** `name`, plus a model-facing `description`
+   carrying the trigger branches (new project; existing project to retrofit;
+   dependency/contract break; release; multi-agent coordination). One trigger
+   per branch, no synonyms, front-loaded leading words.
+2. **Condense Core into the `SKILL.md` body.** Steps (Phases 0–4, R; the
+   L0/L1/L2 remediation ladder) stay in-file; heavy reference (contract-map
+   format, templates, checklists) moves behind pointers. Apply the
+   `writing-for-agents` levers explicitly: completion criteria on every step,
+   leading words (*ratchet*, *frontier*, *fog of war*, *expand–contract* are
+   already in the vocabulary), no-op pruning, positive phrasing.
+3. **Cut the domain/module files over** as disclosed reference. They need
+   little rewriting — they were written trigger-first — but each gets a
+   one-line pointer in the body whose wording is the real activation switch.
+4. **Keep `build.py --check` green.** The monolith remains a generated
+   rendering for human reading; the skill tree becomes a second consumer of
+   the same sources. No content is maintained twice: `SKILL.md`'s condensed
+   body is new prose, but domain/module/appendix files are shared verbatim.
+
+**Exit criterion:** a session given only `SKILL.md` + a fired trigger reaches
+the right disclosed file without being told its path.
+
+## Phase S2 — Setup skill
+
+`/setup-codex-machinae`, seeding per-repo config the way the playbook already
+prescribes (§2.4 agent config, §2.5 profile):
+
+- Project-size profile (Solo / Small / Large) → checklist obligation levels.
+- Issue tracker binding (GitHub / GitLab / local markdown fallback) — needed
+  by §1.9 decision maps and §10 tracking issues.
+- Autonomy posture: which change classes may run L0/L1, never-auto-merge list.
+- Domain/module pre-activation for retrofits (walk the trigger list, §11.6.4).
+
+Split dependencies deliberately (the ADR-0001 lesson from the source repo):
+skills that publish to the tracker carry an explicit "run
+`/setup-codex-machinae` if unconfigured" pointer; everything else degrades
+gracefully and stays token-light.
+
+## Phase S3 — Packaging and distribution
+
+1. **`skills.sh` compatibility** (`npx skills add`) — the universal, editable
+   install; this is the "fork" branch of fork-vs-subscribe, now chosen
+   deliberately.
+2. **Claude Code plugin** — `.claude-plugin/plugin.json` listing the skill
+   explicitly, plus a marketplace manifest so the repo is its own
+   single-plugin marketplace; `claude plugin validate . --strict` in CI.
+   This is the "subscribe" branch: read-only, always-current.
+3. **Defer a native Codex plugin** until its manifest can express a curated
+   subset (the single-path + dropped-symlinks constraint documented in the
+   source repo's ADR-0002). `skills.sh` covers Codex users meanwhile.
+4. **Versioning.** Date-based playbook versioning stays for the document;
+   the plugin needs a semver `version` bumped per release so installed users
+   see updates. `build.py --check` and plugin validation gate releases.
+
+## Phase S4 — Validation
+
+- **Dogfood on the first downstream retrofit** (roadmap item 1) — run the
+  retrofit entirely through the skill, not the copied monolith.
+- **"It's working if" criteria**, published in the README:
+  - a new-project session activates Phase 0 (and §1.9 when foggy) unprompted;
+  - a domain trigger firing loads exactly one domain file, not the monolith;
+  - a dependency break routes through §9 classification → §10 ladder;
+  - a session never carries more than Core + fired files in context;
+  - setup config survives across sessions and providers (§12.7.6).
+- Iterate on the description's trigger wording — misfires here are wording
+  bugs (a weak context pointer), not architecture bugs.
+
+---
+
+## Risks and open questions
+
+| Risk | Mitigation |
+|---|---|
+| Description too broad → skill fires on everything | Prune to genuinely distinct branches; test misfire rate in S4 |
+| `SKILL.md` condensation drifts from `playbook/core.md` | Single source of truth per meaning: body holds steps only, deep rules stay in disclosed files the body links |
+| Two consumers (monolith, skill tree) diverge | Extend `build.py --check` to validate both from the same manifest |
+| CC BY attribution friction inside a plugin | Settle the attribution line in S0 (it is one ticket) |
+| Multi-LLM parity (§12.7.6) vs Claude-first packaging | `skills.sh` path keeps the set harness-agnostic; provider-specific packaging is additive |

@@ -62,6 +62,11 @@ Every User Story MUST have:
 - **Dependencies** — reference to other User Stories that must be completed first
 - **Link to PRD** — the PRD section that this story implements
 
+Two slicing rules keep stories workable by agent sessions:
+
+- **Vertical slice.** A story ships a narrow but complete path through every layer it touches (schema, API, UI, tests) so it is verifiable on its own — never one layer of a change whose value only appears when other stories land. The test: *what can be demoed when this story is done?* A story with no answer is a horizontal slice and must be re-cut. The one legitimate exception is the wide mechanical refactor, which is sequenced as expand–contract (§10.7) instead.
+- **Session sizing.** Where an AI agent executes stories, each story is sized to fit one agent session started fresh — the implementer will not have seen the planning conversation. A story whose context cannot be stated completely within one session is split before work starts.
+
 ### 1.4 Acceptance criteria
 
 Each criterion is a binary condition (pass or fail). Format:
@@ -74,9 +79,13 @@ THEN [expected result]
 
 Acceptance criteria become tests. If a criterion cannot be translated into an automated test, it must be rewritten until it can.
 
+Each criterion must also be **falsifiable at the starting commit**: name the observation that would show it false, and confirm the criterion fails before the work begins. Three shapes grade nothing and must be rewritten — a criterion already true at the base commit, one that merely restates the request, and one that can only be satisfied by work another story owns.
+
 ### 1.5 Architecture Decision Records (ADR)
 
-Every significant architectural decision is documented in an ADR. Minimum format:
+Every significant architectural decision is documented in an ADR. A decision is **significant** — and earns an ADR — when it passes all three tests: it is hard to reverse, it would surprise a newcomer lacking the context, and it resulted from a real trade-off between live alternatives. Miss any one test and there is no ADR: an easily-reversed decision will simply be reversed, an unsurprising one is nobody's question, and one with no real alternative records only that the obvious thing was done.
+
+Minimum format:
 
 ```markdown
 # ADR-<number>: <title>
@@ -235,6 +244,57 @@ An item is "done" when all applicable checks below pass.
 | ADR written (§1.5) | A significant architectural decision was taken |
 
 An agent MUST declare, for each contextual check, whether the precondition held; checks whose precondition did not hold are recorded as `n/a` rather than silently skipped. This keeps the audit trail explicit.
+
+### 1.9 Decision mapping (wayfinding)
+
+Phase 0 assumes the PRD is writable. When it is not — the idea is still wrapped in fog — the gap is closed by **decision mapping**: charting the open decisions as a shared map and resolving them one at a time until nothing is left to decide before someone goes and builds the thing. The practice is adapted from the *wayfinder* skill (Matt Pocock, `mattpocock/skills`), reconciled with this playbook's artefacts.
+
+**Trigger.** Both conditions must hold: (a) the effort exceeds one agent session; (b) decisions blocking the PRD or its ADRs are still open. If the way is already clear, or the whole journey fits one session, this section does not activate — write the PRD directly. Per Emergent Expansion (§2.2): no map without a fired trigger.
+
+#### 1.9.1 The map
+
+The map is a single artefact on the project's issue tracker — an issue labelled `decision-map` — or, when no tracker is configured, a `docs/decisions/MAP.md` file. Its resolution unit is the **decision ticket**, a child issue of the map.
+
+The map is an **index, not a store**: each decision lives in exactly one place — its ticket — and the map only gists it and links to it. Open tickets are not listed in the body; they are found by query (or, in the file fallback, by directory listing). Map body sections (template B.10):
+
+| Section | Content |
+|---------|---------|
+| **Destination** | What reaching the end looks like — the PRD ready to write, the decision to lock, the change made. One or two lines. Naming it is the first act of charting, because the destination fixes the scope |
+| **Notes** | Domain, standing preferences, playbook sections every session should consult |
+| **Decisions so far** | One line per closed ticket: gist plus link — the route actually walked |
+| **Not yet specified** | The fog of war: decisions and investigations visibly coming but not yet formulable as a precise question |
+| **Out of scope** | Work consciously ruled beyond the destination, with the reason |
+
+#### 1.9.2 Decision tickets
+
+A ticket's body is a **question whose resolution is a decision** — never a slice of a build to execute. Each ticket is sized to one agent session and carries a type:
+
+| Type | Mode | Resolves by |
+|------|------|-------------|
+| **Research** | AFK | State-of-the-art research (§1.7) surfacing a fact a decision waits on; the report lands in the research register (§1.7.4) |
+| **Prototype** | HITL | A cheap, rough, concrete artefact to react to, linked from the ticket — for when "how should it look/behave" is the question |
+| **Grilling** | HITL | Structured conversation with the human (the default; protocol in §1.9.4) |
+| **Task** | HITL or AFK | Manual work that must happen before a decision can be made (signing up for a service, provisioning access, moving data) — the one type that *does* rather than decides, and it earns its place by unblocking a decision |
+
+**HITL** (human-in-the-loop) tickets resolve only through live exchange with the human — the agent never stands in for the human's side of it; a grilling session in which the agent answers its own questions is void. **AFK** tickets the agent drives alone.
+
+#### 1.9.3 Working the map
+
+- **Frontier and claim.** Blocking between tickets uses the tracker's native dependency links, so the frontier is visible in the tracker's own UI. The **frontier** is the set of open, unblocked, unclaimed tickets. A session claims a ticket by assigning it to itself **before any work**; concurrent sessions skip claimed tickets.
+- **One ticket per session** — research tickets excepted (they run in parallel as subagents). To resolve: post the answer as a resolution comment, close the ticket, append the one-line gist to Decisions so far.
+- **Fog or ticket.** Create a ticket when the question can be stated precisely *now* — even if it is blocked and cannot be acted on yet. Leave it in Not yet specified when it cannot be phrased that sharply. Never pre-slice the fog into ticket-sized pieces: one patch of fog may graduate into several tickets, or none, once the frontier reaches it.
+- **Graduation.** Each resolution clears fog ahead of it: whatever became specifiable is promoted from Not yet specified into fresh tickets — create the tickets first, wire the blocking edges in a second pass. A resolution can also invalidate existing tickets; update or close them.
+- **Out of scope.** When a ticket turns out to sit beyond the destination, close it and record the gist plus the reason in Out of scope. It stays out of Decisions so far — a scope boundary is not a step on the route — and it never graduates back; it returns only if the destination is redrawn, as a fresh effort.
+- **Plan, don't do.** The map produces decisions, not deliverables. No production code is written while the map is open (§12.5 applies in full); the pull to "just build it" is the signal that the edge of the map is reached and the hand-off is due.
+- **Bound the destination.** Map one bounded effort — an epic — not the whole product. Field experience with wayfinder shows large upfront maps rot: later tickets get invalidated by earlier answers. Prefer a small map plus aggressive prototyping over an exhaustive chart.
+
+#### 1.9.4 Grilling protocol
+
+Grilling tickets are worked in **rounds** over a design tree. Each round, ask the whole **question frontier** — every question whose prerequisites are already settled — numbered, each with a recommended answer, then wait for the human. A question whose answer depends on another question still open in the round belongs to a later round. Facts are the agent's job — look them up, or dispatch a research subagent, never ask the human for something the environment can answer; decisions are the human's — put each one to them. Keep questions short: verbose rounds cause decision fatigue and obscure the reasoning chain.
+
+#### 1.9.5 Exit
+
+The map is done when no open tickets remain and the fog is empty: the way is clear. Collapse the map into the standard artefacts — the PRD (§1.2) referencing the map, ADRs (§1.5) for every decision passing the significance bar, then user stories (§1.3). The map is retired as a historical record and is not maintained afterwards. Decision mapping never replaces the PRD — it is the route to one.
 
 ---
 
@@ -944,6 +1004,8 @@ Record the deprecation, cross-reference with the Boundary Contract Map, open a `
 
 Triggered whenever a tracked contract breaks (major version bump of an outbound dependency, incompatible schema change, endpoint removal, hardware protocol revision, UI-flow breaking change). Actions: L1 disabled for the affected contract, coverage baseline resettable, Boundary Contract Map mandatorily regenerated, test harness verified end-to-end, issue opened as a tracking epic.
 
+**Wide refactors: expand–contract.** When the break is a single mechanical change whose blast radius fans across the codebase (renaming a column, retyping a shared symbol), no vertical slice (§1.3) can land green on its own. Sequence it as: **expand** — add the new form beside the old, so nothing breaks; **migrate** — move call sites over in batches sized by blast radius (per package, per directory), each batch blocked by the expand, CI staying green because the old form survives; **contract** — delete the old form once no caller remains, blocked by every migrate batch. Where even the batches cannot stay green alone, they share an integration branch and all block a final integrate-and-verify step — green is promised only there.
+
 ### 10.8 Human report
 
 For each change, the agent produces a report with: what changed, classification, where it impacts (files and lines), what must be modified to maintain operability, what can be adopted, test results, recommended action, and the autonomy level selected with justification.
@@ -958,6 +1020,7 @@ Each phase lists the **Core steps** that apply to every project, followed by act
 
 **Core (always):**
 
+0. If the §1.9 trigger fires — the effort exceeds one session and open decisions block the PRD — run decision mapping first, and enter step 1 with the map's decisions in hand
 1. Write the PRD (§1.2)
 2. Define user stories with acceptance criteria (§1.3, §1.4)
 3. Document architectural decisions in ADRs (§1.5)
@@ -1174,10 +1237,17 @@ Each agent receives an explicit perimeter before starting work. Partitioning may
 | **By module/domain** | Large projects with independent subsystems | Agent A owns D1, Agent B owns D5 |
 | **By directory** | When module boundaries map cleanly to folders | Agent A owns `src/api/`, Agent B owns `src/ml/` |
 | **By user story** | Sprint-based work with non-overlapping stories | Agent A works on US-007, Agent B on US-012 |
+| **By decision ticket** | Decision mapping (§1.9) worked by parallel sessions | Each session claims one frontier ticket by assigning it to itself before any work |
 
 The analyst documents the partition in the agent-configuration file or in
 `PROJECT_STATUS.md`. An agent must not operate outside its assigned perimeter without
 explicit analyst approval.
+
+The by-decision-ticket strategy is dynamic rather than static: the claim (the tracker
+assignee) *is* the partition, so no perimeter needs documenting up front. Sessions must
+expect other sessions to be editing the tracker concurrently. The map issue itself
+remains a coordination artefact under the single-writer rule (§12.7.4): tickets are
+claimed and resolved by anyone, but the map body is edited by the lead (or the analyst).
 
 #### 12.7.3 Conflict prevention
 
