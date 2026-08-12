@@ -8,6 +8,16 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Visual identity polish
+
+### Fixed
+- Logo and icon backgrounds are now genuinely transparent (alpha derived
+  from line luminance) instead of baked white.
+- The README no longer shows both the ASCII banner and the logo: the
+  banner is retired, replaced by a theme-aware `<picture>` element and the
+  tagline. Dark-theme variants added (`logo-dark.png`, `icon-dark.png`,
+  ivory ink) so the mark stays visible on GitHub's dark mode.
+
 ## [2026-08-12] — Visual identity: logo and icon
 
 ### Added
