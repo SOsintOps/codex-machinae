@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
-"""Assemble codex-machinae.md from the playbook/ sources.
+"""Assemble the generated artefacts from the playbook/ sources.
 
-The files under playbook/ are the source of truth. The monolithic
-codex-machinae.md at the repository root is a generated artefact produced by
-plain byte-for-byte concatenation of the sources in MANIFEST order.
+The files under playbook/ are the source of truth. Two artefacts are
+generated from them:
+
+1. codex-machinae.md — the monolith at the repository root, produced by
+   plain byte-for-byte concatenation of the sources in MANIFEST order.
+2. skills/codex-machinae/reference/ — the agent skill's disclosed-reference
+   tree, byte-for-byte copies of every source except the monolith-only
+   files (frontmatter and part intros). The skill's SKILL.md is authored
+   by hand and is not touched by this script.
 
 Usage:
-    python tools/build.py          # regenerate codex-machinae.md
-    python tools/build.py --check  # verify codex-machinae.md matches sources
+    python tools/build.py          # regenerate both artefacts
+    python tools/build.py --check  # verify both match the sources
                                    # (exit 0 = in sync, exit 1 = stale/missing)
 """
 
@@ -16,6 +22,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "codex-machinae.md"
+SKILL_REF = ROOT / "skills" / "codex-machinae" / "reference"
+
+# Monolith-only sources: assembly scaffolding with no standalone value
+# inside the skill's reference tree.
+SKILL_EXCLUDE = {
+    "playbook/00-frontmatter.md",
+    "playbook/domains/00-intro.md",
+    "playbook/modules/00-intro.md",
+}
 
 MANIFEST = [
     "playbook/00-frontmatter.md",
@@ -61,25 +76,68 @@ def assemble() -> bytes:
     return b"".join(chunks)
 
 
+def skill_mapping() -> dict:
+    """Map each shared source to its path inside the skill reference tree."""
+    return {
+        p: SKILL_REF / p.removeprefix("playbook/")
+        for p in MANIFEST
+        if p not in SKILL_EXCLUDE
+    }
+
+
+def check_skill_tree() -> bool:
+    ok = True
+    for src, dst in skill_mapping().items():
+        if not dst.is_file():
+            print(f"STALE: {dst.relative_to(ROOT)} missing — run tools/build.py")
+            ok = False
+        elif dst.read_bytes() != (ROOT / src).read_bytes():
+            print(f"STALE: {dst.relative_to(ROOT)} does not match {src} — "
+                  "run tools/build.py and commit the result")
+            ok = False
+    return ok
+
+
+def write_skill_tree() -> int:
+    count = 0
+    for src, dst in skill_mapping().items():
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_bytes((ROOT / src).read_bytes())
+        count += 1
+    return count
+
+
 def main() -> None:
     check = "--check" in sys.argv[1:]
     assembled = assemble()
 
     if check:
+        ok = True
         if not OUTPUT.is_file():
             print(f"STALE: {OUTPUT.name} does not exist — run tools/build.py")
-            sys.exit(1)
-        if OUTPUT.read_bytes() != assembled:
+            ok = False
+        elif OUTPUT.read_bytes() != assembled:
             print(f"STALE: {OUTPUT.name} does not match playbook/ sources — "
                   "run tools/build.py and commit the result")
+            ok = False
+        else:
+            print(f"OK: {OUTPUT.name} is in sync with playbook/ sources "
+                  f"({len(MANIFEST)} files, {len(assembled):,} bytes)")
+        if check_skill_tree():
+            print(f"OK: skill reference tree is in sync "
+                  f"({len(skill_mapping())} files)")
+        else:
+            ok = False
+        if not ok:
             sys.exit(1)
-        print(f"OK: {OUTPUT.name} is in sync with playbook/ sources "
-              f"({len(MANIFEST)} files, {len(assembled):,} bytes)")
         return
 
     OUTPUT.write_bytes(assembled)
     print(f"Wrote {OUTPUT.name} ({len(assembled):,} bytes) "
           f"from {len(MANIFEST)} source files")
+    copied = write_skill_tree()
+    print(f"Wrote {copied} skill reference files under "
+          f"{SKILL_REF.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

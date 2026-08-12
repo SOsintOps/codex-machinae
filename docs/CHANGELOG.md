@@ -8,6 +8,31 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Agent skill: S1 authoring
+
+Phase S1 of `docs/SKILL-ROADMAP.md`. S0 scoping decisions locked in a single
+grilling round: name `codex-machinae`, one model-invoked skill with disclosed
+reference, living in-repo.
+
+### Added
+- **`skills/codex-machinae/SKILL.md`** — the playbook packaged as an agent
+  skill: model-facing description with trigger branches; a body (~160 lines)
+  carrying the always-apply operating rules, a route-by-situation table, the
+  condensed lifecycle (Phases 0–4 and R with completion criteria), the
+  classification → autonomy ladder, trigger tables for D1–D7 and M1–M4, and
+  a reference index. CC BY attribution line in the footer.
+- **`skills/codex-machinae/reference/`** — the skill's disclosed-reference
+  tree: 17 byte-for-byte copies of the `playbook/` sources (Core, domains,
+  modules, appendices, limitations), excluding monolith-only scaffolding
+  (frontmatter, part intros).
+
+### Changed
+- **`tools/build.py`** — now generates and `--check`-verifies both artefacts
+  (monolith + skill reference tree) from the same `playbook/` sources.
+- `README.md` — quick start gains the skill option; repository table and
+  roadmap updated (item 5: S1 done).
+- `docs/SKILL-ROADMAP.md` — S0 recorded as resolved, S1 marked shipped.
+
 ## [2026-08-12] — Wayfinder-derived planning practices and skill roadmap
 
 Practices adapted from the *wayfinder* skill and its sibling skills
