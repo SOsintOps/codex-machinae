@@ -100,9 +100,12 @@ sources** by [`tools/build.py`](tools/build.py) — edit the sources, not the mo
 
 ## Quick start
 
-> **Single file or modular?** Copy `codex-machinae.md` if you want one self-contained
-> file. For token-frugal agent sessions, copy the `playbook/` directory instead and load
-> only `core.md` plus the domain/module files whose triggers fire (§2.2).
+> **Single file, modular, or skill?** Copy `codex-machinae.md` if you want one
+> self-contained file. For token-frugal agent sessions, copy the `playbook/` directory
+> instead and load only `core.md` plus the domain/module files whose triggers fire (§2.2).
+> For agent harnesses that support skills (Claude Code and equivalents), copy
+> [`skills/codex-machinae/`](skills/codex-machinae/) into your skills directory — the
+> agent then loads the condensed `SKILL.md` and reaches the reference files by trigger.
 
 ### New project (greenfield)
 
@@ -131,7 +134,8 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 |------|-------------|
 | [`codex-machinae.md`](codex-machinae.md) | The playbook assembled as a single file (~3 800 lines) — **generated, do not edit** |
 | [`playbook/`](playbook/) | Source of truth — Core, domain appendices, modules, and appendices as separate files |
-| [`tools/build.py`](tools/build.py) | Assembles `codex-machinae.md` from `playbook/`; `--check` verifies they are in sync |
+| [`tools/build.py`](tools/build.py) | Assembles `codex-machinae.md` and the skill reference tree from `playbook/`; `--check` verifies both are in sync |
+| [`skills/codex-machinae/`](skills/codex-machinae/) | The playbook packaged as an agent skill — hand-authored `SKILL.md` plus a generated `reference/` tree |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |
 | **`docs/`** | |
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |
@@ -172,7 +176,7 @@ Every agent reads `PROJECT_STATUS.md` at session start and updates it at session
 | 2 | ~~Fill D2 (Library/SDK) and D3 (CLI Tool) stubs~~ | Done |
 | 3 | Build reference implementations against Appendix D specs | Planned |
 | 4 | ~~Fill D6 (Mobile), D7 (Static Site), M3 (Release) stubs~~ | Done |
-| 5 | Package the playbook as an agent skill ([roadmap](docs/SKILL-ROADMAP.md)) | Planned |
+| 5 | Package the playbook as an agent skill ([roadmap](docs/SKILL-ROADMAP.md)) | S1 done — S2–S4 open |
 
 ---
 
