@@ -1,6 +1,6 @@
 # Skill Roadmap — Packaging Codex Machinae as an Agent Skill
 
-**Status:** S0 locked, S1 shipped, first S4 validation round passed (2026-08-12) — next: S2 setup skill, S3 packaging
+**Status:** S0 locked, S1 shipped, S2 shipped, two S4 validation rounds passed (2026-08-12) — next: S3 packaging, S4 live-session validation
 **Depends on:** none (may run in parallel with the downstream-retrofit roadmap item)
 **Informed by:** the skill-authoring practices of `mattpocock/skills`
 (`writing-for-agents`, `SKILL-MECHANICS.md`, ADRs 0001–0002) and published
@@ -131,6 +131,15 @@ Split dependencies deliberately (the ADR-0001 lesson from the source repo):
 skills that publish to the tracker carry an explicit "run
 `/setup-codex-machinae` if unconfigured" pointer; everything else degrades
 gracefully and stays token-light.
+
+> **Shipped 2026-08-12** — `skills/setup-codex-machinae/SKILL.md`:
+> user-invoked (zero context load; run once per repo), facts gathered by
+> the agent, decisions put to the human one per round with recommended
+> answers, retrofit trigger-walk in §2.2 proposal form, config block
+> written into the agent-configuration file only after explicit approval
+> (§12.7.4 human-only rule), `deferred:` as the honest partial outcome.
+> The main skill's operating rule 2 now carries the hard-dependency
+> pointer.
 
 ## Phase S3 — Packaging and distribution
 

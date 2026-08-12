@@ -29,6 +29,13 @@ name.
   [`tools/build.py`](../../tools/build.py). Edit the sources and rebuild;
   never edit these copies. `python tools/build.py --check` verifies sync.
 
+## Companion skill
+
+[`../setup-codex-machinae/`](../setup-codex-machinae/) seeds the per-repo
+configuration this skill consumes (profile, tracker, autonomy posture,
+module activation). Install both; run `/setup-codex-machinae` once per
+repository.
+
 ## Licence
 
 CC BY 4.0 — attribution: *"Codex Machinae —
