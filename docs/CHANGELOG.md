@@ -8,6 +8,21 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Visual identity: logo and icon
+
+### Added
+- `docs/assets/logo.png` — primary logo (open codex whose page curls into
+  gears, engraving-style line art, 1024×1024): README header and social
+  preview.
+- `docs/assets/icon.png` — simplified companion mark (512×512) for small
+  formats (favicon, avatars, skill icon).
+- Both generated with Gemini from prompts designed in-session; selected
+  from three candidates, optimised from ~4.8 MB to ≤380 KB each.
+
+### Changed
+- `README.md` — logo displayed above the ASCII banner (which remains the
+  terminal-side identity); repository table gains the `docs/assets/` row.
+
 ## [2026-08-12] — Documentation catch-up for the skill and decision mapping
 
 ### Added
