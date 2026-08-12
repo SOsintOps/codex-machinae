@@ -7,8 +7,8 @@
 
 # Codex Machinae
 
-**Version:** 2.0.0 — Draft
-**Last updated:** 2026-06-10
+**Version:** 2026-08-12 (date-based, see `docs/CHANGELOG.md`)
+**Last updated:** 2026-08-12
 **Scope:** Framework for developing, testing, deploying, maintaining, and monitoring software projects.
 
 This playbook defines the entire lifecycle of a software project: from requirements gathering through to deployment and continuous dependency monitoring. It is designed for independent developers and small teams operating with autonomous agents (Claude Code, GSD, or equivalents).
