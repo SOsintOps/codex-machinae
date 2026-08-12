@@ -8,6 +8,26 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Agent skill: S3 packaging and distribution
+
+### Added
+- **`.claude-plugin/plugin.json`** (v1.0.0) — Claude Code plugin listing
+  both skills explicitly; **`.claude-plugin/marketplace.json`** makes the
+  repo its own single-plugin marketplace. Verified end to end:
+  `claude plugin validate . --strict` passes, local `marketplace add` →
+  `install` resolves both skills (~165 always-on tokens for the pair).
+- skills.sh route verified in a scratch repo:
+  `npx skills add SOsintOps/codex-machinae` installs both skills for
+  Agent-Skills-compatible harnesses (universal format + Claude Code
+  symlink).
+- `README.md` — "Install as an agent skill" section with the
+  subscribe-vs-fork choice; repository table gains the `.claude-plugin/`
+  row. Skill README install table updated.
+
+### Invariants
+- Every promoted skill has an entry in `plugin.json`'s `skills` array.
+- The plugin `version` bumps together with each tagged release.
+
 ## [2026-08-12] — Agent skill: S2 setup skill
 
 ### Added

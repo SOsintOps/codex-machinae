@@ -1,6 +1,6 @@
 # Skill Roadmap — Packaging Codex Machinae as an Agent Skill
 
-**Status:** S0 locked, S1 shipped, S2 shipped, two S4 validation rounds passed (2026-08-12) — next: S3 packaging, S4 live-session validation
+**Status:** S0–S3 shipped, two S4 blind validation rounds passed (2026-08-12) — remaining: S4 live-session validation and real-project dogfood
 **Depends on:** none (may run in parallel with the downstream-retrofit roadmap item)
 **Informed by:** the skill-authoring practices of `mattpocock/skills`
 (`writing-for-agents`, `SKILL-MECHANICS.md`, ADRs 0001–0002) and published
@@ -156,6 +156,18 @@ gracefully and stays token-light.
 4. **Versioning.** Date-based playbook versioning stays for the document;
    the plugin needs a semver `version` bumped per release so installed users
    see updates. `build.py --check` and plugin validation gate releases.
+
+> **Shipped 2026-08-12** — `.claude-plugin/plugin.json` (v1.0.0, both
+> skills listed explicitly) + `.claude-plugin/marketplace.json`
+> (single-plugin marketplace). Verified end to end:
+> `claude plugin validate . --strict` passes; local `marketplace add` →
+> `install` resolves both skills at ~165 always-on tokens; uninstalled
+> after the test to avoid duplicating the dev install. skills.sh route
+> verified in a scratch repo: `npx skills add SOsintOps/codex-machinae`
+> installs both skills (universal format + Claude Code symlink). README
+> documents subscribe-vs-fork. Invariants: every promoted skill has an
+> entry in `plugin.json`'s `skills` array; the plugin `version` bumps with
+> each release. The native Codex plugin stays deferred per S0.
 
 ## Phase S4 — Validation
 
