@@ -30,8 +30,11 @@ and appendix files.
    `PROJECT_STATUS.md` at session end — four sections: Objective, Modified
    Files, Logical State, Next Action (§2.3).
 2. A **project-size profile** — Solo, Small, or Large — must be declared in
-   the agent config; it modulates every checklist obligation (§2.5). If none
-   is declared, ask for one before Phase work starts.
+   the agent config; it modulates every checklist obligation (§2.5). The
+   profile, the issue-tracker binding (where §1.9 maps and §10 tracking
+   issues publish), and the autonomy posture are seeded by the sibling
+   `setup-codex-machinae` skill — when one is missing where needed, point
+   the human to it rather than inventing a value.
 3. **Emergent Expansion** (§2.2): no folder, file, or process exists until a
    trigger fires. Propose expansions as *"I suggest adding `<path>` to cover
    `<concern>` because `<trigger>`. Cost of omission: `<what breaks>`"* — and

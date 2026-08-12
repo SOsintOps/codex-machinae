@@ -134,6 +134,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`playbook/`](playbook/) | Source of truth — Core, domain appendices, modules, and appendices as separate files |
 | [`tools/build.py`](tools/build.py) | Assembles `codex-machinae.md` and the skill reference tree from `playbook/`; `--check` verifies both are in sync |
 | [`skills/codex-machinae/`](skills/codex-machinae/) | The playbook packaged as an agent skill — hand-authored `SKILL.md` plus a generated `reference/` tree |
+| [`skills/setup-codex-machinae/`](skills/setup-codex-machinae/) | Companion setup skill — seeds the per-repo config (profile, tracker, autonomy, modules) |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |
 | **`docs/`** | |
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |

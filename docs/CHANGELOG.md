@@ -8,6 +8,25 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Agent skill: S2 setup skill
+
+### Added
+- **`skills/setup-codex-machinae/SKILL.md`** — user-invoked companion skill
+  that seeds the per-repo configuration the main skill consumes: project
+  profile, issue-tracker binding, autonomy posture, never-auto-merge
+  additions, domain/module activation (with a retrofit trigger-walk in the
+  §2.2 proposal form). Facts are gathered by the agent; decisions go to the
+  human one question per round with a recommended answer; the config block
+  is written into the agent-configuration file only after explicit approval
+  (§12.7.4). Includes the config-block template and a `deferred:` outcome
+  for undecided keys.
+
+### Changed
+- `skills/codex-machinae/SKILL.md` — operating rule 2 now carries the
+  hard-dependency pointer to the setup skill (profile, tracker, autonomy).
+- `skills/codex-machinae/README.md`, `README.md`, `docs/SKILL-ROADMAP.md` —
+  companion skill documented; S2 marked shipped.
+
 ## [2026-08-12] — Agent skill: second S4 validation round
 
 Six blind scenarios (the original five plus a precedence probe) against the
