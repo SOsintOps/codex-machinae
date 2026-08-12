@@ -8,6 +8,24 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Agent skill: second S4 validation round
+
+Six blind scenarios (the original five plus a precedence probe) against the
+corrected `SKILL.md`: **6/6 routed correctly**, with every round-one fix
+cited verbatim by the agents as the reason for the correct choice. Two new
+source defects surfaced and fixed:
+
+### Fixed
+- `playbook/appendices/A-checklists.md` A.8 — the unconditional
+  "T3 completed" checkbox contradicted the Phase R gate (T1+T2 only); T3 is
+  now explicitly deferrable with owner and target date, per §11.6.3/§11.6.5.
+- `playbook/core.md` §10.7 — new rule for undeclared (transitive, vendored,
+  or unrecorded) dependencies that break the project: they are implicit
+  contracts; remediation includes declaring them in the Boundary Contract
+  Map and `DEPENDENCIES.md`.
+- Monolith and skill reference tree regenerated; `docs/SKILL-ROADMAP.md`
+  records the round.
+
 ## [2026-08-12] — Visual identity polish
 
 ### Added

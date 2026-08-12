@@ -1070,6 +1070,8 @@ Record the deprecation, cross-reference with the Boundary Contract Map, open a `
 
 Triggered whenever a tracked contract breaks (major version bump of an outbound dependency, incompatible schema change, endpoint removal, hardware protocol revision, UI-flow breaking change). Actions: L1 disabled for the affected contract, coverage baseline may be reset (the reset is mandatory in Phase 4, §11.5), Boundary Contract Map mandatorily regenerated, test harness verified end-to-end, issue opened as a tracking epic.
 
+An **undeclared dependency** — transitive, vendored, or simply never recorded — that breaks the project is an implicit contract discovered the hard way. The protocol applies to it in full, and remediation additionally includes declaring it: add the dependency to the Boundary Contract Map (§8) and, where it is a runtime dependency, to `DEPENDENCIES.md`, so the next break arrives through a tracked contract.
+
 **Wide refactors: expand–contract.** When the break is a single mechanical change whose blast radius fans across the codebase (renaming a column, retyping a shared symbol), no vertical slice (§1.3) can land green on its own. Sequence it as: **expand** — add the new form beside the old, so nothing breaks; **migrate** — move call sites over in batches sized by blast radius (per package, per directory), each batch blocked by the expand, CI staying green because the old form survives; **contract** — delete the old form once no caller remains, blocked by every migrate batch. Where even the batches cannot stay green alone, they share an integration branch and all block a final integrate-and-verify step — green is promised only there.
 
 ### 10.8 Human report
@@ -3118,7 +3120,7 @@ This checklist applies when adopting Codex Machinae on an existing project (§11
 
 - [ ] T1 (Safety net) completed — coverage ratchet, secrets audit, CI baseline
 - [ ] T2 (Structure) completed — directory layout, agent config, CHANGELOG, contract map
-- [ ] T3 (Process) completed — module activation, checklist adoption, Definition of Done
+- [ ] T3 (Process) completed — module activation, checklist adoption, Definition of Done — or explicitly deferred with owner and target date (lifecycle entry requires only T1+T2, §11.6.5; T2 and T3 may be interleaved, §11.6.3)
 
 **Module activation (§11.6.4)**
 
