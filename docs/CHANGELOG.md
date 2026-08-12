@@ -10,6 +10,13 @@ as it is a design document, not a software release.
 
 ## [2026-08-12] — Visual identity polish
 
+### Added
+- `docs/assets/social-preview.png` — 1280×640 social card composed from the
+  logo, the wordmark (Garamond, width-matched CODEX / MACHINAE), and the
+  tagline, following the same emblem-plus-wordmark scheme as the
+  Exploratores project. To activate: upload it under GitHub *Settings →
+  General → Social preview* (not settable from the repository).
+
 ### Fixed
 - Logo and icon backgrounds are now genuinely transparent (alpha derived
   from line luminance) instead of baked white.
