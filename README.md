@@ -1,5 +1,8 @@
+[![Licence: CC BY 4.0](https://img.shields.io/badge/licence-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Status: stable design](https://img.shields.io/badge/status-stable%20design-brightgreen.svg)](#)
+[![Language: en-GB](https://img.shields.io/badge/language-en--GB-blue.svg)](#)
+[![Playbook: ~3 900 lines](https://img.shields.io/badge/playbook-~3%20900%20lines-informational.svg)](#)
 # Codex Machinae
-
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.png">
@@ -11,10 +14,7 @@
 
 <p align="center">
 
-[![Licence: CC BY 4.0](https://img.shields.io/badge/licence-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Status: stable design](https://img.shields.io/badge/status-stable%20design-brightgreen.svg)](#)
-[![Language: en-GB](https://img.shields.io/badge/language-en--GB-blue.svg)](#)
-[![Playbook: ~3 900 lines](https://img.shields.io/badge/playbook-~3%20900%20lines-informational.svg)](#)
+
 
 </p>
 
