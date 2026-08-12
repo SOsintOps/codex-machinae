@@ -8,6 +8,20 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Documentation catch-up for the skill and decision mapping
+
+### Added
+- `docs/FAQ.md` — two new General entries (using the playbook as an agent
+  skill; decision mapping and when it applies) and three inspiration rows
+  crediting Matt Pocock's *wayfinder*, *to-tickets*, and
+  *writing-for-agents* skills.
+- `skills/codex-machinae/README.md` — install locations, layout, generated
+  vs hand-authored files, licence and attribution.
+
+### Changed
+- `README.md` — Quick start steps now include the skill install option and
+  the §1.9 decision-mapping entry point for foggy greenfield starts.
+
 ## [2026-08-12] — Agent skill: first S4 validation round
 
 Five blind subagent runs — each given only `SKILL.md` and a trigger

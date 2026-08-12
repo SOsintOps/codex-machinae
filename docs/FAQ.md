@@ -29,6 +29,31 @@ Yes. Phase R (§11.6) is a dedicated retrofit protocol. It guides you through a
 debt-scoping audit, retroactive contract mapping, and prioritised adoption in
 three tiers (T1 safety net, T2 structure, T3 process).
 
+### How do I use the playbook as an agent skill?
+
+Copy [`skills/codex-machinae/`](../skills/codex-machinae/) into your agent
+harness's skills directory — for Claude Code, `.claude/skills/` in the repo
+(or `~/.claude/skills/` for all projects). The agent then loads the condensed
+`SKILL.md` (~170 lines) and reaches the full reference files only when their
+triggers fire, instead of carrying the ~3 900-line monolith into every
+session. The skill is model-invoked: the agent activates it on its own when a
+lifecycle event matches (new project, retrofit, contract break, release,
+multi-agent work). `SKILL.md` is hand-authored; the `reference/` tree is
+generated from `playbook/` by `tools/build.py` — edit the sources, never the
+copies. Packaging status and next steps live in
+[SKILL-ROADMAP.md](SKILL-ROADMAP.md).
+
+### What is decision mapping and when do I need it?
+
+Decision mapping (§1.9) covers the gap *before* the PRD: when an effort is
+too large for one agent session and open decisions still block the
+requirements, you chart those decisions as a map of typed tickets (research,
+prototype, grilling, task) on the issue tracker and resolve them one per
+session until the way is clear — then collapse the map into the PRD, ADRs,
+and stories. If requirements are already clear, skip it entirely and write
+the PRD directly. The practice is adapted from Matt Pocock's *wayfinder*
+skill (see the inspirations table below).
+
 ### Is it tied to a specific AI provider?
 
 No. The playbook is LLM-agnostic. §12 defines conventions that apply to any agent.
@@ -102,6 +127,9 @@ by area:
 | Boundary Contracts (4-axis taxonomy) | Inspired by contract testing (Pact) and DDD bounded contexts | §8 — integration-point catalogue |
 | Risk-modulated remediation (L0/L1/L2) | Inspired by autonomous-vehicle levels and SRE practices | §10 — fix autonomy classification |
 | MECE principle | McKinsey / structured problem-solving | M4 — taxonomy design |
+| Decision mapping (wayfinding) | Matt Pocock's *wayfinder* skill — [mattpocock/skills](https://github.com/mattpocock/skills) | §1.9, §12.7.2, templates B.10–B.11 |
+| Vertical slices / tracer bullets, expand–contract | *to-tickets* skill (same repo); The Pragmatic Programmer | §1.3 story slicing, §10.7 wide refactors |
+| Skill authoring (context pointers, progressive disclosure) | *writing-for-agents* skill (same repo) | `skills/codex-machinae/SKILL.md` |
 
 ### Is Emergent Expansion an established pattern?
 
