@@ -8,6 +8,45 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Wayfinder-derived planning practices and skill roadmap
+
+Practices adapted from the *wayfinder* skill and its sibling skills
+(`mattpocock/skills`), reconciled with the playbook's artefacts after a review
+of published field feedback on the skill set.
+
+### Added
+- **§1.9 Decision mapping (wayfinding)** — trigger-based protocol for the gap
+  Phase 0 used to assume away: when an effort exceeds one agent session and
+  open decisions still block the PRD, chart them as a decision map (tracker
+  issue or `docs/decisions/MAP.md`) and resolve decision tickets one per
+  session until the way is clear. Covers ticket types (research / prototype /
+  grilling / task, HITL vs AFK), frontier and claim-by-assignee, fog of war
+  with graduation, out-of-scope semantics, the plan-don't-do rule, and the
+  grilling round protocol. Exit collapses the map into PRD, ADRs, and stories.
+- **§11.1 step 0** — Phase 0 now enters through decision mapping when the §1.9
+  trigger fires.
+- **§12.7.2 "By decision ticket"** — fourth scope-partitioning strategy:
+  dynamic claim-based partitioning for parallel sessions working one map.
+- **§10.7 expand–contract** — sequencing rule for wide mechanical refactors
+  whose blast radius defeats vertical slicing.
+- **Appendix B.10 / B.11** — Decision Map and decision ticket templates.
+- **Appendix A.1** — conditional checklist block for efforts that triggered
+  decision mapping.
+- **Appendix C** — glossary entries: decision map, decision ticket, frontier,
+  fog of war, graduation, HITL/AFK, grilling, vertical slice, expand–contract.
+- **`docs/SKILL-ROADMAP.md`** — roadmap for packaging the playbook as an
+  agent skill (authoring, setup skill, distribution, validation).
+
+### Changed
+- **§1.3 User story** — two slicing rules added: vertical slice (the
+  "what can be demoed" test) and session sizing for agent-executed stories.
+- **§1.4 Acceptance criteria** — criteria must be falsifiable at the starting
+  commit; three non-grading shapes named and banned.
+- **§1.5 ADR** — "significant" now defined by a three-part bar (hard to
+  reverse, surprising without context, real trade-off), curbing ADR inflation.
+- `README.md` — line-count badge updated (~3 800 → ~3 900); Appendix B
+  description and repository/roadmap tables extended.
+
 ## [2026-06-10] — GSD comparison and integration guide
 
 ### Added

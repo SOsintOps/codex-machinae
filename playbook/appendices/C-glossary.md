@@ -7,6 +7,15 @@
 | **User Story** | Functional requirement from the user's perspective |
 | **Acceptance Criteria** | Binary conditions that define "done" |
 | **Definition of Done** | Universal checklist applied to every work item |
+| **Decision map** | Shared index of decision tickets charting the way from a loose idea to a writable PRD (§1.9) |
+| **Decision ticket** | Child issue of a decision map whose body is a question resolved by a decision, sized to one agent session (§1.9.2) |
+| **Frontier** | The set of open, unblocked, unclaimed decision tickets — the edge of the known (§1.9.3) |
+| **Fog of war** | In-scope decisions visibly coming but not yet formulable as a precise question; recorded under Not yet specified (§1.9.3) |
+| **Graduation** | Promotion of a patch of fog into fresh decision tickets once a resolution makes it specifiable (§1.9.3) |
+| **HITL / AFK** | Human-in-the-loop vs agent-alone resolution modes for decision tickets (§1.9.2) |
+| **Grilling** | Structured decision conversation worked in rounds over a design tree, questions numbered with recommended answers (§1.9.4) |
+| **Vertical slice** | A story cut as a narrow but complete path through every layer it touches, verifiable on its own (§1.3) |
+| **Expand–contract** | Three-step sequencing (add new form, migrate call sites in batches, delete old form) for wide mechanical refactors (§10.7) |
 | **Domain appendix** | A section of the playbook (D1–D7) that adds project-type-specific content on top of Core when its activation trigger fires |
 | **Cross-cutting module** | A section of the playbook (M1–M4) that adds capability-specific content composable with any domain when its activation trigger fires |
 | **Boundary contract** | A promise the system makes to something outside its own implementation (hardware, UI, data, API); can be inbound (exposed) or outbound (consumed) |

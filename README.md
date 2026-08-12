@@ -21,7 +21,7 @@
 [![Licence: CC BY 4.0](https://img.shields.io/badge/licence-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Status: stable design](https://img.shields.io/badge/status-stable%20design-brightgreen.svg)](#)
 [![Language: en-GB](https://img.shields.io/badge/language-en--GB-blue.svg)](#)
-[![Playbook: ~3 800 lines](https://img.shields.io/badge/playbook-~3%20800%20lines-informational.svg)](#)
+[![Playbook: ~3 900 lines](https://img.shields.io/badge/playbook-~3%20900%20lines-informational.svg)](#)
 
 </p>
 
@@ -87,7 +87,7 @@ codex-machinae.md
 │
 └── Appendices
     ├── A — Phase checklists (profile-aware)
-    ├── B — Templates (PRD, ADR, stories, contract map, retrofit audit)
+    ├── B — Templates (PRD, ADR, stories, contract map, retrofit audit, decision map)
     ├── C — Glossary
     └── D — Tooling Specifications (AST Walker, Coverage Ratchet, Surveillance Agent)
 ```
@@ -141,6 +141,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`docs/GSD-COMPARISON.md`](docs/GSD-COMPARISON.md) | Comparative analysis: Codex Machinae vs the GSD workflow engine |
 | [`docs/GSD-INTEGRATION.md`](docs/GSD-INTEGRATION.md) | Operational guide to running the playbook under GSD |
 | [`docs/MODULARISATION_PLAN.md`](docs/MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
+| [`docs/SKILL-ROADMAP.md`](docs/SKILL-ROADMAP.md) | Roadmap for packaging the playbook as an agent skill |
 | **Local only** | |
 | `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — not tracked |
 | `CLAUDE.md` | Claude-specific agent configuration — not tracked |
@@ -171,6 +172,7 @@ Every agent reads `PROJECT_STATUS.md` at session start and updates it at session
 | 2 | ~~Fill D2 (Library/SDK) and D3 (CLI Tool) stubs~~ | Done |
 | 3 | Build reference implementations against Appendix D specs | Planned |
 | 4 | ~~Fill D6 (Mobile), D7 (Static Site), M3 (Release) stubs~~ | Done |
+| 5 | Package the playbook as an agent skill ([roadmap](docs/SKILL-ROADMAP.md)) | Planned |
 
 ---
 
