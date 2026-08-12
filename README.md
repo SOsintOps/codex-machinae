@@ -96,9 +96,30 @@ sources** by [`tools/build.py`](tools/build.py) — edit the sources, not the mo
 > **Single file, modular, or skill?** Copy `codex-machinae.md` if you want one
 > self-contained file. For token-frugal agent sessions, copy the `playbook/` directory
 > instead and load only `core.md` plus the domain/module files whose triggers fire (§2.2).
-> For agent harnesses that support skills (Claude Code and equivalents), copy
-> [`skills/codex-machinae/`](skills/codex-machinae/) into your skills directory — the
-> agent then loads the condensed `SKILL.md` and reaches the reference files by trigger.
+> For agent harnesses that support skills, install the skill — the agent then loads the
+> condensed `SKILL.md` and reaches the reference files by trigger.
+
+### Install as an agent skill
+
+**Subscribe** — read-only, always current (Claude Code plugin):
+
+```
+claude plugin marketplace add SOsintOps/codex-machinae
+claude plugin install codex-machinae@codex-machinae
+```
+
+**Fork** — editable copy in your repo, any Agent-Skills harness (Claude Code, Codex,
+Gemini CLI, Copilot, and others via [skills.sh](https://skills.sh)):
+
+```
+npx skills add SOsintOps/codex-machinae
+```
+
+Both routes install the [`codex-machinae`](skills/codex-machinae/) skill and its
+[`setup-codex-machinae`](skills/setup-codex-machinae/) companion (~165 always-on
+tokens for the pair). Run `/setup-codex-machinae` once per repository, then let the
+main skill route by trigger. Choose deliberately: subscribe if you won't customise,
+fork if you will — a drifting fork is the one option with nothing going for it.
 
 ### New project (greenfield)
 
@@ -135,6 +156,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`tools/build.py`](tools/build.py) | Assembles `codex-machinae.md` and the skill reference tree from `playbook/`; `--check` verifies both are in sync |
 | [`skills/codex-machinae/`](skills/codex-machinae/) | The playbook packaged as an agent skill — hand-authored `SKILL.md` plus a generated `reference/` tree |
 | [`skills/setup-codex-machinae/`](skills/setup-codex-machinae/) | Companion setup skill — seeds the per-repo config (profile, tracker, autonomy, modules) |
+| [`.claude-plugin/`](.claude-plugin/) | Claude Code plugin + single-plugin marketplace manifests (`claude plugin validate . --strict` passes) |
 | [`LICENSE`](LICENSE) | CC BY 4.0 full text |
 | **`docs/`** | |
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | Version history |

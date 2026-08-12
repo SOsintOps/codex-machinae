@@ -6,13 +6,12 @@ reference, so an agent session carries only what its triggers actually fire.
 
 ## Install
 
-Copy this directory into your harness's skills location:
-
-| Harness | Location |
+| Route | Command / location |
 |---|---|
-| Claude Code (this repo only) | `.claude/skills/codex-machinae/` |
-| Claude Code (all your projects) | `~/.claude/skills/codex-machinae/` |
-| Other Agent-Skills-compatible harnesses | their skills directory |
+| **Subscribe** — Claude Code plugin (read-only, always current) | `claude plugin marketplace add SOsintOps/codex-machinae` then `claude plugin install codex-machinae@codex-machinae` |
+| **Fork** — editable copy, any Agent-Skills harness | `npx skills add SOsintOps/codex-machinae` |
+| Manual — this repo only | copy to `.claude/skills/codex-machinae/` |
+| Manual — all your projects | copy to `~/.claude/skills/codex-machinae/` |
 
 The skill is **model-invoked**: the agent activates it on its own when a
 lifecycle event matches the description (new project, retrofit, dependency or

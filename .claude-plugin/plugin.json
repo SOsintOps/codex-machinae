@@ -1,0 +1,23 @@
+{
+  "name": "codex-machinae",
+  "version": "1.0.0",
+  "description": "Process playbook for shipping software with LLM collaborators: trigger-routed lifecycle, boundary contracts, autonomy-laddered remediation, decision mapping. Includes the setup companion skill.",
+  "author": {
+    "name": "SOsintOps",
+    "url": "https://github.com/SOsintOps"
+  },
+  "homepage": "https://github.com/SOsintOps/codex-machinae",
+  "repository": "https://github.com/SOsintOps/codex-machinae",
+  "license": "CC-BY-4.0",
+  "keywords": [
+    "playbook",
+    "process",
+    "sdlc",
+    "ai-agents",
+    "methodology"
+  ],
+  "skills": [
+    "./skills/codex-machinae",
+    "./skills/setup-codex-machinae"
+  ]
+}
