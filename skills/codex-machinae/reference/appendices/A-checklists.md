@@ -251,7 +251,7 @@ This checklist applies when adopting Codex Machinae on an existing project (§11
 
 - [ ] T1 (Safety net) completed — coverage ratchet, secrets audit, CI baseline
 - [ ] T2 (Structure) completed — directory layout, agent config, CHANGELOG, contract map
-- [ ] T3 (Process) completed — module activation, checklist adoption, Definition of Done
+- [ ] T3 (Process) completed — module activation, checklist adoption, Definition of Done — or explicitly deferred with owner and target date (lifecycle entry requires only T1+T2, §11.6.5; T2 and T3 may be interleaved, §11.6.3)
 
 **Module activation (§11.6.4)**
 

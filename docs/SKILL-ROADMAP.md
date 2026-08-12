@@ -176,6 +176,20 @@ gracefully and stays token-light.
 > is installed locally in `.claude/skills/`), and a second blind round after
 > any future wording change.
 
+> **Second round run 2026-08-12, post-fix** — the five original scenarios
+> plus a new precedence probe (mid-sprint story with CI broken overnight by
+> a transitive dependency patch). **6/6 routed correctly**, and every
+> round-one fix was cited verbatim by the agents as the reason for the
+> correct choice (D2 carve-out refused the consumed SDK; A.1 stayed unloaded
+> while a §1.9 map is open; A.8 loaded at the Phase R gate; Phase 4 reached
+> from the route table; causal-trigger rule resolved the precedence probe —
+> including the fine call that a *breaking patch* lands at L2 without
+> escalating to Phase 4). Two new source defects surfaced and fixed in the
+> same session: checklist A.8's unconditional "T3 completed" box conflicted
+> with the T1+T2 gate (now explicitly deferrable per §11.6.3/§11.6.5), and
+> §10.7 had no rule for undeclared/transitive dependencies that break the
+> project (now: implicit contract — remediate and declare it in the map).
+
 ---
 
 ## Risks and open questions
