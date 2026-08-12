@@ -4,6 +4,12 @@
 [![Playbook: ~3 900 lines](https://img.shields.io/badge/playbook-~3%20900%20lines-informational.svg)](#)
 # Codex Machinae
 <p align="center">
+
+
+
+</p>
+
+<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/logo-dark.png">
     <img src="docs/assets/logo.png" alt="Codex Machinae — an open codex whose page curls into gears" width="360">
@@ -11,12 +17,6 @@
 </p>
 
 <p align="center"><em>· universal llm-assisted playbook ·</em></p>
-
-<p align="center">
-
-
-
-</p>
 
 > **Universal, modular meta-framework for shipping software with LLM collaborators.**
 > A sober Core plus domain appendices and cross-cutting modules — activated by trigger,
@@ -144,7 +144,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`docs/GSD-INTEGRATION.md`](docs/GSD-INTEGRATION.md) | Operational guide to running the playbook under GSD |
 | [`docs/MODULARISATION_PLAN.md`](docs/MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
 | [`docs/SKILL-ROADMAP.md`](docs/SKILL-ROADMAP.md) | Roadmap for packaging the playbook as an agent skill |
-| [`docs/assets/`](docs/assets/) | Visual identity: `logo.png` / `logo-dark.png` (primary, per theme) and `icon.png` / `icon-dark.png` (small formats) |
+| [`docs/assets/`](docs/assets/) | Visual identity: `logo.png` / `logo-dark.png` (primary, per theme), `icon.png` / `icon-dark.png` (small formats), `social-preview.png` (1280×640, for GitHub's social preview setting) |
 | **Local only** | |
 | `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — not tracked |
 | `CLAUDE.md` | Claude-specific agent configuration — not tracked |
