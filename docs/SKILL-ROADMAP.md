@@ -1,6 +1,6 @@
 # Skill Roadmap — Packaging Codex Machinae as an Agent Skill
 
-**Status:** S0 locked and S1 shipped (2026-08-12) — next: S2 setup skill, S3 packaging
+**Status:** S0 locked, S1 shipped, first S4 validation round passed (2026-08-12) — next: S2 setup skill, S3 packaging
 **Depends on:** none (may run in parallel with the downstream-retrofit roadmap item)
 **Informed by:** the skill-authoring practices of `mattpocock/skills`
 (`writing-for-agents`, `SKILL-MECHANICS.md`, ADRs 0001–0002) and published
@@ -160,6 +160,21 @@ gracefully and stays token-light.
   - setup config survives across sessions and providers (§12.7.6).
 - Iterate on the description's trigger wording — misfires here are wording
   bugs (a weak context pointer), not architecture bugs.
+
+> **First round run 2026-08-12** — five blind subagents, each given only
+> `SKILL.md` and a trigger scenario (new mobile app, retrofit, consumed-SDK
+> major bump, first npm release, foggy pre-PRD idea). **5/5 routed to the
+> correct reference files**; the foggy-idea agent correctly refused to load
+> D5 despite the "data platform" pattern-match, because the domain was
+> itself an open decision. Seven wording defects surfaced and were fixed in
+> the same session: Phase 4 unreachable from the route table; no precedence
+> rule for multi-row matches (now: causal trigger wins); D2's trigger read
+> as firing on *consumed* SDKs (now publishes-only); Phase R lacked its
+> "Done when: A.8" gate; A.1 timing vs an open §1.9 map; the
+> core-vs-disclosed loading rule was implicit; §10.7/§11.5 baseline-reset
+> wording drift. Remaining S4 work: validation in live sessions (the skill
+> is installed locally in `.claude/skills/`), and a second blind round after
+> any future wording change.
 
 ---
 

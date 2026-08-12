@@ -19,6 +19,11 @@ Section references like `§5.3` resolve inside [reference/core.md](reference/cor
 [reference/domains/](reference/domains/), [reference/modules/](reference/modules/),
 and [reference/appendices/](reference/appendices/).
 
+Loading `reference/core.md` is always legitimate — it *is* the Core, and a
+`§` pointer narrows where to read inside it, not whether to load it.
+Emergent Expansion's no-untriggered-loading rule governs the domain, module,
+and appendix files.
+
 ## Operating rules — always apply
 
 1. Read the repo's agent-configuration file before any action. Update
@@ -48,9 +53,13 @@ and [reference/appendices/](reference/appendices/).
 | New project, way to the PRD not yet clear, effort exceeds one session | **Decision mapping** first (§1.9), then Phase 0 |
 | New project, requirements clear | **Phase 0** below |
 | Existing codebase adopting the playbook | **Phase R** below |
-| Dependency / contract changed or broke | **Classification → remediation** below |
-| Release being prepared | Module **M3** (+ D2/D6 if library/mobile) |
+| Dependency / contract changed or broke | **Classification → remediation** below; a major version bump of a consumed dependency escalates to **Phase 4** (§11.5) |
+| Release being prepared | Module **M3**, alongside whichever domain files are already active (D2 for a library, D6 for a mobile app — their own triggers activate them, not the release) |
 | Feature work in flight | **Phase 2** loop below |
+
+When more than one row matches, the **causal trigger wins** — route on the
+event that started the situation, not its symptoms. Red tests caused by a
+dependency bump take the break route, not Phase 2.
 
 ## Lifecycle
 
@@ -72,7 +81,9 @@ and [reference/appendices/](reference/appendices/).
 5. Backlog ordered by priority (§1.6); Definition of Done agreed (§1.8);
    critical dependencies in `DEPENDENCIES.md`.
 
-**Done when:** checklist A.1 passes for the declared profile.
+**Done when:** checklist A.1 passes for the declared profile. The checklist
+is a gate artefact — consult it here, not at entry; while a §1.9 map is
+open, Phase 0 has not begun and A.1 has nothing to grade yet.
 
 ### Phase 1 — Technical bootstrap (§11.2, checklist A.2)
 
@@ -103,6 +114,8 @@ tiers (T1 safety net, then T2 structure, then T3 process; T1 is
 non-negotiable and first). Enter the lifecycle at Phase 2 or 3 when T1+T2
 are complete.
 
+**Done when:** checklist A.8 passes; T1 and T2 tiers complete.
+
 ## When something changes or breaks
 
 1. **Classify** the change (§9): bucket + severity (`safe` / `additive` /
@@ -120,7 +133,7 @@ are complete.
 | Trigger | Load |
 |---|---|
 | HTTP/API service, anything deployed serverside | [D1 Web Service](reference/domains/D1-web-service.md) |
-| Published package consumed as a dependency | [D2 Library / SDK](reference/domains/D2-library-sdk.md) |
+| This project **publishes** a package others consume (a third-party SDK the project merely consumes does not fire this) | [D2 Library / SDK](reference/domains/D2-library-sdk.md) |
 | Command-line tool | [D3 CLI Tool](reference/domains/D3-cli-tool.md) |
 | Firmware, hardware peripherals, RTOS | [D4 Embedded / Firmware](reference/domains/D4-embedded-firmware.md) |
 | ML models, training, data pipelines | [D5 ML / Data Pipeline](reference/domains/D5-ml-data-pipeline.md) |
