@@ -1,5 +1,9 @@
 # Codex Machinae
 
+<p align="center">
+  <img src="docs/assets/logo.png" alt="Codex Machinae — an open codex whose page curls into gears" width="320">
+</p>
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                                                              │
@@ -151,6 +155,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 | [`docs/GSD-INTEGRATION.md`](docs/GSD-INTEGRATION.md) | Operational guide to running the playbook under GSD |
 | [`docs/MODULARISATION_PLAN.md`](docs/MODULARISATION_PLAN.md) | Historical record of the modularisation refactor (Phases 0–10, closed) |
 | [`docs/SKILL-ROADMAP.md`](docs/SKILL-ROADMAP.md) | Roadmap for packaging the playbook as an agent skill |
+| [`docs/assets/`](docs/assets/) | Visual identity: `logo.png` (primary) and `icon.png` (small formats) |
 | **Local only** | |
 | `AI-AGENTS.md` | Shared agent rules (source of truth for all LLMs) — not tracked |
 | `CLAUDE.md` | Claude-specific agent configuration — not tracked |
