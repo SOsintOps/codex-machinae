@@ -8,6 +8,24 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-08-12] — Agent skill: first S4 validation round
+
+Five blind subagent runs — each given only `SKILL.md` and a trigger
+scenario — routed 5/5 to the correct reference files. The round surfaced
+seven wording defects, all fixed:
+
+### Changed
+- `skills/codex-machinae/SKILL.md` — route table now reaches Phase 4 and
+  states the precedence rule (causal trigger wins); D2's trigger fires only
+  for packages the project publishes; Phase R gained its "Done when:
+  checklist A.8" gate; A.1 declared a gate artefact (inert while a §1.9 map
+  is open); D6/D2 in the release row clarified as domain-triggered, not
+  release-triggered; the core-vs-disclosed loading rule made explicit.
+- `playbook/core.md` §10.7 — "coverage baseline resettable" aligned with
+  §11.5 ("may be reset; mandatory in Phase 4"); monolith and skill
+  reference tree regenerated.
+- `docs/SKILL-ROADMAP.md` — S4 first-round record added.
+
 ## [2026-08-12] — Agent skill: S1 authoring
 
 Phase S1 of `docs/SKILL-ROADMAP.md`. S0 scoping decisions locked in a single
