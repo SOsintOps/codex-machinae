@@ -198,7 +198,7 @@ Every agent reads `PROJECT_STATUS.md` at session start and updates it at session
 | 2 | ~~Fill D2 (Library/SDK) and D3 (CLI Tool) stubs~~ | Done |
 | 3 | Build reference implementations against Appendix D specs | Planned |
 | 4 | ~~Fill D6 (Mobile), D7 (Static Site), M3 (Release) stubs~~ | Done |
-| 5 | Package the playbook as an agent skill ([roadmap](docs/SKILL-ROADMAP.md)) | S1 done — S2–S4 open |
+| 5 | Package the playbook as an agent skill ([roadmap](docs/SKILL-ROADMAP.md)) | S0–S3 done — S4 live validation open |
 
 ---
 
