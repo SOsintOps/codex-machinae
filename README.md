@@ -109,15 +109,20 @@ sources** by [`tools/build.py`](tools/build.py) — edit the sources, not the mo
 
 ### New project (greenfield)
 
-1. Copy `codex-machinae.md` (or `playbook/`) into your repository.
+1. Copy `codex-machinae.md` (or `playbook/`) into your repository — or install the skill:
+   copy `skills/codex-machinae/` into your agent's skills directory (Claude Code:
+   `.claude/skills/`).
 2. Declare a project-size profile in your agent config: `Solo`, `Small`, or `Large` (§2.5).
-3. Follow **Phase 0** (§11.1) — write the PRD, define user stories, set the Definition of Done.
+3. Follow **Phase 0** (§11.1) — if the way to the PRD is not yet clear and the effort
+   exceeds one session, run decision mapping first (§1.9); then write the PRD, define
+   user stories, set the Definition of Done.
 4. Follow **Phase 1** (§11.2) — bootstrap the directory structure, CI, and contract map.
 5. Activate domain appendices and modules as their triggers fire (§2.2).
 
 ### Existing project (retrofit)
 
-1. Copy `codex-machinae.md` (or `playbook/`) into your repository.
+1. Copy `codex-machinae.md` (or `playbook/`) into your repository — or install the skill
+   as above.
 2. Follow **Phase R** (§11.6) — the retrofit protocol:
    - **Debt-scoping audit** — assess the gap between your project and the playbook.
    - **Retroactive contract mapping** — generate the Boundary Contract Map from existing code.
