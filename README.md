@@ -1,13 +1,13 @@
+<p align="center">
+
 [![Licence: CC BY 4.0](https://img.shields.io/badge/licence-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Status: stable design](https://img.shields.io/badge/status-stable%20design-brightgreen.svg)](#)
 [![Language: en-GB](https://img.shields.io/badge/language-en--GB-blue.svg)](#)
 [![Playbook: ~3 900 lines](https://img.shields.io/badge/playbook-~3%20900%20lines-informational.svg)](#)
-# Codex Machinae
-<p align="center">
-
-
 
 </p>
+
+# Codex Machinae
 
 <p align="center">
   <picture>
@@ -130,7 +130,7 @@ Use the `RETROFIT_AUDIT.md` template (Appendix B.9) to structure the assessment.
 
 | File | Description |
 |------|-------------|
-| [`codex-machinae.md`](codex-machinae.md) | The playbook assembled as a single file (~3 800 lines) — **generated, do not edit** |
+| [`codex-machinae.md`](codex-machinae.md) | The playbook assembled as a single file (~3 900 lines) — **generated, do not edit** |
 | [`playbook/`](playbook/) | Source of truth — Core, domain appendices, modules, and appendices as separate files |
 | [`tools/build.py`](tools/build.py) | Assembles `codex-machinae.md` and the skill reference tree from `playbook/`; `--check` verifies both are in sync |
 | [`skills/codex-machinae/`](skills/codex-machinae/) | The playbook packaged as an agent skill — hand-authored `SKILL.md` plus a generated `reference/` tree |
