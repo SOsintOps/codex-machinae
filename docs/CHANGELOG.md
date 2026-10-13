@@ -8,6 +8,26 @@ as it is a design document, not a software release.
 
 ---
 
+## [2026-10-13] — Docs: M4 framework references and FAQ
+
+### Changed
+- **M4 Classification & Taxonomy** — F3EAD is described as a targeting cycle
+  (Find, Fix, Finish, Exploit, Analyse, Disseminate), distinct from the
+  intelligence cycle; TLP is TLP 2.0 and STIX is STIX 2.1 (with TAXII 2.1);
+  the biomedical ICD is spelt out as ICD-10/ICD-11 (WHO) so it is not
+  confused with the intelligence directive ICD 203. ATT&CK, STIX, TAXII,
+  CAPEC, CWE, CVE, TLP, F3EAD, FT3, SNOMED CT and ICD are linked at first
+  mention. Monolith and skill reference regenerated with `tools/build.py`.
+
+### Docs
+- `docs/FAQ.md` — table of contents; the illustrative-examples answer
+  points to M4.8 (was M4.7) and adds FT3 and CVE, as in M4.8; the third
+  adoption pattern is "Inspiration only" as in M4.4 (was "Watch", which is
+  a scouting classification); new group *Applied in and related projects*
+  (Elementary CTI, Acta Diurna, Project Anima Simulacrum, Argos, Speculator,
+  Exploratores; related: Aethelburg, Quaesitor, Wukong, Intelligence Field
+  Notes, 13proof, Il Conclave).
+
 ## [2026-08-12] — Agent skill: S3 packaging and distribution
 
 ### Added

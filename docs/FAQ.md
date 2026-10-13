@@ -1,4 +1,32 @@
-# Frequently Asked Questions
+# Frequently Asked Questions (FAQ)
+
+Frequently asked questions about Codex Machinae — what it is, its design and inspirations, the frameworks it illustrates, where it is applied, tooling and contributing.
+
+## Table of Contents
+
+* [What is Codex Machinae?](#what-is-codex-machinae)
+* [Who is it for?](#who-is-it-for)
+* [Do I need to adopt the entire playbook?](#do-i-need-to-adopt-the-entire-playbook)
+* [Can I use it on an existing project?](#can-i-use-it-on-an-existing-project)
+* [How do I use the playbook as an agent skill?](#how-do-i-use-the-playbook-as-an-agent-skill)
+* [What is decision mapping and when do I need it?](#what-is-decision-mapping-and-when-do-i-need-it)
+* [Is it tied to a specific AI provider?](#is-it-tied-to-a-specific-ai-provider)
+* [Can I use Codex Machinae with a workflow engine such as GSD?](#can-i-use-codex-machinae-with-a-workflow-engine-such-as-gsd)
+* [What language is the playbook written in?](#what-language-is-the-playbook-written-in)
+* [What standards and methodologies influenced the playbook?](#what-standards-and-methodologies-influenced-the-playbook)
+* [Is Emergent Expansion an established pattern?](#is-emergent-expansion-an-established-pattern)
+* [Why ADRs instead of design documents?](#why-adrs-instead-of-design-documents)
+* [Where do I find information about classification frameworks?](#where-do-i-find-information-about-classification-frameworks)
+* [What are the illustrative framework examples in M4?](#what-are-the-illustrative-framework-examples-in-m4)
+* [How do I adopt an external framework?](#how-do-i-adopt-an-external-framework)
+* [Where is Codex Machinae applied?](#where-is-codex-machinae-applied)
+* [Are there related SOsintOps projects?](#are-there-related-sosintops-projects)
+* [Does the playbook include tools or scripts?](#does-the-playbook-include-tools-or-scripts)
+* [What CLI frameworks does the playbook recommend?](#what-cli-frameworks-does-the-playbook-recommend)
+* [What mobile frameworks are covered?](#what-mobile-frameworks-are-covered)
+* [What static-site / frontend frameworks are mentioned?](#what-static-site--frontend-frameworks-are-mentioned)
+* [How do I report an error or suggest an improvement?](#how-do-i-report-an-error-or-suggest-an-improvement)
+* [Can I contribute a new domain appendix?](#can-i-contribute-a-new-domain-appendix)
 
 ---
 
@@ -163,19 +191,21 @@ The scouting protocol directs you to:
 
 ### What are the illustrative framework examples in M4?
 
-M4.7 provides a reference table of frameworks to show the *shape* of adoption.
+M4.8 provides a reference table of frameworks to show the *shape* of adoption.
 These are examples, not defaults:
 
 | Domain | Framework | Scope |
 |--------|-----------|-------|
-| Threat intelligence | MITRE ATT&CK | Adversary tactics, techniques, procedures |
-| Threat intelligence | STIX / TAXII | Structured threat information exchange |
-| Vulnerability | CAPEC | Common attack pattern enumeration |
-| Vulnerability | CWE | Common weakness enumeration |
-| Information sharing | TLP | Traffic Light Protocol for disclosure |
-| Intelligence process | F3EAD | Find, Fix, Finish, Exploit, Analyse, Disseminate |
-| Healthcare | SNOMED CT | Clinical terminology |
-| Healthcare | ICD | International Classification of Diseases |
+| Threat intelligence | [MITRE ATT&CK](https://attack.mitre.org/) | Adversary tactics, techniques, procedures |
+| Threat intelligence | [STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html) / [TAXII 2.1](https://docs.oasis-open.org/cti/taxii/v2.1/taxii-v2.1.html) | Structured threat information exchange |
+| Fraud signalling | [FT3](https://github.com/stripe/ft3) (Stripe) | Fraud tools, tactics and techniques |
+| Vulnerability | [CVE](https://www.cve.org/) | Common vulnerabilities and exposures |
+| Vulnerability | [CAPEC](https://capec.mitre.org/) | Common attack pattern enumeration |
+| Vulnerability | [CWE](https://cwe.mitre.org/) | Common weakness enumeration |
+| Information sharing | [TLP 2.0](https://www.first.org/tlp/) | Traffic Light Protocol for disclosure |
+| Targeting cycle | [F3EAD](https://archive.smallwarsjournal.com/node/12209) | Find, Fix, Finish, Exploit, Analyse, Disseminate: a targeting cycle, distinct from the intelligence cycle |
+| Healthcare | [SNOMED CT](https://www.snomed.org/) | Clinical terminology |
+| Healthcare | [ICD-10/ICD-11 (WHO)](https://www.who.int/standards/classifications/classification-of-diseases) | International Classification of Diseases (not the intelligence directive ICD 203) |
 | Geospatial | ISO 19115 | Geographic metadata |
 
 ### How do I adopt an external framework?
@@ -184,10 +214,52 @@ Follow the adoption protocol in M4.4:
 
 1. **Full adoption** — use the framework verbatim; its identifiers become yours.
 2. **Partial adoption** — use a subset plus local extensions for domain-specific needs.
-3. **Watch** — promising but immature; monitor without committing.
+3. **Inspiration only** — design your own taxonomy, informed by the framework's
+   structure but not bound by its identifiers.
+
+Separately, the scouting report (M4.3) may classify a candidate as **watch**:
+promising but immature, monitored without committing.
 
 The decision is recorded in `docs/taxonomy/registry.md` with the scouting report
 that justified the choice.
+
+---
+
+## Applied in and related projects
+
+### Where is Codex Machinae applied?
+
+In the SOsintOps projects. [Elementary CTI](https://github.com/SOsintOps/elementary-CTI)
+names it as its development playbook and applies M4's threat-intelligence examples in
+practice: MITRE ATT&CK enrichment, STIX 2.1 export and TLP handling.
+[Acta Diurna](https://github.com/SOsintOps/acta-diurna) (in Italian) is developed with
+it. [Project Anima Simulacrum](https://github.com/SOsintOps/Project-Anima-Simulacrum)
+follows the playbook (Solo profile, D5 ML/Data Pipeline domain) and keeps a vendored
+copy of an early draft in its repository. The FAQs of [Argos](https://github.com/SOsintOps/Argos)
+and [Speculator](https://github.com/SOsintOps/Speculator-Project) name Codex Machinae as
+the playbook those projects are built with, and [Exploratores](https://github.com/SOsintOps/Exploratores)
+cites it among its related projects.
+
+### Are there related SOsintOps projects?
+
+Yes. They are related through the domains M4 illustrates or through the same
+discipline, not because they all adopt the playbook:
+
+- [Aethelburg](https://github.com/SOsintOps/Aethelburg-project) — UK company analysis
+  whose risk flags are tagged with FT3 techniques, the fraud-signalling example in M4.8.
+- [Quaesitor](https://github.com/SOsintOps/quaesitor) and
+  [Wukong](https://github.com/SOsintOps/Wukong) — a local case graph and a China-focused
+  OSINT workstation, other intelligence tools in the same family.
+- [Intelligence Field Notes](https://github.com/SOsintOps/intelligence-field-notes) —
+  the intelligence method (analytic standards, source evaluation, report writing,
+  TLP 2.0 handling) that the intelligence tools share; Codex Machinae covers how the
+  software is built, the field notes cover how the analysis is done.
+- [13proof](https://github.com/SOsintOps/13proof) — a six-stage AI audit for technical
+  documentation, complementary to the playbook's documentation rules (§6).
+- [Il Conclave](https://github.com/SOsintOps/il-conclave) — a Claude Code skill (in
+  Italian) that runs analytic procedures such as ACH and a premortem on a question or a
+  decision; useful when an open decision in a decision map (§1.9) needs structured
+  challenge.
 
 ---
 

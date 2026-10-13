@@ -7,8 +7,8 @@
 
 # Codex Machinae
 
-**Version:** 2026-08-12 (date-based, see `docs/CHANGELOG.md`)
-**Last updated:** 2026-08-12
+**Version:** 2026-10-13 (date-based, see `docs/CHANGELOG.md`)
+**Last updated:** 2026-10-13
 **Scope:** Framework for developing, testing, deploying, maintaining, and monitoring software projects.
 
 This playbook defines the entire lifecycle of a software project: from requirements gathering through to deployment and continuous dependency monitoring. It is designed for independent developers and small teams operating with autonomous agents (Claude Code, GSD, or equivalents).
@@ -2665,8 +2665,11 @@ activates on the first naming decision.
 **In addition to Core.** This module is framework-agnostic: it ships no curated catalogue of
 taxonomies. Instead, it defines the principles, governance, and scouting protocol the project
 follows to discover, adopt, and maintain whatever domain-specific frameworks its problem space
-requires. Illustrative examples (MITRE ATT&CK, STIX, FT3, CAPEC, TLP, F3EAD, SNOMED, ICD,
-ISO 19115) appear only to show the *shape* of adoption, never as defaults.
+requires. Illustrative examples ([MITRE ATT&CK](https://attack.mitre.org/),
+[STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html),
+[FT3](https://github.com/stripe/ft3), [CAPEC](https://capec.mitre.org/),
+[TLP 2.0](https://www.first.org/tlp/), [F3EAD](https://archive.smallwarsjournal.com/node/12209), SNOMED CT, ICD-10/ICD-11
+(WHO), ISO 19115) appear only to show the *shape* of adoption, never as defaults.
 
 ### M4.1 Design principles
 
@@ -2819,13 +2822,13 @@ exist.
 
 | Domain | Framework | What it classifies | Adoption shape |
 |--------|-----------|-------------------|----------------|
-| Threat intelligence | MITRE ATT&CK | Adversary tactics, techniques, procedures | Full or partial adoption; local techniques for niche attack surfaces |
-| Threat intelligence | STIX / TAXII | Structured threat information exchange | Full adoption as a transport format |
-| Fraud signalling | FT3 (Stripe) | Fraud tactics and techniques | Partial adoption; local extensions for domain-specific fraud vectors |
-| Vulnerability | CVE / CWE / CAPEC | Vulnerabilities, weaknesses, attack patterns | Full adoption as identifiers; local severity overlay |
-| Sharing policy | TLP (Traffic Light Protocol) | Information-sharing boundaries | Full adoption; no local extensions expected |
-| Intelligence cycle | F3EAD | Find, Fix, Finish, Exploit, Analyse, Disseminate | Inspiration; adapted to the project's operational rhythm |
-| Biomedicine | SNOMED CT / ICD | Clinical terms, diagnoses | Full or partial adoption; local extensions for research-specific phenotypes |
+| Threat intelligence | [MITRE ATT&CK](https://attack.mitre.org/) | Adversary tactics, techniques, procedures | Full or partial adoption; local techniques for niche attack surfaces |
+| Threat intelligence | [STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html) / [TAXII 2.1](https://docs.oasis-open.org/cti/taxii/v2.1/taxii-v2.1.html) | Structured threat information exchange | Full adoption as a transport format |
+| Fraud signalling | [FT3](https://github.com/stripe/ft3) (Stripe) | Fraud tools, tactics and techniques | Partial adoption; local extensions for domain-specific fraud vectors |
+| Vulnerability | [CVE](https://www.cve.org/) / [CWE](https://cwe.mitre.org/) / [CAPEC](https://capec.mitre.org/) | Vulnerabilities, weaknesses, attack patterns | Full adoption as identifiers; local severity overlay |
+| Sharing policy | [TLP 2.0](https://www.first.org/tlp/) (Traffic Light Protocol) | Information-sharing boundaries | Full adoption; no local extensions expected |
+| Targeting cycle | [F3EAD](https://archive.smallwarsjournal.com/node/12209) | Find, Fix, Finish, Exploit, Analyse, Disseminate: a targeting cycle, distinct from the intelligence cycle | Inspiration; adapted to the project's operational rhythm |
+| Biomedicine | [SNOMED CT](https://www.snomed.org/) / [ICD-10/ICD-11 (WHO)](https://www.who.int/standards/classifications/classification-of-diseases) | Clinical terms, diagnoses (not to be confused with the intelligence directive ICD 203) | Full or partial adoption; local extensions for research-specific phenotypes |
 | Geospatial | ISO 19115 | Geographic metadata | Full adoption for metadata; local extensions for domain-specific layers |
 
 ---
